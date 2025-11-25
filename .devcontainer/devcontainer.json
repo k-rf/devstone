@@ -1,0 +1,130 @@
+{
+  "name": "devstone",
+  "remoteUser": "devstone",
+  "dockerComposeFile": "./compose.dev.yaml",
+  "initializeCommand": "cp -n .devcontainer/.env.local.example .devcontainer/.env.local || true",
+  "postCreateCommand": ".devcontainer/script/post-created-command.sh",
+  "service": "app",
+  "features": {
+    "ghcr.io/itsmechlark/features/1password": "latest"
+  },
+  "workspaceFolder": "/workspaces/devstone",
+  "overrideCommand": true,
+  "shutdownAction": "none",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "3w36zj6.textlint",
+        "albymor.increment-selection",
+        "bodil.file-browser",
+        "christian-kohler.path-intellisense",
+        "DavidAnson.vscode-markdownlint",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "foxundermoon.shell-format",
+        "GitHub.copilot-chat",
+        "GitHub.copilot",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "Gruntfuggly.todo-tree",
+        "hbenl.vscode-test-explorer",
+        "ipatalas.vscode-postfix-ts",
+        "irongeek.vscode-env",
+        "kahole.magit",
+        "mhutchie.git-graph",
+        "mikestead.dotenv",
+        "ms-azuretools.vscode-docker",
+        "mutantdino.resourcemonitor",
+        "Orta.vscode-twoslash-queries",
+        "oxc.oxc-vscode",
+        "Perkovec.emoji",
+        "redhat.vscode-yaml",
+        "shd101wyy.markdown-preview-enhanced",
+        "streetsidesoftware.code-spell-checker",
+        "stringham.copy-with-imports",
+        "tamasfe.even-better-toml",
+        "vitest.explorer",
+        "wmaurer.change-case",
+        "yoavbls.pretty-ts-errors",
+        "Yukai.map-replace-js",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "editor.defaultColorDecorators": "always",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+
+        "eslint.rules.customizations": [
+          { "rule": "@cspell/spellchecker", "severity": "off" }
+        ],
+        "eslint.useFlatConfig": true,
+        "eslint.workingDirectories": [{ "mode": "auto" }],
+
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true,
+
+        "textlint.autoFixOnSave": true,
+        "textlint.configPath": ".textlintrc.json",
+
+        "yaml.schemas": {
+          "https://moonrepo.dev/schemas/workspace.json": [
+            ".moon/workspace.yml"
+          ],
+          "https://moonrepo.dev/schemas/toolchain.json": [
+            ".moon/toolchain.yml"
+          ],
+          "https://moonrepo.dev/schemas/tasks.json": [
+            ".moon/tasks.yml",
+            ".moon/tasks/**/*.yml"
+          ],
+          "https://moonrepo.dev/schemas/template.json": [
+            ".moon/templates/*.yml"
+          ]
+        },
+
+        "[typescript][typescriptreact][javascript][css]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": "explicit"
+          }
+        },
+
+        "[json][jsonc][snippets]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        "[shellscript][dotenv][ignore][properties]": {
+          "files.eol": "\n",
+          "editor.defaultFormatter": "foxundermoon.shell-format"
+        },
+
+        "[dockerfile]": {
+          "editor.quickSuggestions": {
+            "strings": true
+          },
+          "editor.defaultFormatter": "ms-azuretools.vscode-containers"
+        },
+
+        "[markdown][instructions][prompt][chatagent]": {
+          "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+          "editor.unicodeHighlight.ambiguousCharacters": false,
+          "editor.unicodeHighlight.invisibleCharacters": false,
+          "editor.wordWrap": "on",
+          "editor.quickSuggestions": {
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+          },
+          "diffEditor.ignoreTrimWhitespace": false,
+          "files.trimTrailingWhitespace": false,
+          "cSpell.fixSpellingWithRenameProvider": true,
+          "cSpell.advanced.feature.useReferenceProviderWithRename": true,
+          "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/",
+          "markdownlint.configFile": ".markdownlint.mjs"
+        }
+      }
+    }
+  }
+}

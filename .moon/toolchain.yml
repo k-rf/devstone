@@ -1,0 +1,5 @@
+unstable_node:
+  dependencyVersionFormat: workspace
+  syncPackageManagerField: true
+  addEnginesConstraint: true
+  packageManager: pnpm

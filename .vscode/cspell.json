@@ -1,0 +1,16 @@
+{
+  "version": "0.2",
+  "useGitignore": true,
+  "gitignoreRoot": "..",
+  "ignoreRandomStrings": true,
+  "ignorePaths": [
+    ".gitignore",
+    ".devcontainer"
+  ],
+  "words": [
+    "commitlint",
+    "devstone",
+    "tsgo",
+    "vitest"
+  ]
+}

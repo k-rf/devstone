@@ -1,0 +1,6 @@
+{
+  "name": "devstone",
+  "description": "自作のライブラリやツールを集めたモノレポです。",
+  "version": "0.0.1",
+  "private": true
+}

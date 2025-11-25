@@ -1,0 +1,12 @@
+# REF: https://moonrepo.dev/docs/config/workspace
+
+projects:
+  globs:
+    - apps/*
+    - packages/configs/*
+    - packages/libs/*
+    - packages/design-system/*
+
+vcs:
+  manager: git
+  defaultBranch: main
