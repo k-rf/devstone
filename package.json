@@ -1,6 +1,17 @@
 {
   "name": "devstone",
-  "description": "自作のライブラリやツールを集めたモノレポです。",
   "version": "0.0.1",
-  "private": true
+  "description": "自作のライブラリやツールを集めたモノレポです。",
+  "author": {
+    "name": "Kawano Kenichi",
+    "email": "kenichi.k.820@gmail.com",
+    "url": "https://github.com/k-rf"
+  },
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm@10.23.0",
+  "scripts": {},
+  "devDependencies": {
+    "markdownlint-cli2": "0.20.0"
+  }
 }
