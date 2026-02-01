@@ -1,0 +1,11 @@
+{
+  "config": {
+    "line-length": {
+      "tables": false,
+      "code_blocks": false,
+      "strict": false
+    }
+  },
+  "gitignore": true,
+  "ignores": [".git/**", "**/.claude/skills/**/FORMS.md"]
+}

@@ -1,0 +1,8 @@
+layer: configuration
+
+language: typescript
+platform: node
+
+project:
+  name: configs/eslint
+  description: "ESLintの設定をまとめたパッケージです。"
