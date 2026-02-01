@@ -34,6 +34,7 @@
         "kahole.magit",
         "mhutchie.git-graph",
         "mikestead.dotenv",
+        "moonrepo.moon-console",
         "ms-azuretools.vscode-docker",
         "mutantdino.resourcemonitor",
         "Orta.vscode-twoslash-queries",
@@ -69,19 +70,14 @@
         "textlint.configPath": ".textlintrc.json",
 
         "yaml.schemas": {
-          "https://moonrepo.dev/schemas/workspace.json": [
-            ".moon/workspace.yml"
-          ],
-          "https://moonrepo.dev/schemas/toolchain.json": [
-            ".moon/toolchain.yml"
-          ],
-          "https://moonrepo.dev/schemas/tasks.json": [
+          "./.moon/cache/schemas/project.json": ["**/moon.yml"],
+          "./.moon/cache/schemas/tasks.json": [
             ".moon/tasks.yml",
             ".moon/tasks/**/*.yml"
           ],
-          "https://moonrepo.dev/schemas/template.json": [
-            ".moon/templates/*.yml"
-          ]
+          "./.moon/cache/schemas/template.json": ["**/template.yml"],
+          "./.moon/cache/schemas/toolchain.json": [".moon/toolchain.yml"],
+          "./.moon/cache/schemas/workspace.json": [".moon/workspace.yml"]
         },
 
         "[typescript][typescriptreact][javascript][css]": {
