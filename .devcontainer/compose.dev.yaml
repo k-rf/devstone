@@ -20,6 +20,12 @@ services:
         source: ..
         target: ${PROJECT_ROOT}
       - type: bind
+        source: ${HOME}/.claude
+        target: ${ROOT_REMOTE_HOME}/.claude
+      - type: bind
+        source: ${HOME}/.claude.json
+        target: ${ROOT_REMOTE_HOME}/.claude.json
+      - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
 
