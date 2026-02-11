@@ -3,15 +3,6 @@
   "useGitignore": true,
   "gitignoreRoot": "..",
   "ignoreRandomStrings": true,
-  "ignorePaths": [
-    ".gitignore",
-    ".devcontainer"
-  ],
-  "words": [
-    "commitlint",
-    "dedupe",
-    "devstone",
-    "tsgo",
-    "vitest"
-  ]
+  "ignorePaths": [".gitignore", ".devcontainer"],
+  "words": ["commitlint", "dedupe", "devstone", "oxfmt", "sonarjs", "tsgo", "vitest"]
 }

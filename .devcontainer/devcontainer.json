@@ -21,7 +21,6 @@
         "DavidAnson.vscode-markdownlint",
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
-        "esbenp.prettier-vscode",
         "foxundermoon.shell-format",
         "GitHub.copilot-chat",
         "GitHub.copilot",
@@ -52,13 +51,17 @@
         "yzhang.markdown-all-in-one"
       ],
       "settings": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit",
+          "source.addMissingImports.ts": "explicit",
+          "source.organizeImports": "never"
+        },
         "editor.defaultColorDecorators": "always",
+        "editor.defaultFormatter": "oxc.oxc-vscode",
         "editor.formatOnSave": true,
         "editor.formatOnSaveMode": "file",
 
-        "eslint.rules.customizations": [
-          { "rule": "@cspell/spellchecker", "severity": "off" }
-        ],
+        "eslint.rules.customizations": [{ "rule": "@cspell/spellchecker", "severity": "off" }],
         "eslint.useFlatConfig": true,
         "eslint.workingDirectories": [{ "mode": "auto" }],
 
@@ -71,24 +74,14 @@
 
         "yaml.schemas": {
           "./.moon/cache/schemas/project.json": ["**/moon.yml"],
-          "./.moon/cache/schemas/tasks.json": [
-            ".moon/tasks.yml",
-            ".moon/tasks/**/*.yml"
-          ],
+          "./.moon/cache/schemas/tasks.json": [".moon/tasks.yml", ".moon/tasks/**/*.yml"],
           "./.moon/cache/schemas/template.json": ["**/template.yml"],
           "./.moon/cache/schemas/toolchain.json": [".moon/toolchain.yml"],
           "./.moon/cache/schemas/workspace.json": [".moon/workspace.yml"]
         },
 
-        "[typescript][typescriptreact][javascript][css]": {
-          "editor.defaultFormatter": "oxc.oxc-vscode",
-          "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": "explicit"
-          }
-        },
-
-        "[json][jsonc][snippets]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "[typescript][typescriptreact][javascript][css][json][jsonc][snippets]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode"
         },
 
         "[shellscript][dotenv][ignore][properties]": {
