@@ -3,4 +3,8 @@ packages:
   - packages/configs/*
   - packages/design-system/*
   - packages/libs/*
+
+ignoredBuiltDependencies:
+  - unrs-resolver
+
 saveExact: true

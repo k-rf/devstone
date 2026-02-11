@@ -6,6 +6,8 @@ projects:
     - packages/configs/*
     - packages/libs/*
     - packages/design-system/*
+  sources:
+    root: .
 
 vcs:
   manager: git

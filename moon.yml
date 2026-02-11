@@ -1,0 +1,8 @@
+tasks:
+  format:
+    description: "コードをoxfmtで整形します。"
+    command: "pnpm -w run format"
+
+  build:
+    description: "実行するビルドタスクはありません。"
+    command: "echo 'No build step for project root.'"

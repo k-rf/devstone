@@ -1,0 +1,12 @@
+tasks:
+  typecheck:
+    description: "TypeScriptの型チェックを実行します。"
+    command: "pnpm run typecheck"
+
+  lint:
+    description: "ESLintでコードを検査します。"
+    command: "pnpm run lint"
+
+  build:
+    description: "ビルドを実行します。"
+    command: "pnpm run build"

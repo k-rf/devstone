@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "rootDir": ".",
+    "outDir": ".moon/cache/types",
+    "strict": true,
+    "customConditions": ["dev"]
+  },
+  "references": [
+    {
+      "path": "packages/configs/commitlint"
+    },
+    {
+      "path": "packages/configs/eslint"
+    }
+  ]
+}

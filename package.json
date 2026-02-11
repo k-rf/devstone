@@ -1,17 +1,30 @@
 {
   "name": "devstone",
   "version": "0.0.1",
+  "private": true,
   "description": "自作のライブラリやツールを集めたモノレポです。",
+  "license": "MIT",
   "author": {
     "name": "Kawano Kenichi",
     "email": "kenichi.k.820@gmail.com",
     "url": "https://github.com/k-rf"
   },
-  "license": "MIT",
-  "private": true,
-  "packageManager": "pnpm@10.23.0",
-  "scripts": {},
+  "scripts": {
+    "format": "oxfmt",
+    "lint": "eslint --fix",
+    "lint:md": "markdownlint-cli2 --fix '**/*.md'",
+    "typecheck": "tsgo --noEmit --customConditions null"
+  },
   "devDependencies": {
-    "markdownlint-cli2": "0.20.0"
-  }
+    "@devstone/configs-eslint": "workspace:*",
+    "@types/node": "25.2.2",
+    "@typescript-eslint/parser": "8.54.0",
+    "@typescript/native-preview": "7.0.0-dev.20260201.1",
+    "eslint": "9.39.2",
+    "eslint-import-resolver-typescript": "4.4.4",
+    "jiti": "2.6.1",
+    "markdownlint-cli2": "0.20.0",
+    "oxfmt": "0.28.0"
+  },
+  "packageManager": "pnpm@10.23.0"
 }
