@@ -1,0 +1,83 @@
+{
+  "name": "@devstone/configs-eslint",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ESLintの設定をまとめたパッケージです。",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "dev": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./base": {
+      "dev": "./src/base.ts",
+      "default": "./dist/base.js"
+    },
+    "./react": {
+      "dev": "./src/react.ts",
+      "default": "./dist/react.js"
+    },
+    "./node": {
+      "dev": "./src/node.ts",
+      "default": "./dist/node.js"
+    },
+    "./cspell": {
+      "dev": "./src/cspell.ts",
+      "default": "./dist/cspell.js"
+    },
+    "./import": {
+      "dev": "./src/import.ts",
+      "default": "./dist/import.js"
+    },
+    "./sonarjs": {
+      "dev": "./src/sonarjs.ts",
+      "default": "./dist/sonarjs.js"
+    },
+    "./css": {
+      "dev": "./src/css.ts",
+      "default": "./dist/css.js"
+    },
+    "./markdown": {
+      "dev": "./src/markdown.ts",
+      "default": "./dist/markdown.js"
+    },
+    "./json": {
+      "dev": "./src/json.ts",
+      "default": "./dist/json.js"
+    },
+    "./unicorn": {
+      "dev": "./src/unicorn.ts",
+      "default": "./dist/unicorn.js"
+    }
+  },
+  "scripts": {
+    "build": "tsgo -p tsconfig.build.json",
+    "lint": "eslint --fix",
+    "typecheck": "tsgo --noEmit --customConditions null"
+  },
+  "dependencies": {
+    "@cspell/eslint-plugin": "9.6.2",
+    "@eslint/css": "0.14.1",
+    "@eslint/js": "9.39.2",
+    "@eslint/json": "1.0.0",
+    "@eslint/markdown": "7.5.1",
+    "eslint-plugin-import-x": "4.16.1",
+    "eslint-plugin-n": "17.23.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-sonarjs": "3.0.6",
+    "eslint-plugin-unicorn": "62.0.0",
+    "globals": "17.3.0",
+    "typescript-eslint": "8.54.0"
+  },
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260201.1",
+    "eslint": "9.39.2"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  }
+}

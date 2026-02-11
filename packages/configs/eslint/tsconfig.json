@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "customConditions": ["dev"]
+  },
+  "include": ["src", "eslint.config.ts"]
+}
