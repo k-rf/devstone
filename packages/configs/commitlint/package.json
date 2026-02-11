@@ -1,12 +1,26 @@
 {
   "name": "@devstone/configs-commitlint",
   "version": "1.0.0",
-  "description": "commitlintの設定をまとめたパッケージです。",
   "private": true,
+  "description": "commitlintの設定をまとめたパッケージです。",
+  "files": [
+    "dist"
+  ],
   "type": "module",
-  "main": "index.js",
-  "types:": "index.d.ts",
+  "exports": {
+    ".": {
+      "dev": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsgo -p tsconfig.build.json",
+    "lint": "eslint --fix",
+    "typecheck": "tsgo --noEmit --customConditions null"
+  },
+  "devDependencies": {
+    "@devstone/configs-eslint": "workspace:*",
+    "@typescript/native-preview": "7.0.0-dev.20260201.1",
+    "eslint": "9.39.2"
   }
 }
