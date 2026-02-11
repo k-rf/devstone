@@ -3,13 +3,26 @@
     "deny": [
       "NotebookEdit",
       "NotebookRead",
-      "Bash(npm:*)",
-      "Bash(npx:*)",
-      "Bash(git push:*)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(git push *)",
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Read(**/secrets/**)",
       "Read(**/config/credentials.json)"
+    ],
+    "allow": [
+      "Read",
+      "WebFetch",
+      "WebSearch",
+      "Bash(cat *)",
+      "Bash(cd *)",
+      "Bash(find *)",
+      "Bash(git *)",
+      "Bash(ls *)",
+      "Bash(moon *)",
+      "Bash(pnpm run *)",
+      "Bash(xargs *)"
     ]
   },
   "includeCoAuthoredBy": false,
