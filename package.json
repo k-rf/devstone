@@ -19,6 +19,7 @@
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",
     "@devstone/configs-typescript": "workspace:*",
+    "@devstone/plugins-claude": "workspace:*",
     "@types/node": "25.2.2",
     "@typescript/native-preview": "7.0.0-dev.20260201.1",
     "eslint": "9.39.2",

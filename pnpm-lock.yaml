@@ -14,6 +14,9 @@ importers:
       '@devstone/configs-typescript':
         specifier: workspace:*
         version: link:packages/configs/typescript
+      '@devstone/plugins-claude':
+        specifier: workspace:*
+        version: link:packages/plugins/claude
       '@types/node':
         specifier: 25.2.2
         version: 25.2.2
