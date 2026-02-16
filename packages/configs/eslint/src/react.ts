@@ -1,23 +1,23 @@
 import { type ESLint } from "eslint";
 import { defineConfig } from "eslint/config";
-import reactPlugin from "eslint-plugin-react";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
+import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 
 export const react = defineConfig(
   {
-    ...reactPlugin.configs.flat["recommended"],
+    ...pluginReact.configs.flat["recommended"],
     files: ["**/*.{jsx,tsx}"],
   },
   {
-    ...reactPlugin.configs.flat["jsx-runtime"],
+    ...pluginReact.configs.flat["jsx-runtime"],
     files: ["**/*.{jsx,tsx}"],
   },
   {
     plugins: {
-      "react-hooks": reactHooksPlugin as ESLint.Plugin,
+      "react-hooks": pluginReactHooks as ESLint.Plugin,
     },
-    rules: reactHooksPlugin.configs["recommended-latest"].rules,
+    rules: pluginReactHooks.configs["recommended-latest"].rules,
     files: ["**/*.{jsx,tsx}"],
   },
   {

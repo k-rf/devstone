@@ -1,9 +1,9 @@
-import markdownPlugin from "@eslint/markdown";
+import pluginMarkdown from "@eslint/markdown";
 import { defineConfig } from "eslint/config";
 
-export const markdown = defineConfig(
-  ...markdownPlugin.configs.recommended.map((config) => ({
-    ...config,
-    language: "markdown/gfm",
-  })),
-);
+export const markdown = defineConfig({
+  files: ["**/*.md"],
+  plugins: { markdown: pluginMarkdown },
+  language: "markdown/gfm",
+  extends: [pluginMarkdown.configs.recommended],
+});

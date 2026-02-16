@@ -12,9 +12,7 @@ import {
 } from "@devstone/configs-eslint";
 
 const config = defineConfig(
-  {
-    ignores: ["node_modules/", "dist/", ".pnpm-store/", ".moon/", "packages/"],
-  },
+  { ignores: ["node_modules/", "dist/", ".pnpm-store/", ".moon/", "packages/"] },
   {
     languageOptions: {
       parserOptions: {

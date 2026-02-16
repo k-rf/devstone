@@ -4,4 +4,10 @@ import pluginUnicorn from "eslint-plugin-unicorn";
 export const unicorn = defineConfig({
   files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   extends: [pluginUnicorn.configs.recommended],
+  rules: {
+    "unicorn/prevent-abbreviations": [
+      "error",
+      { allowList: { props: true, args: true, params: true } },
+    ],
+  },
 });
