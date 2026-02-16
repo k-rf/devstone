@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "plugins-claude",
+  "layer": "library",
+
+  "project": {
+    "title": "plugins/claude",
+    "description": "Claude Code向けプラグインのマーケットプレイスです。"
+  }
+}

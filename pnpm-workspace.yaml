@@ -3,6 +3,7 @@ packages:
   - packages/configs/*
   - packages/design-system/*
   - packages/libs/*
+  - packages/plugins/*
 
 ignoredBuiltDependencies:
   - unrs-resolver

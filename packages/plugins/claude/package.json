@@ -1,0 +1,13 @@
+{
+  "name": "@devstone/plugins-claude",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claude Code向けのプラグイン集です。",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --fix"
+  },
+  "devDependencies": {
+    "eslint": "9.39.2"
+  }
+}

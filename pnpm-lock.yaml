@@ -103,6 +103,12 @@ importers:
         specifier: 9.39.2
         version: 9.39.2(jiti@2.6.1)
 
+  packages/plugins/claude:
+    devDependencies:
+      eslint:
+        specifier: 9.39.2
+        version: 9.39.2(jiti@2.6.1)
+
 packages:
 
   '@babel/code-frame@7.29.0':
