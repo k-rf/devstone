@@ -1,0 +1,19 @@
+{
+  "$schema": "../cache/schemas/tasks.json",
+
+  "tasks": {
+    "clean": {
+      "description": "ビルド成果物を削除します。",
+      "options": { "cache": false }
+    },
+    "typecheck": {
+      "description": "TypeScriptの型チェックを実行します。"
+    },
+    "lint": {
+      "description": "ESLintでコードを検査します。"
+    },
+    "build": {
+      "description": "ビルドを実行します。"
+    }
+  }
+}

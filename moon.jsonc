@@ -1,0 +1,11 @@
+{
+  "$schema": ".moon/cache/schemas/project.json",
+
+  "tasks": {
+    "format": {
+      "description": "コードをoxfmtで整形します。",
+      "command": "pnpm run format",
+      "options": { "cache": false }
+    }
+  }
+}

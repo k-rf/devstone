@@ -1,0 +1,20 @@
+{
+  "$schema": "./cache/schemas/workspace.json",
+
+  "projects": {
+    "globs": [
+      "apps/*",
+      "packages/configs/*",
+      "packages/libs/*",
+      "packages/design-system/*",
+      "packages/plugins/*"
+    ],
+    "sources": {
+      "root": "."
+    }
+  },
+  "vcs": {
+    "client": "git",
+    "defaultBranch": "main"
+  }
+}
