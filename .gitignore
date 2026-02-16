@@ -152,3 +152,7 @@ styled-system-studio
 # moon
 .moon/cache
 .moon/docker
+
+# Claude
+
+.claude/settings.local.json
