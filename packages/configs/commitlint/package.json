@@ -14,12 +14,12 @@
     }
   },
   "scripts": {
+    "clean": "rimraf dist",
     "build": "tsgo -p tsconfig.build.json",
-    "lint": "eslint --fix",
-    "typecheck": "tsgo --noEmit --customConditions null"
+    "typecheck": "tsgo -p tsconfig.check.json",
+    "lint": "eslint --fix"
   },
   "devDependencies": {
-    "@devstone/configs-eslint": "workspace:*",
     "@typescript/native-preview": "7.0.0-dev.20260201.1",
     "eslint": "9.39.2"
   }

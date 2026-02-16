@@ -54,9 +54,10 @@
     }
   },
   "scripts": {
+    "clean": "rimraf dist",
     "build": "tsgo -p tsconfig.build.json",
-    "lint": "eslint --fix",
-    "typecheck": "tsgo --noEmit --customConditions null"
+    "typecheck": "tsgo -p tsconfig.check.json",
+    "lint": "eslint --fix"
   },
   "dependencies": {
     "@cspell/eslint-plugin": "9.6.2",
