@@ -9,6 +9,7 @@
     "email": "kenichi.k.820@gmail.com",
     "url": "https://github.com/k-rf"
   },
+  "type": "module",
   "scripts": {
     "clean": "rimraf dist",
     "typecheck": "tsgo -p tsconfig.check.json",
