@@ -26,6 +26,8 @@
     "eslint": "9.39.2",
     "eslint-import-resolver-typescript": "4.4.4",
     "jiti": "2.6.1",
+    "lefthook": "2.1.1",
+    "lint-staged": "16.2.7",
     "markdownlint-cli2": "0.20.0",
     "oxfmt": "0.28.0",
     "rimraf": "6.1.3"

@@ -8,4 +8,7 @@ packages:
 ignoredBuiltDependencies:
   - unrs-resolver
 
+onlyBuiltDependencies:
+  - lefthook
+
 saveExact: true
