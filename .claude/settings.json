@@ -9,7 +9,7 @@
       "Bash(grep *)",
       "Bash(ls *)",
       "Bash(moon *)",
-      "Bash(pnpm run *)",
+      "Bash(pnpm *)",
       "Bash(xargs *)",
       "Bash(proto *)",
       "Read",

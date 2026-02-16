@@ -4,5 +4,10 @@
     "name": "Kawano Kenichi",
     "email": "kenichi.k.820@gmail.com"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "commit",
+      "source": "./packages/plugins/claude/commit"
+    }
+  ]
 }

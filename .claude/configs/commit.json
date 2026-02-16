@@ -1,0 +1,5 @@
+{
+  "$schema": "../../packages/plugins/claude/commit/schemas/commit.schema.json",
+  "language": "ja",
+  "style": "gitmoji"
+}

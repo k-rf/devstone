@@ -4,5 +4,16 @@
   "gitignoreRoot": "..",
   "ignoreRandomStrings": true,
   "ignorePaths": [".gitignore", ".devcontainer"],
-  "words": ["commitlint", "dedupe", "devstone", "oxfmt", "sonarjs", "tsgo", "unrs", "vitest"]
+  "words": [
+    "bento",
+    "commitlint",
+    "dedupe",
+    "devstone",
+    "gitmoji",
+    "oxfmt",
+    "sonarjs",
+    "tsgo",
+    "unrs",
+    "vitest"
+  ]
 }
