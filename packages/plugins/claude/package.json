@@ -5,6 +5,7 @@
   "description": "Claude Code向けのプラグイン集です。",
   "type": "module",
   "scripts": {
+    "typecheck": "tsgo -p tsconfig.check.json",
     "lint": "eslint --fix"
   },
   "devDependencies": {
