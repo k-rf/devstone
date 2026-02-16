@@ -5,7 +5,7 @@ Conventional Commits は、コミットメッセージに構造化された形�
 
 ## メッセージフォーマット
 
-```
+```plaintext
 <type>[optional scope]: <description>
 
 [optional body]
@@ -33,7 +33,7 @@ Conventional Commits は、コミットメッセージに構造化された形�
 
 オプションのスコープで変更領域を絞り込む：
 
-```
+```plaintext
 feat(auth): add JWT token refresh
 fix(api): handle null response in user endpoint
 refactor(db): extract query builder utility
@@ -44,7 +44,7 @@ build(deps): upgrade TypeScript to v5.7
 
 タイプ/スコープの後に `!` を付けるか、`BREAKING CHANGE:` フッターで破壊的変更を示す：
 
-```
+```plaintext
 feat!: remove deprecated authentication method
 
 BREAKING CHANGE: The legacy auth endpoint has been removed.
@@ -53,7 +53,7 @@ Use /api/v2/auth instead.
 
 ## 例
 
-```
+```plaintext
 feat: add user profile page
 fix: correct date parsing in ISO format handler
 docs: update API reference for v2 endpoints
