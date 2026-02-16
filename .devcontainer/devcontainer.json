@@ -3,7 +3,7 @@
   "remoteUser": "devstone",
   "dockerComposeFile": "./compose.dev.yaml",
   "initializeCommand": "cp -n .devcontainer/.env.local.example .devcontainer/.env.local || true",
-  "postCreateCommand": ".devcontainer/script/post-created-command.sh",
+  "postCreateCommand": ".devcontainer/script/post-created-command.sh ${localEnv:HOME}",
   "service": "app",
   "features": {
     "ghcr.io/itsmechlark/features/1password": "latest"
@@ -69,16 +69,11 @@
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
 
+        "oxc.enable.oxfmt": true,
+        "oxc.enable.oxlint": false,
+
         "textlint.autoFixOnSave": true,
         "textlint.configPath": ".textlintrc.json",
-
-        "yaml.schemas": {
-          "./.moon/cache/schemas/project.json": ["**/moon.yml"],
-          "./.moon/cache/schemas/tasks.json": [".moon/tasks.yml", ".moon/tasks/**/*.yml"],
-          "./.moon/cache/schemas/template.json": ["**/template.yml"],
-          "./.moon/cache/schemas/toolchain.json": [".moon/toolchain.yml"],
-          "./.moon/cache/schemas/workspace.json": [".moon/workspace.yml"]
-        },
 
         "[typescript][typescriptreact][javascript][css][json][jsonc][snippets]": {
           "editor.defaultFormatter": "oxc.oxc-vscode"
