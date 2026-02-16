@@ -9,3 +9,5 @@ sudo ln -sf "$HOME/.claude" "${LOCAL_HOME}/.claude"
 proto install
 
 npm install --global zx @google/gemini-cli @github/copilot
+
+pnpm exec lefthook install
