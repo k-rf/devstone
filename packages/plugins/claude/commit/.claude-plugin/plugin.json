@@ -1,0 +1,9 @@
+{
+  "name": "commit",
+  "version": "0.1.0",
+  "description": "差分の妥当性チェック・コミット計画・メッセージ生成・実行の一連のワークフローを提供するプラグイン",
+  "author": {
+    "name": "Kawano Kenichi",
+    "email": "kenichi.k.820@gmail.com"
+  }
+}
