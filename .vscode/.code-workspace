@@ -1,0 +1,9 @@
+{
+  "folders": [
+    { "name": "devstone", "path": "/workspaces/devstone" },
+    { "name": "~/.claude", "path": "/home/devstone/.claude" }
+  ],
+  "settings": {
+    "oxc.enable.oxfmt": false
+  }
+}
