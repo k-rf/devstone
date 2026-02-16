@@ -3,7 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "rootDir": ".",
-    "customConditions": ["dev"]
+    "customConditions": ["dev"],
+    "outDir": "dist"
   },
   "include": ["src", "eslint.config.ts"]
 }
