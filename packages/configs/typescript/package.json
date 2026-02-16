@@ -1,0 +1,15 @@
+{
+  "name": "@devstone/configs-typescript",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TypeScriptの設定をまとめたパッケージです。",
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf dist",
+    "typecheck": "tsgo -p tsconfig.check.json",
+    "lint": "eslint --fix"
+  },
+  "devDependencies": {
+    "eslint": "9.39.2"
+  }
+}

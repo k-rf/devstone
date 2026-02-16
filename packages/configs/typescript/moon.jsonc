@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "configs-typescript",
+  "layer": "configuration",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+
+  "project": {
+    "title": "configs/typescript",
+    "description": "TypeScriptの設定をまとめたパッケージです。"
+  }
+}

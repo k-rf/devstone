@@ -11,6 +11,9 @@ importers:
       '@devstone/configs-eslint':
         specifier: workspace:*
         version: link:packages/configs/eslint
+      '@devstone/configs-typescript':
+        specifier: workspace:*
+        version: link:packages/configs/typescript
       '@types/node':
         specifier: 25.2.2
         version: 25.2.2
@@ -93,6 +96,12 @@ importers:
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260201.1
         version: 7.0.0-dev.20260201.1
+      eslint:
+        specifier: 9.39.2
+        version: 9.39.2(jiti@2.6.1)
+
+  packages/configs/typescript:
+    devDependencies:
       eslint:
         specifier: 9.39.2
         version: 9.39.2(jiti@2.6.1)
