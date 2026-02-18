@@ -72,7 +72,7 @@ skills:
 計画を番号付きリストで提示する：
 
 ```markdown
-### Commit N: <emoji/prefix> <message>
+### Commit N: <emoji/prefix> <件名>
 
 | 操作      | ファイル             |
 | --------- | -------------------- |
