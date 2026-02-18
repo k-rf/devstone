@@ -1,4 +1,6 @@
 {
+  "$schema": "https://raw.githubusercontent.com/evilmartians/lefthook/refs/heads/master/schema.json",
+
   "pre-commit": {
     "commands": {
       "lint-staged": {
