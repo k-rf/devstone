@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-app=${APP_VSCODE_EXTENSIONS_VOLUME_NAME}
+app=${ROOT_VSCODE_EXTENSIONS_VOLUME_NAME}
 
 for volume in {${app},}; do
   echo "Remove extensions in ${volume}"
