@@ -106,7 +106,7 @@
           "cSpell.fixSpellingWithRenameProvider": true,
           "cSpell.advanced.feature.useReferenceProviderWithRename": true,
           "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/",
-          "markdownlint.configFile": ".markdownlint.mjs"
+          "markdownlint.configFile": ".markdownlint-cli2.jsonc"
         }
       }
     }

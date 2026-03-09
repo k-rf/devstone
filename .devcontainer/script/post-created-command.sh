@@ -7,6 +7,7 @@ sudo mkdir -p "${LOCAL_HOME}"
 sudo ln -sf "${HOME}/.claude" "${LOCAL_HOME}/.claude"
 
 proto install
+pnpm install
 
 mkdir -p "${HOME}/.bash_completion.d"
 moon completions > "${HOME}/.bash_completion.d/moon.sh"
