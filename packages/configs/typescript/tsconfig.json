@@ -6,5 +6,5 @@
     "customConditions": ["dev"],
     "outDir": "dist"
   },
-  "include": ["src", "eslint.config.ts"]
+  "include": ["eslint.config.ts"]
 }
