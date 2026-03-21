@@ -3,7 +3,10 @@
   "useGitignore": true,
   "gitignoreRoot": "..",
   "ignoreRandomStrings": true,
-  "ignorePaths": [".gitignore", ".devcontainer"],
+  "ignorePaths": [
+    ".gitignore",
+    ".devcontainer"
+  ],
   "words": [
     "bento",
     "commitlint",
@@ -14,6 +17,7 @@
     "oneline",
     "oxfmt",
     "sonarjs",
+    "toggl",
     "tsgo",
     "unrs",
     "vitest"

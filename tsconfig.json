@@ -1,10 +1,17 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "customConditions": ["dev"]
+    "customConditions": [
+      "dev"
+    ]
   },
-  "include": ["*.ts"],
+  "include": [
+    "*.ts"
+  ],
   "references": [
+    {
+      "path": "apps/notion-toggl-bridge"
+    },
     {
       "path": "packages/configs/commitlint"
     },
