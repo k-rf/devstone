@@ -1,0 +1,20 @@
+name = "notion-toggl-bridge"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+TOGGL_TRACK_WORKSPACE_ID = ""
+NOTION_DAILY_NOTE_DATABASE_ID = ""
+NOTION_DAILY_NOTE_DATE_PROPERTY = "日付"
+NOTION_DAILY_NOTE_RELATION_PROPERTY = "やったこと"
+
+[[kv_namespaces]]
+binding = "IDEMPOTENCY_KV"
+id = ""
+preview_id = ""
+
+[[kv_namespaces]]
+binding = "MAPPING_KV"
+id = ""
+preview_id = ""
