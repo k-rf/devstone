@@ -7,20 +7,20 @@
     "dist"
   ],
   "type": "module",
-  "exports": {
-    ".": {
-      "dev": "./src/index.ts",
-      "default": "./dist/index.js"
-    }
-  },
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsgo -p tsconfig.build.json",
     "typecheck": "tsgo -p tsconfig.check.json",
     "lint": "eslint --fix"
   },
+  "dependencies": {
+    "effect": "3.19.19"
+  },
   "devDependencies": {
+    "@commitlint/types": "20.5.0",
     "@typescript/native-preview": "7.0.0-dev.20260201.1",
+    "commitlint": "20.5.0",
+    "cz-customizable": "7.5.4",
     "eslint": "9.39.2"
   }
 }
