@@ -7,12 +7,12 @@
         "run": "pnpm lint-staged"
       }
     }
+  },
+  "commit-msg": {
+    "commands": {
+      "commitlint": {
+        "run": "pnpm commitlint --config packages/configs/commitlint/src/commitlint.config.ts --edit {1}"
+      }
+    }
   }
-  // "commit-msg": {
-  //   "commands": {
-  //     "commitlint": {
-  //       "run": "pnpm commitlint --edit {1}"
-  //     }
-  //   }
-  // }
 }
