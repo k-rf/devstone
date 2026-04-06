@@ -11,7 +11,8 @@ export const importConfig = defineConfig({
       {
         "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"],
         "newlines-between": "always",
-        "alphabetize": { order: "asc", caseInsensitive: true },
+        "alphabetize": { order: "asc", orderImportKind: "asc", caseInsensitive: false },
+        "named": { enabled: true, types: "types-last" },
       },
     ],
   },

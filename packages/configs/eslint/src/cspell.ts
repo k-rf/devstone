@@ -4,6 +4,7 @@ import { defineConfig } from "eslint/config";
 
 export const cspell = defineConfig(pluginCspell as Linter.Config, {
   rules: {
+    /** @remarks 警告レベルを上げる */
     "@cspell/spellchecker": "error",
   },
 });

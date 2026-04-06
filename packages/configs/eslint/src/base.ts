@@ -16,6 +16,10 @@ export const base = defineConfig(
       },
     },
     rules: {
+      /** @remarks 定義ジャンプを一発でできるようにするため、キーと値は分けて記述するように強制する */
+      "object-shorthand": ["error", "never"],
+
+      /** @remarks インラインで型のインポートを指定することで、型のインポートを強調する */
       "@typescript-eslint/consistent-type-imports": [
         "error",
         { fixStyle: "inline-type-imports", prefer: "type-imports" },

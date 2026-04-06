@@ -32,5 +32,34 @@ export const react = defineConfig(
         version: "detect",
       },
     },
+    rules: {
+      /** @remarks propsの仮引数の書き方を統一する */
+      "react/destructuring-assignment": ["error", "always"],
+
+      /** @remarks propsの記述順序を統一する */
+      "react/jsx-sort-props": [
+        "error",
+        {
+          callbacksLast: true,
+          ignoreCase: false,
+          multiline: "last",
+          noSortAlphabetically: false,
+          reservedFirst: true,
+          shorthandFirst: true,
+        },
+      ],
+
+      /** @remarks boolean型の冗長な記述を避ける */
+      "react/jsx-boolean-value": ["error", "never"],
+
+      /** @remarks コンポーネントの外形的な命名規則をある程度統一する */
+      "react/jsx-pascal-case": ["error", { allowNamespace: true }],
+
+      /** @remarks useStateの戻り値の書き方を統一する */
+      "react/hook-use-state": ["error", { allowDestructuredState: true }],
+
+      /** @remarks Fragmentの書き方を統一する */
+      "react/jsx-fragments": ["error", "syntax"],
+    },
   },
 );

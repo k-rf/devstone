@@ -9,46 +9,57 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "dev": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./base": {
+      "types": "./dist/base.d.ts",
       "dev": "./src/base.ts",
       "default": "./dist/base.js"
     },
     "./react": {
+      "types": "./dist/react.d.ts",
       "dev": "./src/react.ts",
       "default": "./dist/react.js"
     },
     "./node": {
+      "types": "./dist/node.d.ts",
       "dev": "./src/node.ts",
       "default": "./dist/node.js"
     },
     "./cspell": {
+      "types": "./dist/cspell.d.ts",
       "dev": "./src/cspell.ts",
       "default": "./dist/cspell.js"
     },
     "./import": {
+      "types": "./dist/import.d.ts",
       "dev": "./src/import.ts",
       "default": "./dist/import.js"
     },
     "./sonarjs": {
+      "types": "./dist/sonarjs.d.ts",
       "dev": "./src/sonarjs.ts",
       "default": "./dist/sonarjs.js"
     },
     "./css": {
+      "types": "./dist/css.d.ts",
       "dev": "./src/css.ts",
       "default": "./dist/css.js"
     },
     "./markdown": {
+      "types": "./dist/markdown.d.ts",
       "dev": "./src/markdown.ts",
       "default": "./dist/markdown.js"
     },
     "./json": {
+      "types": "./dist/json.d.ts",
       "dev": "./src/json.ts",
       "default": "./dist/json.js"
     },
     "./unicorn": {
+      "types": "./dist/unicorn.d.ts",
       "dev": "./src/unicorn.ts",
       "default": "./dist/unicorn.js"
     }
