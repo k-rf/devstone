@@ -1,0 +1,24 @@
+import { defineConfig } from "oxfmt";
+
+const config = defineConfig({
+  arrowParens: "always",
+  ignorePatterns: [],
+  jsxSingleQuote: false,
+  printWidth: 100,
+  quoteProps: "preserve",
+  semi: true,
+  singleQuote: false,
+  tabWidth: 2,
+  trailingComma: "all",
+  useTabs: false,
+  overrides: [
+    {
+      files: ["*.json", "*.jsonc"],
+      options: {
+        trailingComma: "none",
+      },
+    },
+  ],
+});
+
+export default config;
