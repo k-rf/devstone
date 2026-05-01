@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
+  "mcpServers": {
+    "notion": {
+      "command": "bunx",
+      "args": ["-y", "mcp-remote", "https://mcp.notion.com/mcp"]
+    }
+  },
+  "hooks": {
+    "AfterTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "name": "format-and-lint",
+            "type": "command",
+            "command": "$GEMINI_PROJECT_DIR/.gemini/hooks/format-and-lint.sh",
+            "timeout": 60000
+          }
+        ]
+      }
+    ]
+  }
+}
