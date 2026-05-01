@@ -10,6 +10,7 @@
     "commitlint",
     "dedupe",
     "devstone",
+    "esbuild",
     "gitmoji",
     "lefthook",
     "oneline",
@@ -19,6 +20,7 @@
     "tsgo",
     "Unrepresentable",
     "unrs",
-    "vitest"
+    "vitest",
+    "workerd"
   ]
 }
