@@ -11,10 +11,11 @@ pnpm install
 
 mkdir -p "${HOME}/.bash_completion.d"
 moon completions > "${HOME}/.bash_completion.d/moon.sh"
+
 cat >> "${HOME}/.bashrc" <<'EOF'
 
 # moon
-source $HOME/.bash_completion.d/moon.sh
+source ${HOME}/.bash_completion.d/moon.sh
 EOF
 
 npm install --global zx @google/gemini-cli @github/copilot

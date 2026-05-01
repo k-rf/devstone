@@ -1,0 +1,14 @@
+{
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli": {
+      "version": "1.1.0",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671",
+      "integrity": "sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671"
+    },
+    "ghcr.io/itsmechlark/features/1password": {
+      "version": "1.5.0",
+      "resolved": "ghcr.io/itsmechlark/features/1password@sha256:d4d27764112af3639f68701c85525c54477ebab7670fbaf4d90962e41209d3f8",
+      "integrity": "sha256:d4d27764112af3639f68701c85525c54477ebab7670fbaf4d90962e41209d3f8"
+    }
+  }
+}
