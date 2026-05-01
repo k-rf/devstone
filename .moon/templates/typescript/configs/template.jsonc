@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../cache/schemas/template.json",
+  "id": "typescript/configs",
+  "title": "TypeScript configuration package",
+  "description": "設定向けのTypeScriptテンプレートです。",
+  "destination": "packages/configs/{{ name | kebab_case }}",
+  "variables": {
+    "name": {
+      "type": "string",
+      "prompt": "パッケージ名を指定してください",
+      "required": true
+    }
+  }
+}

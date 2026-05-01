@@ -1,6 +1,9 @@
 {
   "$schema": "./cache/schemas/workspace.json",
 
+  "generator": {
+    "templates": [".moon/templates/*"]
+  },
   "projects": {
     "globs": [
       "apps/*",

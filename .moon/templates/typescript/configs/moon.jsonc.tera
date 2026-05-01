@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "configs-{{ name | kebab_case }}",
+  "layer": "configuration",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+
+  "project": {
+    "title": "configs/{{ name | kebab_case }}",
+    "description": "{{ name }}の設定をまとめたパッケージです。"
+  }
+}

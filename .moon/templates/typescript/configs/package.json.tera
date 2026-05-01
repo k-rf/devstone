@@ -1,0 +1,29 @@
+{
+  "name": "@devstone/configs-{{ name | kebab_case }}",
+  "version": "1.0.0",
+  "private": true,
+  "description": "{{ name }}の設定をまとめたパッケージです。",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "dev": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "tsgo -p tsconfig.build.json",
+    "typecheck": "tsgo -p tsconfig.check.json",
+    "lint": "eslint --fix"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript/native-preview": "7.0.0-dev.20260201.1",
+    "effect": "3.21.2",
+    "eslint": "9.39.2"
+  }
+}
