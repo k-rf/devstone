@@ -145,6 +145,9 @@ next-env.d.ts
 
 *storybook.log
 
+# Cloudflare
+.wrangler
+
 ## Panda
 styled-system
 styled-system-studio
@@ -154,5 +157,8 @@ styled-system-studio
 .moon/docker
 
 # Claude
-
 .claude/settings.local.json
+
+# Local files
+apps/notion-toggl-bridge/scripts/seed.ts
+.todo

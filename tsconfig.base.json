@@ -1,7 +1,9 @@
 {
   "extends": "@devstone/configs-typescript/base.json",
   "compilerOptions": {
+    "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "types": ["bun", "node"]
   }
 }

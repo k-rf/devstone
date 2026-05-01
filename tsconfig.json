@@ -3,19 +3,22 @@
   "compilerOptions": {
     "customConditions": ["dev"]
   },
-  "include": ["*.ts"],
+  "include": ["*.ts", ".gemini/**/*.ts"],
   "references": [
     {
-      "path": "packages/configs/commitlint"
+      "path": "./apps/notion-toggl-bridge"
     },
     {
-      "path": "packages/configs/eslint"
+      "path": "./packages/configs/commitlint"
     },
     {
-      "path": "packages/configs/typescript"
+      "path": "./packages/configs/eslint"
     },
     {
-      "path": "packages/plugins/claude"
+      "path": "./packages/configs/typescript"
+    },
+    {
+      "path": "./packages/plugins/claude"
     }
   ]
 }

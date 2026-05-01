@@ -6,4 +6,12 @@ export const markdown = defineConfig({
   plugins: { markdown: pluginMarkdown },
   language: "markdown/gfm",
   extends: [pluginMarkdown.configs.recommended],
+  rules: {
+    "markdown/no-missing-label-refs": [
+      "error",
+      {
+        allowLabels: ["!NOTE", "!TIP", "!IMPORTANT", "!WARNING", "!CAUTION"],
+      },
+    ],
+  },
 });

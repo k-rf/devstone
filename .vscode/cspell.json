@@ -6,6 +6,7 @@
   "ignorePaths": [".gitignore", ".devcontainer"],
   "words": [
     "bento",
+    "bunx",
     "commitlint",
     "dedupe",
     "devstone",
@@ -14,7 +15,9 @@
     "oneline",
     "oxfmt",
     "sonarjs",
+    "toggl",
     "tsgo",
+    "Unrepresentable",
     "unrs",
     "vitest"
   ]

@@ -1,4 +1,4 @@
-import { type UserConfig, RuleConfigSeverity } from "@commitlint/types";
+import { RuleConfigSeverity, type UserConfig } from "@commitlint/types";
 import { Match } from "effect";
 
 import { typeEnums } from "./type-enum.js";

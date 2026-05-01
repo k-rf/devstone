@@ -24,6 +24,17 @@ export const base = defineConfig(
         "error",
         { fixStyle: "inline-type-imports", prefer: "type-imports" },
       ],
+
+      /** @remarks `as unknown as T` は型安全性を完全に破壊するため禁止する */
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "TSAsExpression:has(> TSAsExpression.expression[typeAnnotation.type='TSUnknownKeyword'])",
+          message:
+            "`as unknown as` は型チェックを完全に迂回します。型安全になるように実装を見直してください。",
+        },
+      ],
     },
   },
   {
