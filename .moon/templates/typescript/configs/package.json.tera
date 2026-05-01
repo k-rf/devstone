@@ -22,8 +22,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@typescript/native-preview": "7.0.0-dev.20260201.1",
+    "@typescript/native-preview": "7.0.0-dev.20260430.1",
     "effect": "3.21.2",
-    "eslint": "9.39.2"
+    "eslint": "10.2.1"
   }
 }

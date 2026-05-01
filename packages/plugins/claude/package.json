@@ -9,6 +9,6 @@
     "lint": "eslint --fix"
   },
   "devDependencies": {
-    "eslint": "9.39.2"
+    "eslint": "10.2.1"
   }
 }

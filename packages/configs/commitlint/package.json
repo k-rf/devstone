@@ -18,9 +18,9 @@
   },
   "devDependencies": {
     "@commitlint/types": "20.5.0",
-    "@typescript/native-preview": "7.0.0-dev.20260201.1",
-    "commitlint": "20.5.0",
+    "@typescript/native-preview": "7.0.0-dev.20260430.1",
+    "commitlint": "20.5.3",
     "cz-customizable": "7.5.4",
-    "eslint": "9.39.2"
+    "eslint": "10.2.1"
   }
 }
