@@ -1,0 +1,10 @@
+{
+  "extends": "@devstone/configs-typescript/base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["esnext", "webworker"],
+    "types": ["@cloudflare/workers-types", "vitest/importMeta", "bun"]
+  }
+}

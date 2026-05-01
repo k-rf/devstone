@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "customConditions": ["dev"],
+    "outDir": "dist"
+  },
+  "include": ["src", "scripts", "*.ts"],
+  "references": [
+    {
+      "path": "../../packages/configs/eslint"
+    },
+    {
+      "path": "../../packages/configs/typescript"
+    }
+  ]
+}

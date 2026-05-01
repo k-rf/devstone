@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "notion-toggl-bridge",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-12-19",
+  "observability": {
+    "enabled": true
+  },
+  "kv_namespaces": [
+    {
+      "binding": "TOGGL_MAPPER",
+      "id": "8180a0bd43d045cda2c39f2681513654"
+    }
+  ]
+}
