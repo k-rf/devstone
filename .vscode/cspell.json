@@ -13,6 +13,8 @@
     "esbuild",
     "gitmoji",
     "lefthook",
+    "moonrepo",
+    "msgpackr",
     "oneline",
     "oxfmt",
     "sonarjs",

@@ -8,7 +8,7 @@ const capitalize = (value: string) => {
 const allowList = () => {
   const singleLetters = ["e", "i", "j", "k"];
   const words = ["acc", "arr", "ctx", "cur", "env", "ext", "fn", "obj", "prev", "req", "res"];
-  const withPluralWords = ["arg", "func", "param", "prop", "ref", "util", "var"];
+  const withPluralWords = ["arg", "dir", "func", "param", "prop", "ref", "util", "var"];
 
   return Object.fromEntries(
     [
