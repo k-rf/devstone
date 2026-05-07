@@ -18,6 +18,9 @@
       "path": "./packages/configs/typescript"
     },
     {
+      "path": "./packages/configs/vitest"
+    },
+    {
       "path": "./packages/plugins/claude"
     }
   ]
