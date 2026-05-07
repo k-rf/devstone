@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "configs-vitest",
+  "layer": "configuration",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "project": {
+    "title": "configs/vitest",
+    "description": "Vitestの設定をまとめたパッケージです。"
+  },
+
+  "tasks": {
+    "coverage-report": {
+      "description": "各プロジェクトのカバレッジを集約してHTMLレポートを生成します。",
+      "script": "bun run src/scripts/collect-coverage.ts && bun run src/scripts/merge-report.ts",
+      "deps": ["#testable:test-cov"],
+      "outputs": ["/coverage/**"]
+    }
+  }
+}

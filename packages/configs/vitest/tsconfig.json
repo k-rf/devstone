@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "customConditions": ["dev"],
+    "outDir": "dist"
+  },
+  "include": ["src", "eslint.config.ts"],
+  "references": [
+    {
+      "path": "../../../apps/notion-toggl-bridge"
+    }
+  ]
+}
