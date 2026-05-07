@@ -15,7 +15,8 @@
     "typecheck": "tsgo -p tsconfig.check.json",
     "format": "oxfmt",
     "lint": "eslint --fix",
-    "lint:md": "markdownlint-cli2 --fix '**/*.md'"
+    "lint:md": "markdownlint-cli2 --fix '**/*.md'",
+    "test:cov:report": "moon run configs-vitest:coverage-report"
   },
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",

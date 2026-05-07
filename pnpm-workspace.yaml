@@ -5,12 +5,14 @@ packages:
   - packages/libs/*
   - packages/plugins/*
 
-ignoredBuiltDependencies:
-  - esbuild
-  - msw
-  - sharp
-  - unrs-resolver
-  - workerd
+allowBuilds:
+  "@parcel/watcher": false
+  msgpackr-extract: false
+  esbuild: false
+  msw: false
+  sharp: false
+  unrs-resolver: false
+  workerd: false
 
 onlyBuiltDependencies:
   - lefthook
