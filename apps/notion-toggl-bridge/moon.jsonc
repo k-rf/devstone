@@ -5,9 +5,16 @@
   "layer": "application",
   "language": "typescript",
   "toolchains": { "default": "node" },
+  "tags": ["testable"],
 
   "project": {
     "title": "notion-toggl-bridge",
     "description": "NotionとToggl Trackを連携するCloudflare Workersアプリケーション。"
+  },
+
+  "tasks": {
+    "test-cov": {
+      "outputs": ["coverage/**"]
+    }
   }
 }

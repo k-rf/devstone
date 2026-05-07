@@ -10,6 +10,7 @@
     "typecheck": "tsgo -p tsconfig.check.json",
     "lint": "eslint --fix",
     "test": "vitest run",
+    "test:cov": "vitest run --coverage",
     "wrangler": "op run --no-masking -- wrangler"
   },
   "dependencies": {
@@ -22,12 +23,15 @@
     "@cloudflare/workers-types": "4.20260430.1",
     "@devstone/configs-eslint": "workspace:*",
     "@devstone/configs-typescript": "workspace:*",
+    "@devstone/configs-vitest": "workspace:*",
     "@faker-js/faker": "10.4.0",
     "@typescript/native-preview": "7.0.0-dev.20260430.1",
+    "@vitest/coverage-istanbul": "4.1.5",
     "eslint": "10.2.1",
     "msw": "2.14.2",
     "typescript": "6.0.3",
     "vitest": "4.1.5",
     "wrangler": "4.86.0"
-  }
+  },
+  "packageManager": "pnpm@11.0.1"
 }
