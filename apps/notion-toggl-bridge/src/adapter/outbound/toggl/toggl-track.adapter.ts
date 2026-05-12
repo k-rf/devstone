@@ -28,7 +28,7 @@ export const TogglTrackAdapterLive = (apiToken: string, workspaceId: number) =>
             yield* client.startTimer({
               title: item.title,
               projectId: projectId,
-              tagIds: item.tags,
+              tags: item.tags,
             });
           }).pipe(Effect.asVoid),
       };

@@ -6,7 +6,7 @@ import { Schema } from "effect";
 export const TogglTimeEntryPayload = Schema.Struct({
   description: Schema.String,
   project_id: Schema.optional(Schema.NullOr(Schema.Number)),
-  tag_ids: Schema.Array(Schema.String),
+  tags: Schema.Array(Schema.String),
   workspace_id: Schema.Number,
   start: Schema.String,
   duration: Schema.Number,

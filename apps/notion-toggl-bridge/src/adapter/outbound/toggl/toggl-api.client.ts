@@ -14,7 +14,7 @@ export interface TogglApiClient {
   readonly startTimer: (params: {
     readonly title: string;
     readonly projectId: Option.Option<number>;
-    readonly tagIds: readonly string[];
+    readonly tags: readonly string[];
   }) => Effect.Effect<void, TimeTrackerError>;
 }
 
@@ -128,7 +128,7 @@ export const makeTogglApiClient = (
  * @param params - 開始パラメータ
  * @param params.title - タイマーのタイトル
  * @param params.projectId - プロジェクトID
- * @param params.tagIds - タグIDのリスト
+ * @param params.tags - タグのリスト
  * @param workspaceId - ワークスペースID
  * @returns エンコード済みペイロード
  */
@@ -136,14 +136,14 @@ const encodeTimeEntry = (
   params: {
     readonly title: string;
     readonly projectId: Option.Option<number>;
-    readonly tagIds: readonly string[];
+    readonly tags: readonly string[];
   },
   workspaceId: number,
 ) =>
   Schema.encode(TogglTimeEntryPayload)({
     description: params.title,
     project_id: Option.getOrNull(params.projectId),
-    tag_ids: params.tagIds,
+    tags: params.tags,
     workspace_id: workspaceId,
     start: new Date().toISOString(),
     duration: -1,
