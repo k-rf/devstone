@@ -2,6 +2,7 @@ import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
+import { type Bindings } from "../adapter/inbound/http/types";
 import app from "../index";
 
 const server = setupServer(
@@ -37,38 +38,110 @@ const server = setupServer(
   }),
 );
 
-describe("E2E: Webhook Handler", () => {
-  beforeAll(() => {
-    server.listen();
-  });
-  afterEach(() => {
-    server.resetHandlers();
-  });
-  afterAll(() => {
-    server.close();
-  });
+beforeAll(() => {
+  server.listen();
+});
+afterEach(() => {
+  server.resetHandlers();
+  vi.restoreAllMocks();
+});
+afterAll(() => {
+  server.close();
+});
 
-  const mockEnv = {
-    NOTION_WEBHOOK_SECRET: "test-secret",
-    NOTION_API_TOKEN: "test-notion-token",
-    TOGGL_API_TOKEN: "test-toggl-token",
-    TOGGL_WORKSPACE_ID: "12345",
-    SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/mock",
-    TOGGL_MAPPER: {
-      get: vi.fn(() => Promise.resolve(undefined)),
-      put: vi.fn(() => Promise.resolve()),
+const mockEnv: Bindings = {
+  NOTION_WEBHOOK_SECRET: "test-secret",
+  NOTION_API_TOKEN: "test-notion-token",
+  TOGGL_API_TOKEN: "test-toggl-token",
+  TOGGL_WORKSPACE_ID: "12345",
+  SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/mock",
+  TOGGL_MAPPER: {
+    get: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+    list: vi.fn(),
+    getWithMetadata: vi.fn(),
+  },
+};
+
+const validPayload = {
+  source: { user_id: "user-1" },
+  data: {
+    id: "block-123",
+    properties: {
+      "☑️ やること": {
+        type: "relation",
+        relation: [{ id: "todo-456" }],
+      },
     },
-  };
+  },
+};
 
-  it("正常系: 正しいシークレットとペイロードでタイマーが開始されること", async () => {
-    const payload = {
-      source: { user_id: "user-1" },
+describe("正常系", () => {
+  it("ルートパスへのアクセスでウェルカムメッセージを返すこと", async () => {
+    const res = await app.request("/", {}, mockEnv);
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe("Notion to Toggl Track Bridge is running!");
+  });
+
+  it("未定義のルートへのアクセスで 404 を返すこと", async () => {
+    const res = await app.request("/undefined-route", {}, mockEnv);
+    expect(res.status).toBe(404);
+  });
+
+  it("正しいシークレットとペイロードでタイマーが開始されること", async () => {
+    const req = new Request("http://localhost/toggl/start", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shared-Secret": "test-secret",
+      },
+      body: JSON.stringify(validPayload),
+    });
+
+    let capturedPromise: Promise<unknown> | undefined;
+    const waitUntilSpy = vi.fn((promise: Promise<unknown>) => {
+      capturedPromise = promise;
+    });
+
+    const executionCtx: ExecutionContext = {
+      waitUntil: waitUntilSpy,
+      passThroughOnException: vi.fn(),
+      props: {},
+    };
+
+    const res = await app.request(req, {}, mockEnv, executionCtx);
+
+    expect(res.status).toBe(202);
+    expect(await res.json()).toStrictEqual({ message: "Accepted" });
+
+    if (capturedPromise) await capturedPromise;
+  });
+});
+
+describe("異常系", () => {
+  it("シークレットが不一致の場合は 401 を返すこと", async () => {
+    const req = new Request("http://localhost/toggl/start", {
+      method: "POST",
+      headers: {
+        "X-Shared-Secret": "wrong-secret",
+      },
+      body: JSON.stringify(validPayload),
+    });
+
+    const res = await app.request(req, {}, mockEnv);
+    expect(res.status).toBe(401);
+  });
+
+  it("ペイロードのバリデーションに失敗した場合は 400 を返すこと", async () => {
+    const invalidPayload = {
+      ...validPayload,
       data: {
-        id: "block-123",
+        ...validPayload.data,
         properties: {
           "☑️ やること": {
             type: "relation",
-            relation: [{ id: "todo-456" }],
+            relation: [{ id: "" }], // minLength(1) に抵触
           },
         },
       },
@@ -80,7 +153,30 @@ describe("E2E: Webhook Handler", () => {
         "Content-Type": "application/json",
         "X-Shared-Secret": "test-secret",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(invalidPayload),
+    });
+
+    const consoleSpy = vi.spyOn(console, "error");
+    const res = await app.request(req, {}, mockEnv);
+
+    expect(res.status).toBe(400);
+    expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  it("バックグラウンドタスクが失敗しても、レスポンス自体は 202 Accepted であること", async () => {
+    server.use(
+      http.get("https://api.notion.com/v1/pages/:id", () => {
+        return new HttpResponse(undefined, { status: 500 });
+      }),
+    );
+
+    const req = new Request("http://localhost/toggl/start", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shared-Secret": "test-secret",
+      },
+      body: JSON.stringify(validPayload),
     });
 
     let capturedPromise: Promise<unknown> | undefined;
@@ -88,36 +184,22 @@ describe("E2E: Webhook Handler", () => {
       capturedPromise = promise;
     });
 
-    // @ts-expect-error: テスト用に ExecutionContext を部分的にモックするため
     const executionCtx: ExecutionContext = {
       waitUntil: waitUntilSpy,
-      passThroughOnException: vi.fn(() => {
-        // Mock
-      }),
+      passThroughOnException: vi.fn(),
+      props: {},
     };
 
+    const consoleSpy = vi.spyOn(console, "error");
     const res = await app.request(req, {}, mockEnv, executionCtx);
 
     expect(res.status).toBe(202);
-    const body: { message: string } = await res.json();
-    expect(body.message).toBe("Accepted");
 
-    // バックグラウンド処理の完了を待機
-    if (capturedPromise) {
-      await capturedPromise;
-    }
-  });
+    if (capturedPromise) await capturedPromise;
 
-  it("異常系: シークレットが不一致の場合は 401 を返すこと", async () => {
-    const req = new Request("http://localhost/toggl/start", {
-      method: "POST",
-      headers: {
-        "X-Shared-Secret": "wrong-secret",
-      },
-      body: JSON.stringify({}),
-    });
-
-    const res = await app.request(req, {}, mockEnv);
-    expect(res.status).toBe(401);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Background task failed:"),
+      expect.anything(),
+    );
   });
 });
