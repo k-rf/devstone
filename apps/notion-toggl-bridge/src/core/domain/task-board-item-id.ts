@@ -6,7 +6,10 @@ export const TaskBoardItemIdBrand: unique symbol = Symbol.for("TaskBoardItemId")
  * タスクボードアイテムの識別子 (Branded Type)
  * unique symbol を用いることで、他の文字列型との混同を物理的に排除する
  */
-export const TaskBoardItemId = Schema.String.pipe(Schema.brand(TaskBoardItemIdBrand));
+export const TaskBoardItemId = Schema.String.pipe(
+  Schema.minLength(1),
+  Schema.brand(TaskBoardItemIdBrand),
+);
 
 export type TaskBoardItemId = Schema.Schema.Type<typeof TaskBoardItemId>;
 
@@ -17,6 +20,10 @@ if (import.meta.vitest) {
     const id = "page-id-123";
     const result = Schema.decodeSync(TaskBoardItemId)(id);
     expect(result).toBe(id);
+  });
+
+  it("空文字は検証に失敗すること", () => {
+    expect(() => Schema.decodeSync(TaskBoardItemId)("")).toThrow();
   });
 
   it("文字列以外の値は検証に失敗すること", () => {
