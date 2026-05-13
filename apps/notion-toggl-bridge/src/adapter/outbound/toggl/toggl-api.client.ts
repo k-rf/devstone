@@ -38,7 +38,7 @@ const fetchToggl = <A, I>(
   ctx: TogglContext,
   path: string,
   schema: Schema.Schema<A, I>,
-  options: RequestInit = {},
+  options: RequestInit,
 ): Effect.Effect<A, TimeTrackerError> =>
   Effect.gen(function* () {
     const headers = new Headers(options.headers);
@@ -59,9 +59,7 @@ const fetchToggl = <A, I>(
     });
 
     if (!response.ok) {
-      const text = yield* Effect.tryPromise(() => response.text()).pipe(
-        Effect.orElseSucceed(() => ""),
-      );
+      const text = yield* Effect.promise(() => response.text());
       return yield* Effect.fail(
         new TimeTrackerError({
           message: `Toggl API error: ${String(response.status)} ${text}`,
@@ -113,7 +111,7 @@ export const makeTogglApiClient = (
           yield* fetchToggl(
             ctx,
             `/workspaces/${String(workspaceId)}/time_entries`,
-            Schema.Unknown,
+            Schema.Struct({ id: Schema.Number }),
             {
               method: "POST",
               body: JSON.stringify(payload),
