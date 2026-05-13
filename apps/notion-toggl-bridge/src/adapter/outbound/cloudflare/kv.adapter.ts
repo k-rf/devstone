@@ -6,18 +6,15 @@ import { CacheError, CachePort } from "../../../core/port/outbound/cloudflare/ca
  * 最小限の KVNamespace インターフェース
  */
 export interface KVNamespace {
-  get(key: string): Promise<string | null>;
-  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+  readonly get: (key: string) => Promise<string | null>;
+  readonly put: (key: string, value: string, options?: { expirationTtl?: number }) => Promise<void>;
 }
 
 export const KvAdapterLive = (kvNamespace: KVNamespace) =>
   Layer.succeed(CachePort, {
     get: (key) =>
       Effect.tryPromise({
-        try: async () => {
-          const result = await kvNamespace.get(key);
-          return result ?? undefined;
-        },
+        try: () => kvNamespace.get(key).then((result) => result ?? undefined),
         catch: (e) =>
           new CacheError({
             message: `KV get error`,
