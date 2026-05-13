@@ -8,7 +8,7 @@ import { TimeTrackerPort } from "../port/outbound/toggl/time-tracker.port";
 
 import { startTogglTimerService } from "./start-toggl-timer.service";
 
-describe("startTogglTimerService", () => {
+describe("正常系", () => {
   it("タスクが見つかった場合、タイマーを開始すること", async () => {
     // Arrange
     const mockItem = {
@@ -45,7 +45,9 @@ describe("startTogglTimerService", () => {
     // Assert
     expect(startTimerSpy).toHaveBeenCalledWith(mockItem);
   });
+});
 
+describe("異常系", () => {
   it("タスクの取得に失敗した場合、エラーを通知すること", async () => {
     // Arrange
     const TaskBoardPortTest = Layer.succeed(TaskBoardPort, {
