@@ -51,7 +51,7 @@ afterAll(() => {
 
 const mockEnv: Bindings = {
   NOTION_WEBHOOK_SECRET: "test-secret",
-  NOTION_API_TOKEN: "test-notion-token",
+  NOTION_TOGGL_BRIDGE_API_TOKEN: "test-notion-token",
   TOGGL_API_TOKEN: "test-toggl-token",
   TOGGL_WORKSPACE_ID: "12345",
   SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/mock",

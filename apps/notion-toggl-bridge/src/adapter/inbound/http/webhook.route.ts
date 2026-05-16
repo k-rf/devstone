@@ -27,7 +27,7 @@ webhookRoute.post(
 
     // 2. 各アダプターに必要な設定を直接注入してレイヤーを作成
     const cacheLayer = KvAdapterLive(c.env.TOGGL_MAPPER);
-    const mainLayer = NotionAdapterLive(env.NOTION_API_TOKEN).pipe(
+    const mainLayer = NotionAdapterLive(env.NOTION_TOGGL_BRIDGE_API_TOKEN).pipe(
       Layer.merge(TogglTrackAdapterLive(env.TOGGL_API_TOKEN, env.TOGGL_WORKSPACE_ID)),
       Layer.merge(SlackAdapterLive(env.SLACK_WEBHOOK_URL)),
       Layer.provideMerge(cacheLayer),

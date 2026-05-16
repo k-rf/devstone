@@ -19,7 +19,7 @@ pnpm wrangler kv namespace create TOGGL_MAPPER
 以下のシークレットを `wrangler secret put` で設定します。
 
 - `NOTION_WEBHOOK_SECRET`: Notion の Send Webhook アクションで設定する `X-Shared-Secret` ヘッダの値。
-- `NOTION_API_TOKEN`: Notion インテグレーションの内部インテグレーション・トークン。
+- `NOTION_TOGGL_BRIDGE_API_TOKEN`: Notion インテグレーションの内部インテグレーション・トークン。
 - `TOGGL_API_TOKEN`: Toggl Track の API Token。
 - `SLACK_WEBHOOK_URL`: エラー通知用の Slack Incoming Webhook URL。
 

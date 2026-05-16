@@ -7,7 +7,7 @@ import { type Bindings } from "./types";
  * 環境変数のバリデーションスキーマ
  */
 export const Env = Schema.Struct({
-  NOTION_API_TOKEN: Schema.String,
+  NOTION_TOGGL_BRIDGE_API_TOKEN: Schema.String,
   NOTION_WEBHOOK_SECRET: Schema.String,
   SLACK_WEBHOOK_URL: Schema.String,
   TOGGL_API_TOKEN: Schema.String,

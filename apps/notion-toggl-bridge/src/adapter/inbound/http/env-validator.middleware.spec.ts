@@ -13,7 +13,7 @@ const mockKv: Bindings["TOGGL_MAPPER"] = {
 };
 
 const validEnv: Bindings = {
-  NOTION_API_TOKEN: "token",
+  NOTION_TOGGL_BRIDGE_API_TOKEN: "token",
   NOTION_WEBHOOK_SECRET: "secret",
   SLACK_WEBHOOK_URL: "https://slack.com",
   TOGGL_API_TOKEN: "toggl-token",
@@ -30,7 +30,7 @@ describe("正常系", () => {
     const res = await app.request("/", {}, validEnv);
     expect(res.status).toBe(200);
     expect(await res.json()).toStrictEqual({
-      NOTION_API_TOKEN: "token",
+      NOTION_TOGGL_BRIDGE_API_TOKEN: "token",
       NOTION_WEBHOOK_SECRET: "secret",
       SLACK_WEBHOOK_URL: "https://slack.com",
       TOGGL_API_TOKEN: "toggl-token",
@@ -41,7 +41,7 @@ describe("正常系", () => {
 
 describe("異常系", () => {
   it("環境変数が不足している場合、500 を返しエラーログを出力すること", async () => {
-    // REMARKS: NOTION_API_TOKEN を欠いた環境変数オブジェクトを作成する
+    // REMARKS: NOTION_TOGGL_BRIDGE_API_TOKEN を欠いた環境変数オブジェクトを作成する
     const invalidEnv = {
       NOTION_WEBHOOK_SECRET: "secret",
       SLACK_WEBHOOK_URL: "https://slack.com",
