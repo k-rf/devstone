@@ -33,4 +33,3 @@
 @.agents/rules/code-quality.md
 @.agents/rules/design-principles.md
 @.agents/rules/naming-conventions.md
-@.agents/rules/testing.md

@@ -65,4 +65,4 @@ root/
 
 - **Task Runner**: `moon <task>` を通じて一貫した実行環境を提供します。詳細は [Commands](./commands.md) を参照。
 - **Quality Control**: 静的解析と自動整形を徹底。詳細は [Code Quality](./code-quality.md) を参照。
-- **Verification**: 階層化されたテスト戦略を採用。詳細は [Testing](./testing.md) を参照。
+- **Verification**: 階層化されたテスト戦略を採用。詳細は `devstone-testing-standard` スキルを参照してください。
