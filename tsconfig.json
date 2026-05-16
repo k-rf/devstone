@@ -21,6 +21,9 @@
       "path": "./packages/configs/vitest"
     },
     {
+      "path": "./packages/libs/util"
+    },
+    {
       "path": "./packages/plugins/claude"
     }
   ]
