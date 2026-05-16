@@ -4,6 +4,9 @@
     "notion": {
       "command": "bunx",
       "args": ["-y", "mcp-remote", "https://mcp.notion.com/mcp"]
+    },
+    "notion-developers": {
+      "httpUrl": "https://developers.notion.com/mcp"
     }
   },
   "hooks": {

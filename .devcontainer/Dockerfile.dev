@@ -54,6 +54,9 @@ RUN bash -c "$(curl -fsSL https://claude.ai/install.sh)"
 RUN sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes \
   && echo 'eval "$(starship init bash)"' >> ${REMOTE_HOME}/.bashrc
 
+ENV NTN_INSTALL_DIR="${REMOTE_HOME}/.local/bin"
+RUN bash -c "$(curl -fsSL https://ntn.dev)"
+
 # プロンプトのカスタマイズ
 # ------------------------------------------------------------------------------
 RUN mkdir -p ${REMOTE_HOME}/.config \
