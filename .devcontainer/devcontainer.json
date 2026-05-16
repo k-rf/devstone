@@ -2,7 +2,7 @@
   "name": "devstone",
   "remoteUser": "devstone",
   "dockerComposeFile": "./compose.dev.yaml",
-  "initializeCommand": "cp -n .devcontainer/.env.local.example .devcontainer/.env.local || true",
+  "initializeCommand": ".devcontainer/script/initialize-command.sh",
   "postCreateCommand": ".devcontainer/script/post-created-command.sh ${localEnv:HOME}",
   "service": "app",
   "features": {
@@ -73,6 +73,8 @@
         "files.trimFinalNewlines": true,
         "files.trimTrailingWhitespace": true,
 
+        "markdownlint.configFile": ".markdownlint-cli2.jsonc",
+
         "oxc.enable.oxfmt": true,
         "oxc.enable.oxlint": false,
 
@@ -95,8 +97,8 @@
           "editor.defaultFormatter": "ms-azuretools.vscode-containers"
         },
 
-        "[markdown][instructions][prompt][chatagent]": {
-          "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+        "[markdown][instructions][prompt][chatagent][skill]": {
+          "editor.defaultFormatter": "oxc.oxc-vscode",
           "editor.unicodeHighlight.ambiguousCharacters": false,
           "editor.unicodeHighlight.invisibleCharacters": false,
           "editor.wordWrap": "on",
@@ -109,8 +111,7 @@
           "files.trimTrailingWhitespace": false,
           "cSpell.fixSpellingWithRenameProvider": true,
           "cSpell.advanced.feature.useReferenceProviderWithRename": true,
-          "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/",
-          "markdownlint.configFile": ".markdownlint-cli2.jsonc"
+          "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/"
         }
       }
     }
