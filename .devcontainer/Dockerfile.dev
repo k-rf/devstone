@@ -11,7 +11,7 @@ ENV PATH=${PATH}:${REMOTE_HOME}/.proto/tools/node/globals/bin
 # パッケージのインストール
 # ------------------------------------------------------------------------------
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get install -y --no-install-recommends ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq
+  && apt-get install -y --no-install-recommends ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq zip unzip
 
 # Docker のインストール
 RUN mkdir -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
