@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../cache/schemas/template.json",
+  "id": "typescript/libs",
+  "title": "TypeScript library package",
+  "description": "ライブラリ向けのTypeScriptテンプレートです。",
+  "destination": "packages/libs/{{ name | kebab_case }}",
+  "variables": {
+    "name": {
+      "type": "string",
+      "prompt": "パッケージ名を指定してください",
+      "required": true
+    }
+  }
+}
