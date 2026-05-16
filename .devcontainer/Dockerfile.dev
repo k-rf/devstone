@@ -1,10 +1,10 @@
 # FROM node:lts-bookworm
-FROM debian:bookworm
+FROM debian:trixie
 
 ARG REMOTE_USER
 ARG REMOTE_WORKSPACES
 ARG REMOTE_HOME
-ARG PACKAGES_NODE_MODULES_PATHS
+ARG DOCKER_GID
 
 ENV PATH=${PATH}:${REMOTE_HOME}/.proto/tools/node/globals/bin
 
@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io d
 RUN useradd -m ${REMOTE_USER} -u 1000 -s /bin/bash
 # ローカル開発環境のため許容している
 RUN echo "${REMOTE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN usermod -aG docker,root ${REMOTE_USER}
+RUN groupmod -g ${DOCKER_GID} docker \
+  && usermod -aG docker,root ${REMOTE_USER}
 
 # 日本語化対応
 # ------------------------------------------------------------------------------
@@ -40,10 +41,8 @@ ENV LANG=ja_JP.UTF-8
 # ------------------------------------------------------------------------------
 RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   && mkdir -p /commandhistory ${REMOTE_HOME}/.vscode-server/extensions ${REMOTE_WORKSPACES}/node_modules \
-  && for path in ${PACKAGES_NODE_MODULES_PATHS}; do mkdir -p ${path}; done \
   && touch /commandhistory/.bash_history \
   && chown -R ${REMOTE_USER}:${REMOTE_USER} /commandhistory ${REMOTE_HOME}/.vscode-server ${REMOTE_WORKSPACES}/node_modules \
-  && for path in ${PACKAGES_NODE_MODULES_PATHS}; do chown -R ${REMOTE_USER}:${REMOTE_USER} ${path}; done \
   && echo ${SNIPPET} >> "${REMOTE_HOME}/.bashrc"
 
 # ローカルにパッケージのインストール

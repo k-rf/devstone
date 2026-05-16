@@ -7,7 +7,7 @@ services:
         - REMOTE_USER=${ROOT_REMOTE_USER}
         - REMOTE_WORKSPACES=${ROOT_REMOTE_WORKSPACES}
         - REMOTE_HOME=${ROOT_REMOTE_HOME}
-        - PACKAGES_NODE_MODULES_PATHS=${PACKAGES_NODE_MODULES_PATHS}
+        - DOCKER_GID=${DOCKER_GID}
     env_file:
       - .env
       - .env.local
