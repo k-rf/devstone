@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "libs-util",
+  "layer": "library",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "tags": ["testable"],
+
+  "project": {
+    "title": "libs/util",
+    "description": "utilのライブラリパッケージです。"
+  },
+
+  "tasks": {
+    "test-cov": {
+      "command": "pnpm run test:cov",
+      "outputs": ["coverage/**"]
+    }
+  }
+}
