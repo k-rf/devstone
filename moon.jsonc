@@ -6,6 +6,11 @@
       "description": "コードをoxfmtで整形します。",
       "command": "pnpm run format",
       "options": { "cache": false }
+    },
+    "knip": {
+      "description": "未使用のファイル、エクスポート、依存関係を検出します。",
+      "command": "pnpm run knip",
+      "options": { "cache": false }
     }
   }
 }
