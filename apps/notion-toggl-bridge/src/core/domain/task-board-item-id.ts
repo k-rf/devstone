@@ -1,6 +1,6 @@
 import { Schema } from "effect";
 
-export const TaskBoardItemIdBrand: unique symbol = Symbol.for("TaskBoardItemId");
+const TaskBoardItemIdBrand: unique symbol = Symbol.for("TaskBoardItemId");
 
 /**
  * タスクボードアイテムの識別子 (Branded Type)

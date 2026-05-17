@@ -22,10 +22,7 @@
     "test": "vitest run",
     "test:cov": "vitest run --coverage"
   },
-  "dependencies": {
-    "effect": "3.21.2",
-    "type-fest": "5.6.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",
     "@devstone/configs-typescript": "workspace:*",
