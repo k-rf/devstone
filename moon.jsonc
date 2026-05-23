@@ -11,6 +11,9 @@
       "description": "未使用のファイル、エクスポート、依存関係を検出します。",
       "command": "pnpm run knip",
       "options": { "cache": false }
+    },
+    "test": {
+      "command": "noop"
     }
   }
 }

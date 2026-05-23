@@ -19,8 +19,7 @@
     "build": "tsgo -p tsconfig.build.json",
     "typecheck": "tsgo -p tsconfig.check.json",
     "lint": "eslint --fix",
-    "test": "vitest run",
-    "test:cov": "vitest run --coverage"
+    "test": "vitest run"
   },
   "dependencies": {
     "effect": "3.21.2",

@@ -10,7 +10,6 @@
     "typecheck": "tsgo -p tsconfig.check.json",
     "lint": "eslint --fix",
     "test": "vitest run",
-    "test:cov": "vitest run --coverage",
     "wrangler": "op run --no-masking -- wrangler"
   },
   "dependencies": {

@@ -14,7 +14,7 @@
     "coverage-report": {
       "description": "各プロジェクトのカバレッジを集約してHTMLレポートを生成します。",
       "script": "bun run src/scripts/collect-coverage.ts && bun run src/scripts/merge-report.ts",
-      "deps": ["#testable:test-cov"],
+      "deps": ["#testable:test"],
       "outputs": ["/coverage/**"]
     }
   }

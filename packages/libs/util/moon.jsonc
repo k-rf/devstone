@@ -13,8 +13,8 @@
   },
 
   "tasks": {
-    "test-cov": {
-      "command": "pnpm run test:cov",
+    "test": {
+      "command": "pnpm run test",
       "outputs": ["coverage/**"]
     }
   }

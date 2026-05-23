@@ -17,7 +17,8 @@
     "lint": "eslint --fix",
     "lint:md": "markdownlint-cli2 --fix '**/*.md'",
     "knip": "knip",
-    "test:cov:report": "moon run configs-vitest:coverage-report"
+    "test:cov": "moon run configs-vitest:coverage-report",
+    "check:all": "moon r :format && moon r :typecheck && moon r :lint && pnpm run lint:md && moon r :knip && pnpm run test:cov"
   },
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",

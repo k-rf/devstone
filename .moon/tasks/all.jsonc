@@ -13,10 +13,8 @@
       "description": "ESLintでコードを検査します。"
     },
     "build": {
-      "description": "ビルドを実行します。"
-    },
-    "test": {
-      "description": "テストを実行します。"
+      "description": "ビルドを実行します。",
+      "dependsOn": ["^:build"]
     }
   }
 }
