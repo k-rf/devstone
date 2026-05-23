@@ -3,7 +3,7 @@ import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 
-import { type TaskBoardItemId } from "../../../core/domain/task-board-item-id";
+import { TaskBoardItemId } from "../../../core/domain/task-board-item-id";
 import { TaskBoardPort } from "../../../core/port/outbound/notion/task-board.port";
 
 import { NotionAdapterLive } from "./notion.adapter";
@@ -22,7 +22,7 @@ afterAll(() => {
 
 const apiToken = "test-token";
 const adapter = NotionAdapterLive(apiToken);
-const pageId = "page-123" as TaskBoardItemId;
+const pageId = TaskBoardItemId.make("page-123");
 
 describe("正常系", () => {
   it("正しいペイロードが返された場合に TaskBoardItem に変換されること", async () => {
@@ -151,7 +151,7 @@ describe("異常系", () => {
   });
 
   it("ドメインモデルへのマッピングエラー (TaskBoardItem デコード失敗)", async () => {
-    const pageId = "page-123" as TaskBoardItemId;
+    const pageId = TaskBoardItemId.make("page-123");
     server.use(
       http.get(`https://api.notion.com/v1/pages/${pageId}`, () => {
         return HttpResponse.json({

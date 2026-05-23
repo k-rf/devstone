@@ -1,7 +1,7 @@
-import { Effect, Layer } from "effect";
+import { Effect, Layer, Option } from "effect";
 import { describe, expect, it, vi } from "vitest";
 
-import { type TaskBoardItemId } from "../domain/task-board-item-id";
+import { TaskBoardItemId } from "../domain/task-board-item-id";
 import { TaskBoardPort } from "../port/outbound/notion/task-board.port";
 import { NotificationPort } from "../port/outbound/slack/notification.port";
 import { TimeTrackerPort } from "../port/outbound/toggl/time-tracker.port";
@@ -12,7 +12,7 @@ describe("正常系", () => {
   it("タスクが見つかった場合、タイマーを開始すること", async () => {
     // Arrange
     const mockItem = {
-      id: "page-123" as TaskBoardItemId,
+      id: TaskBoardItemId.make("page-123"),
       parentDatabaseId: "db-123",
       title: "Test Task",
       category: "Client / Project",
@@ -43,7 +43,13 @@ describe("正常系", () => {
     );
 
     // Assert
-    expect(startTimerSpy).toHaveBeenCalledWith(mockItem);
+    expect(startTimerSpy).toHaveBeenCalledWith({
+      description: mockItem.title,
+      category: Option.some(mockItem.category),
+      tags: mockItem.tags,
+      startTime: Option.none(),
+      endTime: Option.none(),
+    });
   });
 });
 
@@ -71,7 +77,7 @@ describe("異常系", () => {
 
     // Act
     const action = Effect.runPromise(
-      startTogglTimerService("page-123" as TaskBoardItemId, "block-123").pipe(
+      startTogglTimerService(TaskBoardItemId.make("page-123"), "block-123").pipe(
         Effect.provide(layer),
       ),
     );

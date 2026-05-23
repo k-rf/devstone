@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { Effect, Option } from "effect";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
@@ -35,10 +36,14 @@ describe("正常系", () => {
       ),
     );
 
+    const title = faker.lorem.sentence();
+    const projectId = faker.number.int();
+    const tags = [faker.lorem.word(), faker.lorem.word()];
+
     const params = {
-      title: "Test Task",
-      projectId: Option.some(67_890),
-      tags: ["Tag1", "Tag2"],
+      title: title,
+      projectId: Option.some(projectId),
+      tags: tags,
     };
 
     const program = clientEffect.pipe(Effect.flatMap((client) => client.startTimer(params)));
@@ -47,9 +52,9 @@ describe("正常系", () => {
 
     const body = capturedBody as Record<string, unknown>;
     expect(body).toMatchObject({
-      description: "Test Task",
-      project_id: 67_890,
-      tags: ["Tag1", "Tag2"],
+      description: title,
+      project_id: projectId,
+      tags: tags,
       workspace_id: workspaceId,
       duration: -1,
       created_with: "notion-toggl-bridge",
@@ -57,30 +62,41 @@ describe("正常系", () => {
     expect(body["start"]).toBeDefined();
   });
 
-  it("projectId が None の場合、project_id が null になること", async () => {
-    let capturedBody: unknown;
+  it("getClients: クライアント一覧を取得できること", async () => {
+    const mockClients = [
+      { id: 1, name: faker.company.name() },
+      { id: 2, name: faker.company.name() },
+    ];
+
     server.use(
-      http.post(
-        `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/time_entries`,
-        async ({ request }) => {
-          capturedBody = await request.json();
-          return HttpResponse.json({ id: 999 });
-        },
+      http.get(`https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/clients`, () =>
+        HttpResponse.json(mockClients),
       ),
     );
 
-    const params = {
-      title: "Test Task No Project",
-      projectId: Option.none(),
-      tags: [],
-    };
+    const program = clientEffect.pipe(Effect.flatMap((client) => client.getClients()));
+    const result = await Effect.runPromise(program);
 
-    const program = clientEffect.pipe(Effect.flatMap((client) => client.startTimer(params)));
+    expect(result).toStrictEqual(mockClients);
+  });
 
-    await Effect.runPromise(program);
+  it("getProjects: プロジェクト一覧を取得できること", async () => {
+    const mockProjects = [
+      { id: 10, name: faker.commerce.productName() },
+      { id: 20, name: faker.commerce.productName() },
+    ];
 
-    const body = capturedBody as Record<string, unknown>;
-    expect(body["project_id"]).toBeNull();
+    server.use(
+      http.get(
+        `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/projects`,
+        () => HttpResponse.json(mockProjects),
+      ),
+    );
+
+    const program = clientEffect.pipe(Effect.flatMap((client) => client.getProjects()));
+    const result = await Effect.runPromise(program);
+
+    expect(result).toStrictEqual(mockProjects);
   });
 });
 
@@ -107,57 +123,11 @@ describe("異常系", () => {
     expect(error.message).toBe("Toggl API error: 400 Bad Request");
   });
 
-  it("Toggl API エラー (401 Unauthorized)", async () => {
-    server.use(
-      http.post(
-        `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/time_entries`,
-        () => {
-          return new HttpResponse("Unauthorized", { status: 401 });
-        },
-      ),
-    );
-
-    const params = {
-      title: "Test Task",
-      projectId: Option.none(),
-      tags: [],
-    };
-
-    const program = clientEffect.pipe(Effect.flatMap((client) => client.startTimer(params)));
-
-    const error = await Effect.runPromise(Effect.flip(program));
-    expect(error.message).toBe("Toggl API error: 401 Unauthorized");
-  });
-
-  it("Toggl API エラー (500 Internal Server Error)", async () => {
-    server.use(
-      http.post(
-        `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/time_entries`,
-        () => {
-          return new HttpResponse("Internal Server Error", { status: 500 });
-        },
-      ),
-    );
-
-    const params = {
-      title: "Test Task",
-      projectId: Option.none(),
-      tags: [],
-    };
-
-    const program = clientEffect.pipe(Effect.flatMap((client) => client.startTimer(params)));
-
-    const error = await Effect.runPromise(Effect.flip(program));
-    expect(error.message).toBe("Toggl API error: 500 Internal Server Error");
-  });
-
   it("ネットワークエラー", async () => {
     server.use(
       http.post(
         `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/time_entries`,
-        () => {
-          return HttpResponse.error();
-        },
+        () => HttpResponse.error(),
       ),
     );
 

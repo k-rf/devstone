@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -9,9 +10,9 @@ const server = setupServer(
   // Notion API Mock
   http.get("https://api.notion.com/v1/pages/:id", () => {
     return HttpResponse.json({
-      parent: { type: "database_id", database_id: "allowed-db-id" },
+      parent: { type: "database_id", database_id: faker.string.uuid() },
       properties: {
-        名前: { title: [{ plain_text: "E2E Task" }] },
+        名前: { title: [{ plain_text: faker.lorem.sentence() }] },
         カテゴリ: { select: { name: "Client / Project" } },
         タグ: { multi_select: [{ name: "TagA" }] },
       },
@@ -29,7 +30,7 @@ const server = setupServer(
     return HttpResponse.json([{ id: 301, name: "TagA" }]);
   }),
   http.post("https://api.track.toggl.com/api/v9/workspaces/:wid/time_entries", () => {
-    return HttpResponse.json({ id: 999 });
+    return HttpResponse.json({ id: faker.number.int() });
   }),
 
   // Slack Mock
@@ -50,10 +51,10 @@ afterAll(() => {
 });
 
 const mockEnv: Bindings = {
-  NOTION_WEBHOOK_SECRET: "test-secret",
-  NOTION_TOGGL_BRIDGE_API_TOKEN: "test-notion-token",
-  TOGGL_API_TOKEN: "test-toggl-token",
-  TOGGL_WORKSPACE_ID: "12345",
+  NOTION_WEBHOOK_SECRET: faker.string.alphanumeric(10),
+  NOTION_TOGGL_BRIDGE_API_TOKEN: faker.string.alphanumeric(20),
+  TOGGL_API_TOKEN: faker.string.alphanumeric(20),
+  TOGGL_WORKSPACE_ID: faker.number.int().toString(),
   SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/mock",
   TOGGL_MAPPER: {
     get: vi.fn(),
@@ -65,13 +66,13 @@ const mockEnv: Bindings = {
 };
 
 const validPayload = {
-  source: { user_id: "user-1" },
+  source: { user_id: faker.string.uuid() },
   data: {
-    id: "block-123",
+    id: faker.string.uuid(),
     properties: {
       "☑️ やること": {
         type: "relation",
-        relation: [{ id: "todo-456" }],
+        relation: [{ id: faker.string.uuid() }],
       },
     },
   },
@@ -94,7 +95,7 @@ describe("正常系", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shared-Secret": "test-secret",
+        "X-Shared-Secret": mockEnv.NOTION_WEBHOOK_SECRET,
       },
       body: JSON.stringify(validPayload),
     });
@@ -151,7 +152,7 @@ describe("異常系", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shared-Secret": "test-secret",
+        "X-Shared-Secret": mockEnv.NOTION_WEBHOOK_SECRET,
       },
       body: JSON.stringify(invalidPayload),
     });
@@ -174,7 +175,7 @@ describe("異常系", () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Shared-Secret": "test-secret",
+        "X-Shared-Secret": mockEnv.NOTION_WEBHOOK_SECRET,
       },
       body: JSON.stringify(validPayload),
     });
