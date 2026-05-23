@@ -1,6 +1,6 @@
 import { Context, Data, type Effect } from "effect";
 
-import { type TaskBoardItem } from "../../../domain/task-board-item";
+import { type TrackingEntry } from "../../../domain/tracking-entry";
 
 /**
  * タイムトラッカー関連のエラー
@@ -13,6 +13,6 @@ export class TimeTrackerError extends Data.TaggedError("TimeTrackerError")<{
 export class TimeTrackerPort extends Context.Tag("TimeTrackerPort")<
   TimeTrackerPort,
   {
-    readonly startTimer: (item: TaskBoardItem) => Effect.Effect<void, TimeTrackerError>;
+    readonly startTimer: (entry: TrackingEntry) => Effect.Effect<void, TimeTrackerError>;
   }
 >() {}

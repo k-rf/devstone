@@ -2,6 +2,7 @@ import { Effect, Option, Schema } from "effect";
 
 import { TimeTrackerError } from "../../../core/port/outbound/toggl/time-tracker.port";
 
+import { TogglResourcePayload } from "./toggl-resource.payload";
 import { TogglTimeEntryPayload } from "./toggl-time-entry.payload";
 
 /**
@@ -10,12 +11,29 @@ import { TogglTimeEntryPayload } from "./toggl-time-entry.payload";
 export interface TogglApiClient {
   /**
    * タイマーを開始する
+   * @param params - 開始パラメータ
+   * @param params.title - タイマーのタイトル
+   * @param params.projectId - プロジェクトID
+   * @param params.tags - タグのリスト
+   * @returns 処理結果を示す Effect
    */
   readonly startTimer: (params: {
     readonly title: string;
     readonly projectId: Option.Option<number>;
     readonly tags: readonly string[];
   }) => Effect.Effect<void, TimeTrackerError>;
+
+  /**
+   * クライアント一覧を取得する
+   * @returns クライアント一覧を含む Effect
+   */
+  readonly getClients: () => Effect.Effect<readonly TogglResourcePayload[], TimeTrackerError>;
+
+  /**
+   * プロジェクト一覧を取得する
+   * @returns プロジェクト一覧を含む Effect
+   */
+  readonly getProjects: () => Effect.Effect<readonly TogglResourcePayload[], TimeTrackerError>;
 }
 
 /**
@@ -118,6 +136,22 @@ export const makeTogglApiClient = (
             },
           );
         }).pipe(Effect.asVoid),
+
+      getClients: () =>
+        fetchToggl(
+          ctx,
+          `/workspaces/${String(workspaceId)}/clients`,
+          Schema.Array(TogglResourcePayload),
+          { method: "GET" },
+        ),
+
+      getProjects: () =>
+        fetchToggl(
+          ctx,
+          `/workspaces/${String(workspaceId)}/projects`,
+          Schema.Array(TogglResourcePayload),
+          { method: "GET" },
+        ),
     };
   });
 

@@ -1,6 +1,7 @@
-import { Effect } from "effect";
+import { Effect, Option, Schema } from "effect";
 
 import { type TaskBoardItemId } from "../domain/task-board-item-id";
+import { TrackingEntry } from "../domain/tracking-entry";
 import { TaskBoardPort } from "../port/outbound/notion/task-board.port";
 import { NotificationPort } from "../port/outbound/slack/notification.port";
 import { TimeTrackerPort } from "../port/outbound/toggl/time-tracker.port";
@@ -16,11 +17,17 @@ export const startTogglTimerService = (todoPageId: TaskBoardItemId, timeBlockId:
     const taskBoard = yield* TaskBoardPort;
     const timeTracker = yield* TimeTrackerPort;
 
-    // 1. タスクボードからアイテムを取得
     const item = yield* taskBoard.getItem(todoPageId);
 
-    // 2. タイムトラッカーでタイマーを開始
-    yield* timeTracker.startTimer(item);
+    const entry = yield* Schema.validate(TrackingEntry)({
+      description: item.title,
+      category: Option.some(item.category),
+      tags: item.tags,
+      startTime: Option.none(),
+      endTime: Option.none(),
+    });
+
+    yield* timeTracker.startTimer(entry);
   }).pipe(
     Effect.tapError((error) =>
       Effect.gen(function* () {
