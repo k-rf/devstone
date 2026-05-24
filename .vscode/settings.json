@@ -1,4 +1,63 @@
 {
   "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "js/ts.tsdk.promptToUseWorkspaceVersion": true
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.addMissingImports.ts": "explicit",
+    "source.organizeImports": "never"
+  },
+  "editor.defaultColorDecorators": "always",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+
+  "eslint.rules.customizations": [{ "rule": "@cspell/spellchecker", "severity": "off" }],
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+
+  "markdownlint.configFile": ".markdownlint-cli2.jsonc",
+
+  "oxc.enable.oxfmt": true,
+  "oxc.enable.oxlint": false,
+
+  "textlint.autoFixOnSave": true,
+  "textlint.configPath": ".textlintrc.json",
+
+  "[typescript][typescriptreact][javascript][css][json][jsonc][snippets]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+
+  "[shellscript][dotenv][ignore][properties]": {
+    "files.eol": "\n",
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+
+  "[dockerfile]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.defaultFormatter": "docker.docker"
+  },
+
+  "[markdown][instructions][prompt][chatagent][skill]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "files.trimTrailingWhitespace": false,
+    "cSpell.fixSpellingWithRenameProvider": true,
+    "cSpell.advanced.feature.useReferenceProviderWithRename": true,
+    "cSpell.advanced.feature.useReferenceProviderRemove": "/^#+\\s/"
+  }
 }
