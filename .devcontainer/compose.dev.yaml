@@ -8,6 +8,9 @@ services:
         - REMOTE_WORKSPACES=${ROOT_REMOTE_WORKSPACES}
         - REMOTE_HOME=${ROOT_REMOTE_HOME}
         - DOCKER_GID=${DOCKER_GID}
+    group_add:
+      - root
+      - ${DOCKER_GID}
     env_file:
       - .env
       - .env.local

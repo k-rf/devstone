@@ -27,8 +27,6 @@ RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io d
 RUN useradd -m ${REMOTE_USER} -u 1000 -s /bin/bash
 # ローカル開発環境のため許容している
 RUN echo "${REMOTE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-RUN groupmod -g ${DOCKER_GID} docker \
-  && usermod -aG docker,root ${REMOTE_USER}
 
 # 日本語化対応
 # ------------------------------------------------------------------------------
