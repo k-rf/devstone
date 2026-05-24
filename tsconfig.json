@@ -21,6 +21,9 @@
       "path": "./packages/configs/vitest"
     },
     {
+      "path": "./packages/libs/json-canvas-spec"
+    },
+    {
       "path": "./packages/libs/util"
     },
     {
