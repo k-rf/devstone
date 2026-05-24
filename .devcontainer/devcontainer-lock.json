@@ -5,6 +5,11 @@
       "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671",
       "integrity": "sha256:d22f50b70ed75339b4eed1ba9ecde3a1791f90e88d37936517e3bace0bbad671"
     },
+    "ghcr.io/devcontainers/features/sshd": {
+      "version": "1.1.0",
+      "resolved": "ghcr.io/devcontainers/features/sshd@sha256:f5251b8e4325f68f7280973c6cd65daff414449c66f240621502d4e8e74eb7ee",
+      "integrity": "sha256:f5251b8e4325f68f7280973c6cd65daff414449c66f240621502d4e8e74eb7ee"
+    },
     "ghcr.io/itsmechlark/features/1password": {
       "version": "1.5.0",
       "resolved": "ghcr.io/itsmechlark/features/1password@sha256:d4d27764112af3639f68701c85525c54477ebab7670fbaf4d90962e41209d3f8",

@@ -19,3 +19,5 @@ source ${HOME}/.bash_completion.d/moon.sh
 EOF
 
 pnpm exec lefthook install
+
+echo "${SSH_PUB_KEY}" >> "${HOME}/.ssh/authorized_keys"

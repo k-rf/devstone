@@ -8,6 +8,8 @@ services:
         - REMOTE_WORKSPACES=${ROOT_REMOTE_WORKSPACES}
         - REMOTE_HOME=${ROOT_REMOTE_HOME}
         - DOCKER_GID=${DOCKER_GID}
+    ports:
+      - 2222:2222
     group_add:
       - root
       - ${DOCKER_GID}
