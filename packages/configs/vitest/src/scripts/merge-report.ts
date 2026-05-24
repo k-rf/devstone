@@ -1,6 +1,31 @@
 import { Command, Path } from "@effect/platform";
+import { type Process } from "@effect/platform/CommandExecutor";
 import { BunContext, BunRuntime } from "@effect/platform-bun";
-import { Config, Effect } from "effect";
+import { Config, Effect, Exit, Stream, String } from "effect";
+
+const runString = <E, R>(stream: Stream.Stream<Uint8Array, E, R>): Effect.Effect<string, E, R> =>
+  stream.pipe(Stream.decodeText(), Stream.runFold(String.empty, String.concat));
+
+const runCommand = (command: Command.Command, scope: string) =>
+  Command.start(command).pipe(
+    Effect.andThen((process: Process) =>
+      Effect.all([process.exitCode, runString(process.stdout), runString(process.stderr)], {
+        concurrency: 3,
+      }).pipe(
+        Effect.flatMap(([exitCode, stdout, stderr]) =>
+          exitCode === 0
+            ? Effect.logInfo(`[${scope}]`, stdout).pipe(Effect.as(exitCode))
+            : Effect.logError(`[${scope}]`, ...stderr.split("\n")).pipe(
+                Effect.andThen(
+                  Effect.fail(
+                    new Error(`Process exited with code ${exitCode.toString()} in "${scope}"`),
+                  ),
+                ),
+              ),
+        ),
+      ),
+    ),
+  );
 
 const main = Effect.fn(function* () {
   const rootDir = yield* Config.string("PROJECT_ROOT");
@@ -26,11 +51,26 @@ const main = Effect.fn(function* () {
     "--exclude-after-remap=false",
   );
 
-  yield* Command.string(merge).pipe(
-    Effect.tap((output) => Effect.logInfo(output)),
-    Effect.andThen(Command.string(report)),
-    Effect.tap((output) => Effect.logInfo(output)),
-  );
+  yield* runCommand(merge, "merge");
+  yield* runCommand(report, "report");
 });
 
-Effect.suspend(main).pipe(Effect.provide(BunContext.layer), BunRuntime.runMain);
+BunRuntime.runMain(
+  Effect.scoped(Effect.suspend(main).pipe(Effect.provide(BunContext.layer))).pipe(
+    Effect.catchAll((error) => Effect.fail(`[main] ${error.message}`)),
+  ),
+  {
+    teardown: (exit, onExit) => {
+      exit.pipe(
+        Exit.match({
+          onFailure: () => {
+            onExit(2);
+          },
+          onSuccess: () => {
+            onExit(0);
+          },
+        }),
+      );
+    },
+  },
+);
