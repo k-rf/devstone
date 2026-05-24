@@ -18,6 +18,4 @@ cat >> "${HOME}/.bashrc" <<'EOF'
 source ${HOME}/.bash_completion.d/moon.sh
 EOF
 
-npm install --global zx @google/gemini-cli @github/copilot
-
 pnpm exec lefthook install

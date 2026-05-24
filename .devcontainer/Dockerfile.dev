@@ -48,6 +48,7 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 USER ${REMOTE_USER}
 RUN bash -c "$(curl -fsSL https://moonrepo.dev/install/proto.sh)" -- --yes
 RUN bash -c "$(curl -fsSL https://claude.ai/install.sh)"
+RUN bash -c "$(curl -fsSL https://antigravity.google/cli/install.sh)"
 RUN sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes \
   && echo 'eval "$(starship init bash)"' >> ${REMOTE_HOME}/.bashrc
 

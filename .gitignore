@@ -162,3 +162,7 @@ styled-system-studio
 # Local files
 apps/notion-toggl-bridge/scripts/seed.ts
 .todo
+
+# Antigravity CLI
+.antigravitycli/
+
