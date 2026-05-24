@@ -10,6 +10,8 @@ const config = defineConfig({
       provider: "istanbul",
       reporter: [["json", { file: "coverage.json" }], "text-summary"],
       enabled: true,
+      include: ["src/**/*.ts"],
+      exclude: ["src/**/*.{spec-d,spec}.ts"],
     },
     onConsoleLog: (...[, type]) => {
       // 期待されるエラーケースのテスト時にアプリが出すスタックトレースを抑制する
