@@ -6,6 +6,9 @@
   "include": ["*.ts", ".gemini/**/*.ts"],
   "references": [
     {
+      "path": "./apps/easel"
+    },
+    {
       "path": "./apps/notion-toggl-bridge"
     },
     {

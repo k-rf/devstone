@@ -17,12 +17,14 @@
     "msgpackr",
     "oneline",
     "oxfmt",
+    "pandacss",
     "sonarjs",
     "toggl",
     "tsgo",
     "Unrepresentable",
     "unrs",
     "vitest",
-    "workerd"
+    "workerd",
+    "xyflow"
   ]
 }

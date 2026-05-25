@@ -5,7 +5,11 @@ const config: KnipConfig = {
   ignoreDependencies: ["commitlint", "lint-staged", "nyc"],
   workspaces: {
     ".": {},
-    "apps/*": {
+    "apps/easel": {
+      entry: ["src/main.ts"],
+      project: ["src/**/*.ts"],
+    },
+    "apps/notion-toggl-bridge": {
       entry: ["scripts/*.ts"],
       project: ["src/**/*.ts"],
     },

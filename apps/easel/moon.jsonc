@@ -1,0 +1,21 @@
+{
+  "$schema": "../../.moon/cache/schemas/project.json",
+
+  "id": "easel",
+  "layer": "application",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "tags": ["testable"],
+
+  "project": {
+    "title": "easel",
+    "description": "JSON-Canvas 仕様に基づいたキャンバスデータ（.canvas ファイル）を型安全に作成・編集するための CLI ツールです。"
+  },
+
+  "tasks": {
+    "test": {
+      "command": "pnpm run test",
+      "outputs": ["coverage/**"]
+    }
+  }
+}
