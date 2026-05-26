@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@devstone/libs-json-canvas-spec": "workspace:*",
+    "@devstone/libs-util": "workspace:*",
     "@effect/cli": "0.54.0",
     "@effect/platform": "0.96.1",
     "@effect/platform-bun": "0.89.0",

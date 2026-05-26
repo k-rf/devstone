@@ -65,6 +65,9 @@ importers:
       '@devstone/libs-json-canvas-spec':
         specifier: workspace:*
         version: link:../../packages/libs/json-canvas-spec
+      '@devstone/libs-util':
+        specifier: workspace:*
+        version: link:../../packages/libs/util
       '@effect/cli':
         specifier: 0.54.0
         version: 0.54.0(@effect/platform@0.96.1(effect@3.21.2))(@effect/printer-ansi@0.40.12(@effect/typeclass@0.31.12(effect@3.21.2))(effect@3.21.2))(@effect/printer@0.40.12(@effect/typeclass@0.31.12(effect@3.21.2))(effect@3.21.2))(effect@3.21.2)
