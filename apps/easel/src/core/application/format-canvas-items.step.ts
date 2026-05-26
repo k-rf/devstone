@@ -11,23 +11,17 @@ export const formatCanvasItemsStep = (canvas: JsonCanvas) =>
     const nodes = canvas.nodes ?? [];
     const edges = canvas.edges ?? [];
 
-    const nodesOutput =
-      nodes.length === 0
-        ? "(No nodes)\n"
-        : nodes.map((n) => `- ${n.id} [${n.type}]`).join("\n") + "\n";
+    const nodesOutput = nodes.map((n) => `- ${n.id} [${n.type}]`).join("\n");
 
-    const edgesOutput =
-      edges.length === 0
-        ? "(No edges)\n"
-        : edges
-            .map((e) => {
-              const sideInfo =
-                e.fromSide !== undefined || e.toSide !== undefined
-                  ? ` (${e.fromSide ?? "any"} -> ${e.toSide ?? "any"})`
-                  : "";
-              return `- ${e.id} [${e.fromNode} -> ${e.toNode}]${sideInfo}`;
-            })
-            .join("\n") + "\n";
+    const edgesOutput = edges
+      .map((e) => {
+        const sideInfo =
+          e.fromSide !== undefined || e.toSide !== undefined
+            ? ` (${e.fromSide ?? "any"} -> ${e.toSide ?? "any"})`
+            : "";
+        return `- ${e.id} [${e.fromNode} -> ${e.toNode}]${sideInfo}`;
+      })
+      .join("\n");
 
-    return `=== Nodes ===\n${nodesOutput}\n=== Edges ===\n${edgesOutput}`;
+    return ["nodes:", nodesOutput, "edges:", edgesOutput].join("\n");
   });
