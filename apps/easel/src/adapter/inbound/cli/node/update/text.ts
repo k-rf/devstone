@@ -4,29 +4,15 @@ import { Console, Effect } from "effect";
 import { updateNode } from "../../../../../core/application/canvas.service.js";
 import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
 
-const nodeIdOption = Options.text("id").pipe(
-  Options.withDescription("Unique identifier of the text node to update"),
-);
-const xOption = Options.integer("x").pipe(
-  Options.optional,
-  Options.withDescription("New X coordinate of the node"),
-);
-const yOption = Options.integer("y").pipe(
-  Options.optional,
-  Options.withDescription("New Y coordinate of the node"),
-);
-const widthOption = Options.integer("width").pipe(
-  Options.optional,
-  Options.withDescription("New width of the node"),
-);
-const heightOption = Options.integer("height").pipe(
-  Options.optional,
-  Options.withDescription("New height of the node"),
-);
-const colorOption = Options.text("color").pipe(
-  Options.optional,
-  Options.withDescription("New color preset (1 to 6) or hex color code"),
-);
+import {
+  colorOption,
+  heightOption,
+  nodeIdOption,
+  widthOption,
+  xOption,
+  yOption,
+} from "./options.js";
+
 const textOption = Options.text("text").pipe(
   Options.optional,
   Options.withDescription("New text content for the node"),

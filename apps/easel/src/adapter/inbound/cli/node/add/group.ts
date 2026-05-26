@@ -4,6 +4,7 @@ import { Console, Effect, Option } from "effect";
 import { addNode } from "../../../../../core/application/canvas.service.js";
 import { generateId } from "../../../../../utils/generate-id.js";
 import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
+
 import {
   colorOption,
   heightOption,
@@ -12,7 +13,7 @@ import {
   widthOption,
   xOption,
   yOption,
-} from "../options.js";
+} from "./options.js";
 
 /**
  * Group タイプのノードをキャンバスに追加または更新するコマンド。

@@ -1,36 +1,18 @@
-import { Command, Options } from "@effect/cli";
+import { Command } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateNode } from "../../../../../core/application/canvas.service.js";
 import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
 
-const nodeIdOption = Options.text("id").pipe(
-  Options.withDescription("Unique identifier of the group node to update"),
-);
-const xOption = Options.integer("x").pipe(
-  Options.optional,
-  Options.withDescription("New X coordinate of the node"),
-);
-const yOption = Options.integer("y").pipe(
-  Options.optional,
-  Options.withDescription("New Y coordinate of the node"),
-);
-const widthOption = Options.integer("width").pipe(
-  Options.optional,
-  Options.withDescription("New width of the node"),
-);
-const heightOption = Options.integer("height").pipe(
-  Options.optional,
-  Options.withDescription("New height of the node"),
-);
-const colorOption = Options.text("color").pipe(
-  Options.optional,
-  Options.withDescription("New color preset (1 to 6) or hex color code"),
-);
-const labelOption = Options.text("label").pipe(
-  Options.optional,
-  Options.withDescription("New optional text label displayed on top of the node"),
-);
+import {
+  colorOption,
+  heightOption,
+  labelOption,
+  nodeIdOption,
+  widthOption,
+  xOption,
+  yOption,
+} from "./options.js";
 
 /**
  * Group タイプのノードを更新するコマンド。
