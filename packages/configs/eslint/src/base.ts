@@ -41,6 +41,10 @@ export const base = defineConfig(
           message:
             "describe の説明に関数名やクラス名などの識別子を繰り返すことは禁止されています。意味のあるコンテキストを記述してください。",
         },
+        {
+          selector: "ImportDeclaration[importKind='type']",
+          message: "import type ... ではなく、import { type ... } を使用してください。",
+        },
       ],
     },
   },

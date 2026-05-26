@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "typecheck": "tsgo -p tsconfig.check.json",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix --max-warnings 0"
   },
   "devDependencies": {
     "eslint": "10.2.1"

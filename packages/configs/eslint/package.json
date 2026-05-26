@@ -73,7 +73,7 @@
     "clean": "rimraf dist",
     "build": "tsgo -p tsconfig.build.json",
     "typecheck": "tsgo -p tsconfig.check.json",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix --max-warnings 0"
   },
   "dependencies": {
     "@cspell/eslint-plugin": "10.0.0",

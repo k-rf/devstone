@@ -1,8 +1,8 @@
 const config = {
-  "*.{ts,mts,cts,tsx}": ["oxfmt", "bash -c 'pnpm run typecheck'", "eslint --fix"],
-  "*.{js,mjs,cjs,jsx}": ["oxfmt", "eslint --fix"],
-  "*.{json,jsonc}": ["oxfmt", "eslint --fix"],
-  "*.css": ["oxfmt", "eslint --fix"],
+  "*.{ts,mts,cts,tsx}": ["oxfmt", "bash -c 'pnpm run typecheck'", "eslint --fix --max-warnings 0"],
+  "*.{js,mjs,cjs,jsx}": ["oxfmt", "eslint --fix --max-warnings 0"],
+  "*.{json,jsonc}": ["oxfmt", "eslint --fix --max-warnings 0"],
+  "*.css": ["oxfmt", "eslint --fix --max-warnings 0"],
   "*.md": ["oxfmt", "markdownlint-cli2 --fix"],
 };
 

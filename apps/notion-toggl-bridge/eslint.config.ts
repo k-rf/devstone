@@ -1,4 +1,12 @@
-import { base, cspell, importConfig, jsdoc, sonarjs, unicorn } from "@devstone/configs-eslint";
+import {
+  base,
+  cspell,
+  importConfig,
+  jsdoc,
+  json,
+  sonarjs,
+  unicorn,
+} from "@devstone/configs-eslint";
 import { defineConfig } from "eslint/config";
 
 const config = defineConfig(
@@ -14,9 +22,11 @@ const config = defineConfig(
   cspell,
   importConfig,
   jsdoc,
+  json,
   sonarjs,
   unicorn,
   {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     rules: {
       "import-x/no-restricted-paths": [
         "error",

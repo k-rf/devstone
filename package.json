@@ -14,7 +14,7 @@
     "clean": "rimraf dist",
     "typecheck": "tsgo -p tsconfig.check.json",
     "format": "oxfmt",
-    "lint": "eslint --fix",
+    "lint": "eslint --fix --max-warnings 0",
     "lint:md": "markdownlint-cli2 --fix '**/*.md'",
     "knip": "knip",
     "test:cov": "moon run configs-vitest:coverage-report",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",
     "@devstone/configs-typescript": "workspace:*",
+    "@devstone/easel": "workspace:*",
     "@types/bun": "1.3.13",
     "@types/node": "25.6.0",
     "@typescript/native-preview": "7.0.0-dev.20260430.1",

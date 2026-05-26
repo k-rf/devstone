@@ -8,7 +8,7 @@
     "dev": "op run -- wrangler dev",
     "deploy": "op run -- wrangler deploy",
     "typecheck": "tsgo -p tsconfig.check.json",
-    "lint": "eslint --fix",
+    "lint": "eslint --fix --max-warnings 0",
     "test": "vitest run",
     "wrangler": "op run --no-masking -- wrangler"
   },

@@ -23,7 +23,7 @@
     "clean": "rimraf dist",
     "build": "tsgo -p tsconfig.build.json",
     "typecheck": "tsgo -p tsconfig.check.json",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix --max-warnings 0"
   },
   "devDependencies": {
     "@effect/platform": "0.96.1",
