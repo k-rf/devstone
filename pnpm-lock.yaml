@@ -14,9 +14,6 @@ importers:
       '@devstone/configs-typescript':
         specifier: workspace:*
         version: link:packages/configs/typescript
-      '@devstone/easel':
-        specifier: workspace:*
-        version: link:apps/easel
       '@types/bun':
         specifier: 1.3.13
         version: 1.3.13

@@ -18,12 +18,12 @@
     "lint:md": "markdownlint-cli2 --fix '**/*.md'",
     "knip": "knip",
     "test:cov": "moon run configs-vitest:coverage-report",
-    "check:all": "moon r :format && moon r :typecheck && moon r :lint && pnpm run lint:md && moon r :knip && pnpm run test:cov"
+    "check:all": "moon r :format && moon r :typecheck && moon r :lint && pnpm run lint:md && moon r :knip && pnpm run test:cov",
+    "build:easel": "docker build -t devstone/easel:latest -f apps/easel/Dockerfile ."
   },
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",
     "@devstone/configs-typescript": "workspace:*",
-    "@devstone/easel": "workspace:*",
     "@types/bun": "1.3.13",
     "@types/node": "25.6.0",
     "@typescript/native-preview": "7.0.0-dev.20260430.1",
