@@ -1,7 +1,6 @@
 import {
   Edge as EdgeSchema,
   Node as NodeSchema,
-  NodeId,
   type JsonCanvas,
 } from "@devstone/libs-json-canvas-spec";
 import { Effect, Schema } from "effect";
@@ -9,6 +8,10 @@ import { Effect, Schema } from "effect";
 import * as Domain from "../domain/canvas/index.js";
 import { CanvasError } from "../domain/errors.js";
 import { CanvasRepository } from "../port/repository/canvas.repository.js";
+
+export { updateNodeWorkflow as updateNode } from "./update-node.workflow.js";
+export { moveNodeWorkflow as moveNode } from "./move-node.workflow.js";
+export { updateEdgeWorkflow as updateEdge } from "./update-edge.workflow.js";
 
 /**
  * ID で指定されたノードまたはエッジを取得します。
@@ -90,29 +93,6 @@ export const addNode = (nodeData: unknown) =>
   });
 
 /**
- * ノードを検証・更新し、キャンバスを保存します。
- * @param nodeData - 更新する未検証のノードデータ
- * @returns 処理完了を示す Effect
- */
-export const updateNode = (nodeData: unknown) =>
-  Effect.gen(function* () {
-    const repo = yield* CanvasRepository;
-    const canvas = yield* repo.read();
-
-    const validated = yield* Effect.try({
-      try: () => Schema.decodeUnknownSync(NodeSchema)(nodeData),
-      catch: (error) =>
-        new CanvasError({
-          message: `ノードデータの検証に失敗しました: ${(error as Error).message}`,
-          cause: error,
-        }),
-    });
-
-    const updatedCanvas = yield* Domain.updateNode(canvas, validated);
-    yield* repo.write(updatedCanvas);
-  });
-
-/**
  * ノードを削除し（関連エッジも含む）、キャンバスを保存します。
  * @param id - 削除するノードの ID
  * @returns 処理完了を示す Effect
@@ -122,32 +102,6 @@ export const removeNode = (id: string) =>
     const repo = yield* CanvasRepository;
     const canvas = yield* repo.read();
     const updatedCanvas = yield* Domain.removeNode(canvas, id);
-    yield* repo.write(updatedCanvas);
-  });
-
-/**
- * ノードの位置を移動（絶対または相対）し、キャンバスを保存します。
- * @param id - 移動するノードの ID
- * @param options - 移動座標オプション（絶対座標 x,y または 相対座標 dx,dy）
- * @param options.x - 移動先の絶対 X 座標
- * @param options.y - 移動先の絶対 Y 座標
- * @param options.dx - 相対移動する X 方向の距離
- * @param options.dy - 相対移動する Y 方向の距離
- * @returns 処理完了を示す Effect
- */
-export const moveNode = (
-  id: string,
-  options: {
-    readonly x?: number;
-    readonly y?: number;
-    readonly dx?: number;
-    readonly dy?: number;
-  },
-) =>
-  Effect.gen(function* () {
-    const repo = yield* CanvasRepository;
-    const canvas = yield* repo.read();
-    const updatedCanvas = yield* Domain.moveNode(canvas, NodeId.make(id), options);
     yield* repo.write(updatedCanvas);
   });
 
@@ -173,29 +127,6 @@ export const addEdge = (edgeData: unknown) =>
     const updatedCanvas = yield* Domain.addEdge(canvas, validated);
     yield* repo.write(updatedCanvas);
     return validated.id;
-  });
-
-/**
- * エッジを検証・更新し、キャンバスを保存します。
- * @param edgeData - 更新する未検証のエッジデータ
- * @returns 処理完了を示す Effect
- */
-export const updateEdge = (edgeData: unknown) =>
-  Effect.gen(function* () {
-    const repo = yield* CanvasRepository;
-    const canvas = yield* repo.read();
-
-    const validated = yield* Effect.try({
-      try: () => Schema.decodeUnknownSync(EdgeSchema)(edgeData),
-      catch: (error) =>
-        new CanvasError({
-          message: `エッジデータの検証に失敗しました: ${(error as Error).message}`,
-          cause: error,
-        }),
-    });
-
-    const updatedCanvas = yield* Domain.updateEdge(canvas, validated);
-    yield* repo.write(updatedCanvas);
   });
 
 /**
