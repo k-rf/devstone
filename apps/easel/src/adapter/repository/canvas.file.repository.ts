@@ -16,6 +16,37 @@ export class CanvasFileConfig extends Context.Tag("CanvasFileConfig")<
 >() {}
 
 /**
+ * 配列プロパティをカスタムフォーマットで JSON 文字列化する。
+ * 各要素は 1 行で出力され、要素が無い場合は "[]" を返す。
+ * @param key - プロパティのキー名
+ * @param items - シリアライズ対象の要素配列
+ * @returns フォーマットされたプロパティ文字列
+ */
+const formatArrayProperty = (key: string, items: readonly unknown[]): string => {
+  const content =
+    items.length === 0
+      ? "[]"
+      : ["[", items.map((item) => `    ${JSON.stringify(item)}`).join(",\n"), "  ]"].join("\n");
+
+  return `  "${key}": ${content}`;
+};
+
+/**
+ * キャンバスデータを JSON 形式の文字列に変換する。
+ * nodes と edges の各要素は1行で出力される。
+ * @param canvas - 変換対象のキャンバスデータ
+ * @returns JSON文字列
+ */
+const stringifyCanvas = (canvas: JsonCanvas): string => {
+  const properties = [
+    canvas.nodes === undefined ? undefined : formatArrayProperty("nodes", canvas.nodes),
+    canvas.edges === undefined ? undefined : formatArrayProperty("edges", canvas.edges),
+  ].filter((p) => p !== undefined);
+
+  return properties.length === 0 ? "{}" : `{\n${properties.join(",\n")}\n}`;
+};
+
+/**
  * FileSystem を使ってキャンバスファイルの読み書きを行う、CanvasRepository の実装 Layer。
  */
 export const CanvasFileRepository = Layer.effect(
@@ -72,7 +103,7 @@ export const CanvasFileRepository = Layer.effect(
 
       write: (canvas) =>
         Effect.gen(function* () {
-          yield* fs.writeFileString(config.filePath, JSON.stringify(canvas, undefined, 2)).pipe(
+          yield* fs.writeFileString(config.filePath, stringifyCanvas(canvas)).pipe(
             Effect.mapError(
               (error) =>
                 new CanvasError({

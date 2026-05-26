@@ -1,8 +1,9 @@
 import path from "node:path";
 
+import { JsonCanvas } from "@devstone/libs-json-canvas-spec";
 import { FileSystem } from "@effect/platform";
 import { SystemError } from "@effect/platform/Error";
-import { Effect, Layer } from "effect";
+import { Effect, Layer, Schema } from "effect";
 import { vol } from "memfs";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -75,6 +76,56 @@ describe("CanvasFileRepository によるファイル入出力", () => {
       // Assert
       const writtenData = vol.readFileSync(testFilePath, "utf8");
       expect(JSON.parse(writtenData as string)).toEqual(canvas);
+    });
+
+    it("nodes と edges が1行になったカスタム JSON 形式で書き込めること", async () => {
+      // Arrange
+      const canvas = Schema.decodeSync(JsonCanvas)({
+        nodes: [
+          { id: "n1", type: "text", x: 0, y: 0, width: 100, height: 100, text: "hello" },
+          { id: "n2", type: "file", x: 200, y: 200, width: 80, height: 80, file: "doc.md" },
+        ],
+        edges: [{ id: "e1", fromNode: "n1", toNode: "n2", color: "1" }],
+      });
+      const program = Effect.gen(function* () {
+        const repo = yield* CanvasRepository;
+        yield* repo.write(canvas);
+      }).pipe(Effect.provide(makeTestLayer()));
+
+      // Act
+      await Effect.runPromise(program);
+
+      // Assert
+      const writtenData = vol.readFileSync(testFilePath, "utf8") as string;
+      const expectedLines = [
+        "{",
+        '  "nodes": [',
+        '    {"id":"n1","type":"text","x":0,"y":0,"width":100,"height":100,"text":"hello"},',
+        '    {"id":"n2","type":"file","x":200,"y":200,"width":80,"height":80,"file":"doc.md"}',
+        "  ],",
+        '  "edges": [',
+        '    {"id":"e1","fromNode":"n1","toNode":"n2","color":"1"}',
+        "  ]",
+        "}",
+      ].join("\n");
+
+      expect(writtenData).toBe(expectedLines);
+    });
+
+    it("nodes と edges が undefined のキャンバスデータを正常に書き込めること", async () => {
+      // Arrange
+      const canvas = Schema.decodeSync(JsonCanvas)({});
+      const program = Effect.gen(function* () {
+        const repo = yield* CanvasRepository;
+        yield* repo.write(canvas);
+      }).pipe(Effect.provide(makeTestLayer()));
+
+      // Act
+      await Effect.runPromise(program);
+
+      // Assert
+      const writtenData = vol.readFileSync(testFilePath, "utf8");
+      expect(writtenData).toBe("{}");
     });
   });
 
