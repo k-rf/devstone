@@ -14,4 +14,4 @@ WORKDIR /app
 
 COPY --from=builder /usr/src/app/apps/easel/dist/bun/easel.js ./easel.js
 
-ENTRYPOINT ["bun", "run", "easel.js"]
+ENTRYPOINT ["bun", "run", "/app/easel.js"]
