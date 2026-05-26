@@ -4,10 +4,10 @@ import { addNodeCommand } from "./add/command.js";
 import { rmNodeCommand } from "./rm.js";
 
 /**
- * キャンバス内のノードを管理するための node コマンド。
- * サブコマンドとして add と rm を持ちます。
+ * easel の node コマンド定義。
+ * サブコマンドとして add, rm を持ちます。
  */
 export const nodeCommand = Command.make("node").pipe(
-  Command.withDescription("Manage nodes within the canvas"),
+  Command.withDescription("Manage nodes in the canvas"),
   Command.withSubcommands([addNodeCommand, rmNodeCommand]),
 );

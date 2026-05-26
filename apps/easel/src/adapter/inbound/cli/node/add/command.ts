@@ -6,11 +6,11 @@ import { addLinkNodeCommand } from "./link.js";
 import { addTextNodeCommand } from "./text.js";
 
 /**
- * ノードを追加するための add 親コマンド。
- * サブコマンドとして text, file, link, group を持ちます。
+ * node add コマンド定義。
+ * 各ノードタイプ用のサブコマンドを持ちます。
  */
 export const addNodeCommand = Command.make("add").pipe(
-  Command.withDescription("Add or update a node (text, file, link, group)"),
+  Command.withDescription("Add a new node to the canvas"),
   Command.withSubcommands([
     addTextNodeCommand,
     addFileNodeCommand,

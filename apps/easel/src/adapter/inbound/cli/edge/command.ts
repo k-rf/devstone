@@ -4,10 +4,10 @@ import { addEdgeCommand } from "./add.js";
 import { rmEdgeCommand } from "./rm.js";
 
 /**
- * キャンバス内のエッジを管理するための edge コマンド。
- * サブコマンドとして add と rm を持ちます。
+ * easel の edge コマンド定義。
+ * サブコマンドとして add, rm を持ちます。
  */
 export const edgeCommand = Command.make("edge").pipe(
-  Command.withDescription("Manage edges within the canvas"),
+  Command.withDescription("Manage edges in the canvas"),
   Command.withSubcommands([addEdgeCommand, rmEdgeCommand]),
 );

@@ -1,10 +1,9 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect, Option } from "effect";
 
-import { generateId } from "../../../utils/generate-id.js";
-import { readCanvas } from "../../../utils/read-canvas.js";
-import { upsertNode } from "../../../utils/upsert-node.js";
-import { fileOption } from "../../options/file-option.js";
+import { addNode } from "../../../../../core/application/canvas.service.js";
+import { generateId } from "../../../../../utils/generate-id.js";
+import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
 import {
   colorOption,
   heightOption,
@@ -32,22 +31,20 @@ export const addTextNodeCommand = Command.make("text", {
   Command.withDescription("Add or update a text node"),
   Command.withHandler(({ file, id, x, y, width, height, color, text }) => {
     const nodeId = Option.getOrElse(id, () => generateId());
-    return readCanvas(file).pipe(
-      Effect.flatMap((canvas) => {
-        const colorValue = Option.getOrUndefined(color);
-        const nodeData = {
-          id: nodeId,
-          type: "text",
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          color: colorValue,
-          text: text,
-        };
+    const colorValue = Option.getOrUndefined(color);
+    const nodeData = {
+      id: nodeId,
+      type: "text",
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+      color: colorValue,
+      text: text,
+    };
 
-        return upsertNode(file, canvas, nodeData);
-      }),
+    return addNode(nodeData).pipe(
+      provideCanvasRepository(file),
       Effect.tap(() => Console.log(`Successfully added or updated text node: ${nodeId}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

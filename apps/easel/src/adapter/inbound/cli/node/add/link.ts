@@ -1,10 +1,9 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect, Option } from "effect";
 
-import { generateId } from "../../../utils/generate-id.js";
-import { readCanvas } from "../../../utils/read-canvas.js";
-import { upsertNode } from "../../../utils/upsert-node.js";
-import { fileOption } from "../../options/file-option.js";
+import { addNode } from "../../../../../core/application/canvas.service.js";
+import { generateId } from "../../../../../utils/generate-id.js";
+import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
 import {
   colorOption,
   heightOption,
@@ -34,24 +33,22 @@ export const addLinkNodeCommand = Command.make("link", {
   Command.withDescription("Add or update a link node"),
   Command.withHandler(({ file, id, x, y, width, height, color, url, label }) => {
     const nodeId = Option.getOrElse(id, () => generateId());
-    return readCanvas(file).pipe(
-      Effect.flatMap((canvas) => {
-        const colorValue = Option.getOrUndefined(color);
-        const labelValue = Option.getOrUndefined(label);
-        const nodeData = {
-          id: nodeId,
-          type: "link",
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          color: colorValue,
-          url: url,
-          label: labelValue,
-        };
+    const colorValue = Option.getOrUndefined(color);
+    const labelValue = Option.getOrUndefined(label);
+    const nodeData = {
+      id: nodeId,
+      type: "link",
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+      color: colorValue,
+      url: url,
+      label: labelValue,
+    };
 
-        return upsertNode(file, canvas, nodeData);
-      }),
+    return addNode(nodeData).pipe(
+      provideCanvasRepository(file),
       Effect.tap(() => Console.log(`Successfully added or updated link node: ${nodeId}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
