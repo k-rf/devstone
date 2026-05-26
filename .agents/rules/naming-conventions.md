@@ -35,8 +35,10 @@
 ディレクトリの役割がファイル名からも推測できるようにします。
 
 - **Port**: `core/port/{inbound,outbound,repository}/xyz.port.ts`
-- **Service**: `core/application/xyz.service.ts`
-- **Adapter**: `adapter/{inbound,outbound,repository}/xyz.adapter.ts`
+- **Workflow**: `core/application/xyz.workflow.ts` (ユースケースの全体フローを定義)
+- **Step**: `core/application/xyz.step.ts` (Workflow を構成する個別の処理ステップ)
+- **Adapter**: `adapter/outbound/xyz.<specific>.adapter.ts`
+- **Repository**: `adapter/repository/xyz.<specific>.repository.ts`
 - **Handler**: `adapter/inbound/xyz.handler.ts`
 - **Schema (Communication)**: `adapter/{inbound,outbound}/xyz.payload.ts`
 - **Schema (Persistence)**: `adapter/repository/xyz.record.ts`
