@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { updateNode } from "../../../../../core/application/canvas.service.js";
+import { updateNodeWorkflow } from "../../../../../core/application/update-node.workflow.js";
 import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
 
 import {
@@ -33,7 +33,7 @@ export const updateLinkNodeCommand = Command.make("link", {
 }).pipe(
   Command.withDescription("Update a link node"),
   Command.withHandler(({ file, id, x, y, width, height, color, url }) =>
-    updateNode({
+    updateNodeWorkflow({
       id: id,
       type: "link",
       x: x,

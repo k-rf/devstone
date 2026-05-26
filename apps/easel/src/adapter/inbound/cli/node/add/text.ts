@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect, Option } from "effect";
 
-import { addNode } from "../../../../../core/application/canvas.service.js";
+import { addNodeWorkflow } from "../../../../../core/application/add-node.workflow.js";
 import { generateId } from "../../../../../utils/generate-id.js";
 import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
 
@@ -44,7 +44,7 @@ export const addTextNodeCommand = Command.make("text", {
       text: text,
     };
 
-    return addNode(nodeData).pipe(
+    return addNodeWorkflow(nodeData).pipe(
       provideCanvasRepository(file),
       Effect.tap(() => Console.log(`Successfully added or updated text node: ${nodeId}`)),
       Effect.catchAll((error) =>

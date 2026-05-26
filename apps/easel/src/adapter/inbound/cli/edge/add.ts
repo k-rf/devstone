@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect, Option } from "effect";
 
-import { addEdge } from "../../../../core/application/canvas.service.js";
+import { addEdgeWorkflow } from "../../../../core/application/add-edge.workflow.js";
 import { generateId } from "../../../../utils/generate-id.js";
 import { fileOption, provideCanvasRepository } from "../options/file-option.js";
 
@@ -56,7 +56,7 @@ export const addEdgeCommand = Command.make("add", {
       label: labelValue,
     };
 
-    return addEdge(edgeData).pipe(
+    return addEdgeWorkflow(edgeData).pipe(
       provideCanvasRepository(file),
       Effect.tap(() => Console.log(`Successfully added edge: ${edgeId}`)),
       Effect.catchAll((error) =>

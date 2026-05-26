@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { removeEdge } from "../../../../core/application/canvas.service.js";
+import { removeEdgeWorkflow } from "../../../../core/application/remove-edge.workflow.js";
 import { fileOption, provideCanvasRepository } from "../options/file-option.js";
 
 const edgeIdOption = Options.text("id").pipe(
@@ -17,7 +17,7 @@ export const rmEdgeCommand = Command.make("rm", {
 }).pipe(
   Command.withDescription("Remove an edge by ID"),
   Command.withHandler(({ file, id }) =>
-    removeEdge(id).pipe(
+    removeEdgeWorkflow(id).pipe(
       provideCanvasRepository(file),
       Effect.tap(() => Console.log(`Successfully removed edge: ${id}`)),
       Effect.catchAll((error) =>

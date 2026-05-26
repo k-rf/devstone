@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { removeNode } from "../../../../core/application/canvas.service.js";
+import { removeNodeWorkflow } from "../../../../core/application/remove-node.workflow.js";
 import { fileOption, provideCanvasRepository } from "../options/file-option.js";
 
 const rmNodeIdOption = Options.text("id").pipe(
@@ -17,7 +17,7 @@ export const rmNodeCommand = Command.make("rm", {
 }).pipe(
   Command.withDescription("Remove a node and all of its connected edges by ID"),
   Command.withHandler(({ file, id }) =>
-    removeNode(id).pipe(
+    removeNodeWorkflow(id).pipe(
       provideCanvasRepository(file),
       Effect.tap(() =>
         Console.log(`Successfully removed node: ${id} (and cleaned up its connections)`),

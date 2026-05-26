@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { moveNode } from "../../../../core/application/canvas.service.js";
+import { moveNodeWorkflow } from "../../../../core/application/move-node.workflow.js";
 import { fileOption, provideCanvasRepository } from "../options/file-option.js";
 
 const nodeIdOption = Options.text("id").pipe(
@@ -37,7 +37,7 @@ export const mvNodeCommand = Command.make("mv", {
 }).pipe(
   Command.withDescription("Move a node in the canvas"),
   Command.withHandler(({ file, id, x, y, dx, dy }) =>
-    moveNode(id, { x: x, y: y, dx: dx, dy: dy }).pipe(
+    moveNodeWorkflow(id, { x: x, y: y, dx: dx, dy: dy }).pipe(
       provideCanvasRepository(file),
       Effect.tap(() => Console.log(`Successfully moved node: ${id}`)),
       Effect.catchAll((error) =>

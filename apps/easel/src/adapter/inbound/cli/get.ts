@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { getCanvasItem } from "../../../core/application/canvas.service.js";
+import { getCanvasItemWorkflow } from "../../../core/application/get-canvas-item.workflow.js";
 
 import { fileOption, provideCanvasRepository } from "./options/file-option.js";
 
@@ -18,7 +18,7 @@ export const getCommand = Command.make("get", {
 }).pipe(
   Command.withDescription("Retrieve a specific node or edge by ID"),
   Command.withHandler(({ file, id }) =>
-    getCanvasItem(id).pipe(
+    getCanvasItemWorkflow(id).pipe(
       Effect.flatMap((item) =>
         Console.log(JSON.stringify({ type: item.type, data: item.data }, undefined, 2)),
       ),

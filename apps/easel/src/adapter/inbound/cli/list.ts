@@ -1,7 +1,7 @@
 import { Command } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { listCanvasItems } from "../../../core/application/canvas.service.js";
+import { listCanvasItemsWorkflow } from "../../../core/application/list-canvas-items.workflow.js";
 
 import { fileOption, provideCanvasRepository } from "./options/file-option.js";
 
@@ -13,7 +13,7 @@ export const listCommand = Command.make("list", {
 }).pipe(
   Command.withDescription("List all node IDs and edge IDs in the canvas"),
   Command.withHandler(({ file }) =>
-    listCanvasItems().pipe(
+    listCanvasItemsWorkflow().pipe(
       Effect.flatMap((output) => Console.log(output)),
       provideCanvasRepository(file),
       Effect.catchAll((error) =>

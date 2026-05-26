@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { updateEdge } from "../../../../core/application/canvas.service.js";
+import { updateEdgeWorkflow } from "../../../../core/application/update-edge.workflow.js";
 import { fileOption, provideCanvasRepository } from "../options/file-option.js";
 
 const edgeIdOption = Options.text("id").pipe(
@@ -63,7 +63,7 @@ export const updateEdgeCommand = Command.make("update", {
   Command.withDescription("Update an existing edge"),
   Command.withHandler(
     ({ file, id, fromNode, toNode, fromSide, toSide, fromEnd, toEnd, color, label }) =>
-      updateEdge({
+      updateEdgeWorkflow({
         id: id,
         fromNode: fromNode,
         toNode: toNode,

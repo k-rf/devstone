@@ -1,7 +1,7 @@
 import { Command } from "@effect/cli";
 import { Console, Effect } from "effect";
 
-import { showCanvas } from "../../../core/application/canvas.service.js";
+import { showCanvasWorkflow } from "../../../core/application/show-canvas.workflow.js";
 
 import { fileOption, provideCanvasRepository } from "./options/file-option.js";
 
@@ -13,7 +13,7 @@ export const showCommand = Command.make("show", {
 }).pipe(
   Command.withDescription("Dump the entire canvas JSON data to standard output"),
   Command.withHandler(({ file }) =>
-    showCanvas().pipe(
+    showCanvasWorkflow().pipe(
       Effect.flatMap((canvas) => Console.log(JSON.stringify(canvas, undefined, 2))),
       provideCanvasRepository(file),
       Effect.catchAll((error) =>
