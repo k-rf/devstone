@@ -1,10 +1,12 @@
-import { Edge as EdgeSchema } from "@devstone/libs-json-canvas-spec";
-import { compact } from "@devstone/libs-util";
-import { Effect, Option, Schema } from "effect";
+import { Effect, type Option } from "effect";
 
-import * as Domain from "../domain/canvas/index.js";
-import { CanvasError } from "../domain/errors.js";
-import { CanvasRepository } from "../port/repository/canvas.repository.js";
+import * as Canvas from "../domain/canvas/index.js";
+
+import { findEdgeStep } from "./find-edge.step.js";
+import { mergeEdgeUpdatesStep } from "./merge-edge-updates.step.js";
+import { readCanvasStep } from "./read-canvas.step.js";
+import { validateEdgeSchemaStep } from "./validate-edge-schema.step.js";
+import { writeCanvasStep } from "./write-canvas.step.js";
 
 /**
  * エッジを更新するための Workflow。
@@ -33,44 +35,10 @@ export const updateEdgeWorkflow = (params: {
   readonly label: Option.Option<string>;
 }) =>
   Effect.gen(function* () {
-    const repo = yield* CanvasRepository;
-    const canvas = yield* repo.read();
-
-    // Step 1: 既存のエッジを取得
-    const foundEdge = canvas.edges?.find((e) => e.id === params.id);
-    if (foundEdge === undefined) {
-      return yield* Effect.fail(
-        new CanvasError({ message: `ID '${params.id}' のエッジが見つかりませんでした` }),
-      );
-    }
-
-    // Step 2: updates を compact にしてマージ
-    const rawUpdates = {
-      fromNode: Option.getOrUndefined(params.fromNode),
-      toNode: Option.getOrUndefined(params.toNode),
-      fromSide: Option.getOrUndefined(params.fromSide),
-      toSide: Option.getOrUndefined(params.toSide),
-      fromEnd: Option.getOrUndefined(params.fromEnd),
-      toEnd: Option.getOrUndefined(params.toEnd),
-      color: Option.getOrUndefined(params.color),
-      label: Option.getOrUndefined(params.label),
-    };
-    const updates = compact(rawUpdates);
-    const edgeData = {
-      ...foundEdge,
-      ...updates,
-    };
-
-    // Step 3: バリデーション & ドメインでの更新
-    const validated = yield* Effect.try({
-      try: () => Schema.decodeUnknownSync(EdgeSchema)(edgeData),
-      catch: (error) =>
-        new CanvasError({
-          message: `エッジデータの検証に失敗しました: ${(error as Error).message}`,
-          cause: error,
-        }),
-    });
-
-    const updatedCanvas = yield* Domain.updateEdge(canvas, validated);
-    yield* repo.write(updatedCanvas);
+    const canvas = yield* readCanvasStep();
+    const foundEdge = yield* findEdgeStep(canvas, params.id);
+    const mergedData = yield* mergeEdgeUpdatesStep(foundEdge, params);
+    const validated = yield* validateEdgeSchemaStep(mergedData);
+    const updatedCanvas = yield* Canvas.updateEdge(canvas, validated);
+    yield* writeCanvasStep(updatedCanvas);
   });

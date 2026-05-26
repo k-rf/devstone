@@ -1,10 +1,13 @@
-import { Node as NodeSchema } from "@devstone/libs-json-canvas-spec";
-import { compact } from "@devstone/libs-util";
-import { Effect, Option, Schema } from "effect";
+import { Effect, type Option } from "effect";
 
-import * as Domain from "../domain/canvas/index.js";
-import { CanvasError } from "../domain/errors.js";
-import { CanvasRepository } from "../port/repository/canvas.repository.js";
+import * as Canvas from "../domain/canvas/index.js";
+
+import { findNodeStep } from "./find-node.step.js";
+import { mergeNodeUpdatesStep } from "./merge-node-updates.step.js";
+import { readCanvasStep } from "./read-canvas.step.js";
+import { validateNodeSchemaStep } from "./validate-node-schema.step.js";
+import { validateNodeTypeStep } from "./validate-node-type.step.js";
+import { writeCanvasStep } from "./write-canvas.step.js";
 
 /**
  * ノードを更新するための Workflow。
@@ -37,52 +40,11 @@ export const updateNodeWorkflow = (params: {
   readonly label?: Option.Option<string>;
 }) =>
   Effect.gen(function* () {
-    const repo = yield* CanvasRepository;
-    const canvas = yield* repo.read();
-
-    // Step 1: 既存のノードを取得
-    const foundNode = canvas.nodes?.find((n) => n.id === params.id);
-    if (foundNode === undefined) {
-      return yield* Effect.fail(
-        new CanvasError({ message: `ID '${params.id}' のノードが見つかりませんでした` }),
-      );
-    }
-
-    // Step 2: 意味論的バリデーション (タイプの不一致チェック)
-    if (foundNode.type !== params.type) {
-      return yield* Effect.fail(
-        new CanvasError({ message: `ID '${params.id}' は ${params.type} ノードではありません` }),
-      );
-    }
-
-    // Step 3: updates を compact にしてマージ
-    const rawUpdates = {
-      x: Option.getOrUndefined(params.x),
-      y: Option.getOrUndefined(params.y),
-      width: Option.getOrUndefined(params.width),
-      height: Option.getOrUndefined(params.height),
-      color: Option.getOrUndefined(params.color),
-      text: params.text ? Option.getOrUndefined(params.text) : undefined,
-      file: params.fileRef ? Option.getOrUndefined(params.fileRef) : undefined,
-      url: params.url ? Option.getOrUndefined(params.url) : undefined,
-      label: params.label ? Option.getOrUndefined(params.label) : undefined,
-    };
-    const updates = compact(rawUpdates);
-    const nodeData = {
-      ...foundNode,
-      ...updates,
-    };
-
-    // Step 4: バリデーション & ドメインでの更新
-    const validated = yield* Effect.try({
-      try: () => Schema.decodeUnknownSync(NodeSchema)(nodeData),
-      catch: (error) =>
-        new CanvasError({
-          message: `ノードデータの検証に失敗しました: ${(error as Error).message}`,
-          cause: error,
-        }),
-    });
-
-    const updatedCanvas = yield* Domain.updateNode(canvas, validated);
-    yield* repo.write(updatedCanvas);
+    const canvas = yield* readCanvasStep();
+    const foundNode = yield* findNodeStep(canvas, params.id);
+    yield* validateNodeTypeStep(foundNode, params.type);
+    const mergedData = yield* mergeNodeUpdatesStep(foundNode, params);
+    const validated = yield* validateNodeSchemaStep(mergedData);
+    const updatedCanvas = yield* Canvas.updateNode(canvas, validated);
+    yield* writeCanvasStep(updatedCanvas);
   });
