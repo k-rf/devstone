@@ -478,6 +478,151 @@ describe("正常系", () => {
         "node-link-1",
       ]);
 
+      // 5. node mv コマンド (絶対座標への移動)
+      yield* executeCli([
+        "node",
+        "mv",
+        "-f",
+        testFile,
+        "--id",
+        "node-text-1",
+        "-x",
+        "50",
+        "-y",
+        "60",
+      ]);
+      const canvasAfterMv1 = yield* readCanvas(testFile);
+      const nodeMv1 = canvasAfterMv1.nodes?.find((n) => n.id === "node-text-1");
+      expect(nodeMv1?.x).toBe(50);
+      expect(nodeMv1?.y).toBe(60);
+
+      // 6. node mv コマンド (相対座標への移動)
+      yield* executeCli([
+        "node",
+        "mv",
+        "-f",
+        testFile,
+        "--id",
+        "node-text-1",
+        "--dx",
+        "10",
+        "--dy",
+        "-5",
+      ]);
+      const canvasAfterMv2 = yield* readCanvas(testFile);
+      const nodeMv2 = canvasAfterMv2.nodes?.find((n) => n.id === "node-text-1");
+      expect(nodeMv2?.x).toBe(60);
+      expect(nodeMv2?.y).toBe(55);
+
+      // 7. node update text コマンド
+      yield* executeCli([
+        "node",
+        "update",
+        "text",
+        "-f",
+        testFile,
+        "--id",
+        "node-text-1",
+        "--text",
+        "super updated text",
+        "--color",
+        "3",
+      ]);
+      const canvasAfterUpdateText = yield* readCanvas(testFile);
+      const nodeUpdateText = canvasAfterUpdateText.nodes?.find((n) => n.id === "node-text-1");
+      expect(nodeUpdateText?.type).toBe("text");
+      if (nodeUpdateText?.type === "text") {
+        expect(nodeUpdateText.text).toBe("super updated text");
+        expect(nodeUpdateText.color).toBe("3");
+        expect(nodeUpdateText.x).toBe(60);
+        expect(nodeUpdateText.y).toBe(55);
+        expect(nodeUpdateText.width).toBe(110);
+        expect(nodeUpdateText.height).toBe(55);
+      }
+
+      // 8. node update file コマンド
+      yield* executeCli([
+        "node",
+        "update",
+        "file",
+        "-f",
+        testFile,
+        "--id",
+        "node-file-1",
+        "--file-ref",
+        "readme_super_updated.md",
+      ]);
+      const canvasAfterUpdateFile = yield* readCanvas(testFile);
+      const nodeUpdateFile = canvasAfterUpdateFile.nodes?.find((n) => n.id === "node-file-1");
+      expect(nodeUpdateFile?.type).toBe("file");
+      if (nodeUpdateFile?.type === "file") {
+        expect(nodeUpdateFile.file).toBe("readme_super_updated.md");
+        expect(nodeUpdateFile.x).toBe(105);
+        expect(nodeUpdateFile.y).toBe(105);
+      }
+
+      // 9. node update link コマンド
+      yield* executeCli([
+        "node",
+        "update",
+        "link",
+        "-f",
+        testFile,
+        "--id",
+        "node-link-1",
+        "--url",
+        "https://effect.website/docs/guide",
+      ]);
+      const canvasAfterUpdateLink = yield* readCanvas(testFile);
+      const nodeUpdateLink = canvasAfterUpdateLink.nodes?.find((n) => n.id === "node-link-1");
+      expect(nodeUpdateLink?.type).toBe("link");
+      if (nodeUpdateLink?.type === "link") {
+        expect(nodeUpdateLink.url).toBe("https://effect.website/docs/guide");
+        expect(nodeUpdateLink.color).toBe("4");
+      }
+
+      // 10. node update group コマンド
+      yield* executeCli([
+        "node",
+        "update",
+        "group",
+        "-f",
+        testFile,
+        "--id",
+        "node-group-1",
+        "--label",
+        "My Super Updated Group",
+      ]);
+      const canvasAfterUpdateGroup = yield* readCanvas(testFile);
+      const nodeUpdateGroup = canvasAfterUpdateGroup.nodes?.find((n) => n.id === "node-group-1");
+      expect(nodeUpdateGroup?.type).toBe("group");
+      if (nodeUpdateGroup?.type === "group") {
+        expect(nodeUpdateGroup.label).toBe("My Super Updated Group");
+        expect(nodeUpdateGroup.color).toBe("6");
+      }
+
+      // 11. edge update コマンド
+      const edgeIdToUpdate = canvasAfterUpdateGroup.edges?.[0]?.id ?? "";
+      yield* executeCli([
+        "edge",
+        "update",
+        "-f",
+        testFile,
+        "--id",
+        edgeIdToUpdate,
+        "--color",
+        "2",
+        "--label",
+        "new-association",
+      ]);
+      const canvasAfterUpdateEdge = yield* readCanvas(testFile);
+      const edgeUpdate = canvasAfterUpdateEdge.edges?.find((e) => e.id === edgeIdToUpdate);
+      expect(edgeUpdate).toBeDefined();
+      if (edgeUpdate !== undefined) {
+        expect(edgeUpdate.color).toBe("2");
+        expect(edgeUpdate.label).toBe("new-association");
+      }
+
       // list コマンド (データが入っている状態 & sideInfo 出力ルートの通過)
       yield* executeCli(["list", "-f", testFile]);
 
@@ -735,6 +880,208 @@ describe("異常系", () => {
       ).toBe(true);
 
       yield* fs.remove(validCanvasFile);
+
+      // -- 新規追加コマンドの異常系テスト --
+
+      // 存在しないノードに対する node mv
+      expect(
+        (yield* Effect.exit(
+          executeCli(["node", "mv", "-f", corruptFile, "--id", "non-existent", "-x", "10"]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+
+      // 存在しないノードに対する node update text
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "text",
+            "-f",
+            corruptFile,
+            "--id",
+            "non-existent",
+            "--text",
+            "hello",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+
+      // 存在しないエッジに対する edge update
+      expect(
+        (yield* Effect.exit(
+          executeCli(["edge", "update", "-f", corruptFile, "--id", "non-existent", "--color", "2"]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+
+      // 他のノードタイプ（file）に node update text を適用しようとするエラー
+      const testErrorFile = "update-error-test.canvas";
+      yield* fs.writeFileString(
+        testErrorFile,
+        JSON.stringify({
+          nodes: [
+            {
+              id: "temp-file",
+              type: "file",
+              x: 10,
+              y: 10,
+              width: 100,
+              height: 100,
+              file: "temp.md",
+            },
+            {
+              id: "temp-text",
+              type: "text",
+              x: 10,
+              y: 10,
+              width: 100,
+              height: 100,
+              text: "temp",
+            },
+          ],
+        }),
+      );
+      // fileノードに対して text アップデート (不一致エラー)
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "text",
+            "-f",
+            testErrorFile,
+            "--id",
+            "temp-file",
+            "--text",
+            "hello",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      // textノードに対して file アップデート (不一致エラー)
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "file",
+            "-f",
+            testErrorFile,
+            "--id",
+            "temp-text",
+            "--file-ref",
+            "readme.md",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      // fileノードに対して link アップデート (不一致エラー)
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "link",
+            "-f",
+            testErrorFile,
+            "--id",
+            "temp-file",
+            "--url",
+            "https://x",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      // fileノードに対して group アップデート (不一致エラー)
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "group",
+            "-f",
+            testErrorFile,
+            "--id",
+            "temp-file",
+            "--label",
+            "g",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      // ノードに対して edge アップデート (不一致エラー)
+      expect(
+        (yield* Effect.exit(
+          executeCli(["edge", "update", "-f", testErrorFile, "--id", "temp-file", "--color", "2"]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      yield* fs.remove(testErrorFile);
+
+      // 各コマンドでの存在しないIDに対する更新エラー (catchAllのカバー)
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "file",
+            "-f",
+            corruptFile,
+            "--id",
+            "non-existent",
+            "--file-ref",
+            "x.md",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "link",
+            "-f",
+            corruptFile,
+            "--id",
+            "non-existent",
+            "--url",
+            "https://x",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      expect(
+        (yield* Effect.exit(
+          executeCli([
+            "node",
+            "update",
+            "group",
+            "-f",
+            corruptFile,
+            "--id",
+            "non-existent",
+            "--label",
+            "g",
+          ]),
+        ))
+          .toString()
+          .includes("Failure"),
+      ).toBe(true);
+      // -- 新規追加コマンドの異常系テスト終了 --
     }).pipe(provideTestContext);
 
     await Effect.runPromise(program);

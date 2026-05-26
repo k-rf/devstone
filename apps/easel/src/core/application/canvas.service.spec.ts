@@ -1,5 +1,5 @@
 import { JsonCanvas as JsonCanvasSchema, type JsonCanvas } from "@devstone/libs-json-canvas-spec";
-import { Effect, Layer, Schema } from "effect";
+import { Effect, Layer, Option, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
 import { assertTextNode } from "../../test-utils/assert-node/assert-text-node.js";
@@ -64,7 +64,6 @@ describe("canvas application service", () => {
       const result = await Effect.runPromise(program);
 
       // Assert
-
       expect(result).toContain("=== Nodes ===");
       expect(result).toContain("- node-1 [text]");
       expect(result).toContain("- node-2 [file]");
@@ -110,18 +109,16 @@ describe("canvas application service", () => {
     it("既存のノードを更新できること (updateNode)", async () => {
       // Arrange
       const state = { current: { ...initialCanvas } };
-      const updatedNodeData = {
+      const program = updateNode({
         id: "node-1",
         type: "text",
-        x: 15,
-        y: 25,
-        width: 100,
-        height: 50,
-        text: "Updated",
-      };
-      const program = updateNode(updatedNodeData).pipe(
-        Effect.provide(makeTestCanvasRepository(state)),
-      );
+        x: Option.some(15),
+        y: Option.some(25),
+        width: Option.some(100),
+        height: Option.some(50),
+        color: Option.none(),
+        text: Option.some("Updated"),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
 
       // Act
       await Effect.runPromise(program);
@@ -131,6 +128,8 @@ describe("canvas application service", () => {
 
       assertTextNode(foundNode);
       expect(foundNode.text).toBe("Updated");
+      expect(foundNode.x).toBe(15);
+      expect(foundNode.y).toBe(25);
     });
 
     it("ノードを削除できること (removeNode)", async () => {
@@ -149,9 +148,12 @@ describe("canvas application service", () => {
     it("ノードを座標移動できること (moveNode)", async () => {
       // Arrange
       const state = { current: { ...initialCanvas } };
-      const program = moveNode("node-1", { dx: 10, dy: -5 }).pipe(
-        Effect.provide(makeTestCanvasRepository(state)),
-      );
+      const program = moveNode("node-1", {
+        x: Option.none(),
+        y: Option.none(),
+        dx: Option.some(10),
+        dy: Option.some(-5),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
 
       // Act
       await Effect.runPromise(program);
@@ -180,16 +182,17 @@ describe("canvas application service", () => {
     it("エッジを更新できること (updateEdge)", async () => {
       // Arrange
       const state = { current: { ...initialCanvas } };
-      const updatedEdgeData = {
+      const program = updateEdge({
         id: "edge-1",
-        fromNode: "node-1",
-        toNode: "node-2",
-        color: "3",
-        label: "Updated",
-      };
-      const program = updateEdge(updatedEdgeData).pipe(
-        Effect.provide(makeTestCanvasRepository(state)),
-      );
+        fromNode: Option.some("node-1"),
+        toNode: Option.some("node-2"),
+        fromSide: Option.none(),
+        toSide: Option.none(),
+        fromEnd: Option.none(),
+        toEnd: Option.none(),
+        color: Option.some("3"),
+        label: Option.some("Updated"),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
 
       // Act
       await Effect.runPromise(program);
@@ -227,10 +230,16 @@ describe("canvas application service", () => {
     it("ノード更新時に不正なノードデータの検証でエラーを返すこと", async () => {
       // Arrange
       const state = { current: { ...initialCanvas } };
-      const invalidNodeData = { id: "node-1", type: "text" };
-      const program = updateNode(invalidNodeData).pipe(
-        Effect.provide(makeTestCanvasRepository(state)),
-      );
+      const program = updateNode({
+        id: "node-1",
+        type: "text",
+        x: Option.none(),
+        y: Option.none(),
+        width: Option.none(),
+        height: Option.none(),
+        color: Option.some("invalid-color-preset"), // 不正なカラー指定でスキーマ検証エラーを期待
+        text: Option.none(),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
 
       // Act
       const error = await Effect.runPromise(Effect.flip(program));
@@ -238,6 +247,49 @@ describe("canvas application service", () => {
       // Assert
       expect(error._tag).toBe("CanvasError");
       expect(error.message).toContain("ノードデータの検証に失敗しました");
+    });
+
+    it("ノード更新時に対象のノードが見つからない場合にエラーを返すこと", async () => {
+      // Arrange
+      const state = { current: { ...initialCanvas } };
+      const program = updateNode({
+        id: "non-existent-node",
+        type: "text",
+        x: Option.none(),
+        y: Option.none(),
+        width: Option.none(),
+        height: Option.none(),
+        color: Option.none(),
+        text: Option.none(),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
+
+      // Act
+      const error = await Effect.runPromise(Effect.flip(program));
+
+      // Assert
+      expect(error._tag).toBe("CanvasError");
+      expect(error.message).toContain("のノードが見つかりませんでした");
+    });
+
+    it("ノード更新時にノードタイプが不一致の場合にエラーを返すこと", async () => {
+      // Arrange
+      const state = { current: { ...initialCanvas } };
+      const program = updateNode({
+        id: "node-1", // node-1 は実際には text ノード
+        type: "file", // file ノードとして更新しようとする
+        x: Option.none(),
+        y: Option.none(),
+        width: Option.none(),
+        height: Option.none(),
+        color: Option.none(),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
+
+      // Act
+      const error = await Effect.runPromise(Effect.flip(program));
+
+      // Assert
+      expect(error._tag).toBe("CanvasError");
+      expect(error.message).toContain("は file ノードではありません");
     });
 
     it("不正なエッジデータの検証時にエラーを返すこと", async () => {
@@ -260,10 +312,17 @@ describe("canvas application service", () => {
     it("エッジ更新時に不正なエッジデータの検証でエラーを返すこと", async () => {
       // Arrange
       const state = { current: { ...initialCanvas } };
-      const invalidEdgeData = { id: "edge-1", color: "1" };
-      const program = updateEdge(invalidEdgeData).pipe(
-        Effect.provide(makeTestCanvasRepository(state)),
-      );
+      const program = updateEdge({
+        id: "edge-1",
+        fromNode: Option.none(),
+        toNode: Option.none(),
+        fromSide: Option.none(),
+        toSide: Option.none(),
+        fromEnd: Option.none(),
+        toEnd: Option.none(),
+        color: Option.some("invalid-color-preset"), // 不正なカラー指定でスキーマ検証エラーを期待
+        label: Option.none(),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
 
       // Act
       const error = await Effect.runPromise(Effect.flip(program));
@@ -271,6 +330,29 @@ describe("canvas application service", () => {
       // Assert
       expect(error._tag).toBe("CanvasError");
       expect(error.message).toContain("エッジデータの検証に失敗しました");
+    });
+
+    it("エッジ更新時に対象のエッジが見つからない場合にエラーを返すこと", async () => {
+      // Arrange
+      const state = { current: { ...initialCanvas } };
+      const program = updateEdge({
+        id: "non-existent-edge",
+        fromNode: Option.none(),
+        toNode: Option.none(),
+        fromSide: Option.none(),
+        toSide: Option.none(),
+        fromEnd: Option.none(),
+        toEnd: Option.none(),
+        color: Option.none(),
+        label: Option.none(),
+      }).pipe(Effect.provide(makeTestCanvasRepository(state)));
+
+      // Act
+      const error = await Effect.runPromise(Effect.flip(program));
+
+      // Assert
+      expect(error._tag).toBe("CanvasError");
+      expect(error.message).toContain("のエッジが見つかりませんでした");
     });
   });
 });
