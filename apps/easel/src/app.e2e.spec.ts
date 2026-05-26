@@ -1,12 +1,31 @@
+import { JsonCanvas } from "@devstone/libs-json-canvas-spec";
 import { FileSystem } from "@effect/platform";
 import { BunContext } from "@effect/platform-bun";
-import { Effect } from "effect";
-import { describe, expect, it } from "vitest";
+import { Effect, Schema } from "effect";
+import { vol } from "memfs";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { runCli } from "./app.js";
-import { readCanvas } from "./utils/read-canvas.js";
+import { assertTextNode } from "./test-utils/assert-node/assert-text-node.js";
+import { mockFileSystem } from "./test-utils/mock-fs.js";
 
 const executeCli = (args: string[]) => runCli(["node", "main.js", ...args]);
+
+const provideTestContext = <R, E, A>(effect: Effect.Effect<A, E, R>) =>
+  effect.pipe(Effect.provide(mockFileSystem), Effect.provide(BunContext.layer));
+
+beforeEach(() => {
+  vol.reset();
+  vol.mkdirSync(process.cwd(), { recursive: true });
+});
+
+const readCanvas = (filePath: string) =>
+  Effect.gen(function* () {
+    const fs = yield* FileSystem.FileSystem;
+    const data = yield* fs.readFileString(filePath);
+    const json: unknown = JSON.parse(data);
+    return yield* Schema.decodeUnknown(JsonCanvas)(json);
+  });
 
 const testFile = "test-canvas.canvas";
 
@@ -47,18 +66,16 @@ describe("正常系", () => {
       const canvas1 = yield* readCanvas(testFile);
       expect(canvas1.nodes).toBeDefined();
       expect(canvas1.nodes?.length).toBe(1);
+
       const node1 = canvas1.nodes?.[0];
-      expect(node1).toBeDefined();
-      const node1Id = node1?.id ?? "";
-      expect(node1Id).toMatch(/^[0-9a-f]{16}$/); // 16桁のnanoidであることを確認
-      if (node1 !== undefined) {
-        expect(node1.type).toBe("text");
-        expect(node1.x).toBe(100);
-        expect(node1.y).toBe(200);
-        if ("text" in node1) {
-          expect(node1.text).toBe("こんにちは");
-        }
-      }
+
+      assertTextNode(node1);
+
+      expect(node1.id).toMatch(/^[0-9a-f]{16}$/); // 16桁のnanoidであることを確認
+      expect(node1.type).toBe("text");
+      expect(node1.x).toBe(100);
+      expect(node1.y).toBe(200);
+      expect(node1.text).toBe("こんにちは");
 
       // 2. Fileノードを追加
       yield* executeCli([
@@ -91,7 +108,7 @@ describe("正常系", () => {
         "-f",
         testFile,
         "--from-node",
-        node1Id,
+        node1.id,
         "--to-node",
         "node-2",
       ]);
@@ -101,13 +118,13 @@ describe("正常系", () => {
       const edge = canvas3.edges?.[0];
       expect(edge).toBeDefined();
       if (edge !== undefined) {
-        expect(edge.fromNode).toBe(node1Id);
+        expect(edge.fromNode).toBe(node1.id);
         expect(edge.toNode).toBe("node-2");
         expect(edge.id).toMatch(/^[0-9a-f]{16}$/); // エッジのIDもnanoidであることを確認
       }
 
       // 4. ノードを削除（エッジも自動で削除される）
-      yield* executeCli(["node", "rm", "-f", testFile, "--id", node1Id]);
+      yield* executeCli(["node", "rm", "-f", testFile, "--id", node1.id]);
 
       const canvas4 = yield* readCanvas(testFile);
       expect(canvas4.nodes?.length).toBe(1);
@@ -117,7 +134,7 @@ describe("正常系", () => {
       yield* fs
         .remove(testFile)
         .pipe(Effect.mapError((error) => new Error(`ファイル削除エラー: ${error.message}`)));
-    }).pipe(Effect.provide(BunContext.layer));
+    }).pipe(provideTestContext);
 
     await Effect.runPromise(program);
   });
@@ -506,7 +523,7 @@ describe("正常系", () => {
       // アサーションを追加 (ファイルが正常にクリーンアップされたことの確認)
       const cleanupSuccess = yield* fs.exists(testFile);
       expect(cleanupSuccess).toBe(false);
-    }).pipe(Effect.provide(BunContext.layer));
+    }).pipe(provideTestContext);
 
     await Effect.runPromise(program);
   });
@@ -544,7 +561,7 @@ describe("異常系", () => {
           .remove(testFile)
           .pipe(Effect.mapError((error) => new Error(`ファイル削除エラー: ${error.message}`)));
       }
-    }).pipe(Effect.provide(BunContext.layer));
+    }).pipe(provideTestContext);
 
     await Effect.runPromise(program);
   });
@@ -718,7 +735,7 @@ describe("異常系", () => {
       ).toBe(true);
 
       yield* fs.remove(validCanvasFile);
-    }).pipe(Effect.provide(BunContext.layer));
+    }).pipe(provideTestContext);
 
     await Effect.runPromise(program);
   });

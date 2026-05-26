@@ -2,11 +2,11 @@ import { type KnipConfig } from "knip";
 
 const config: KnipConfig = {
   ignoreBinaries: ["moon", "op"],
-  ignoreDependencies: ["commitlint", "lint-staged", "nyc"],
+  ignoreDependencies: ["commitlint", "lint-staged", "nyc", "@devstone/easel"],
   workspaces: {
     ".": {},
     "apps/easel": {
-      entry: ["src/main.ts"],
+      entry: ["src/main.ts", "src/**/*.spec-d.ts"],
       project: ["src/**/*.ts"],
     },
     "apps/notion-toggl-bridge": {
