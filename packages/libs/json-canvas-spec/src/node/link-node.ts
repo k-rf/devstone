@@ -5,6 +5,7 @@ import { NodeStruct } from "./node-struct.js";
 export const LinkNode = NodeStruct("link", {
   url: Schema.String,
 });
+export type LinkNode = typeof LinkNode.Type;
 
 if (import.meta.vitest) {
   const { describe, expect, it } = import.meta.vitest;

@@ -6,6 +6,7 @@ export const FileNode = NodeStruct("file", {
   file: Schema.String,
   subpath: Schema.optional(Schema.TemplateLiteral("#", Schema.String)),
 });
+export type FileNode = typeof FileNode.Type;
 
 if (import.meta.vitest) {
   const { describe, expect, it } = import.meta.vitest;

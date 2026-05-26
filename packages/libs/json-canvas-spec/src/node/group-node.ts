@@ -10,6 +10,7 @@ export const GroupNode = NodeStruct("group", {
   backgroundStyle: Schema.optional(Schema.Literal("cover", "ratio", "repeat")),
   nodes: Schema.optional(Schema.Array(Schema.String)),
 });
+export type GroupNode = typeof GroupNode.Type;
 
 if (import.meta.vitest) {
   const { describe, expect, it } = import.meta.vitest;
