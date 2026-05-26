@@ -6,7 +6,7 @@ import {
 } from "@devstone/libs-json-canvas-spec";
 import { Effect, Schema } from "effect";
 
-import * as Domain from "../domain/canvas.js";
+import * as Domain from "../domain/canvas/index.js";
 import { CanvasError } from "../domain/errors.js";
 import { CanvasRepository } from "../port/repository/canvas.repository.js";
 
