@@ -6,6 +6,7 @@ import { vol } from "memfs";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { runCli } from "./app.js";
+import { assertNode } from "./test-utils/assert-node/assert-node.js";
 import { assertTextNode } from "./test-utils/assert-node/assert-text-node.js";
 import { mockFileSystem } from "./test-utils/mock-fs.js";
 
@@ -134,6 +135,43 @@ describe("正常系", () => {
       yield* fs
         .remove(testFile)
         .pipe(Effect.mapError((error) => new Error(`ファイル削除エラー: ${error.message}`)));
+    }).pipe(provideTestContext);
+
+    await Effect.runPromise(program);
+  });
+
+  it("ノードの再配置（重なり解消）が正常に行われること", async () => {
+    const program = Effect.gen(function* () {
+      const fs = yield* FileSystem.FileSystem;
+
+      if (yield* fs.exists(testFile)) {
+        yield* fs.remove(testFile);
+      }
+
+      // 重なった2つのノードを含むキャンバスを作成
+      const initialCanvas = {
+        nodes: [
+          { id: "n1", type: "text", x: 0, y: 0, width: 100, height: 50, text: "Node 1" },
+          { id: "n2", type: "text", x: 0, y: 40, width: 100, height: 50, text: "Node 2" },
+        ],
+      };
+      yield* fs.writeFileString(testFile, JSON.stringify(initialCanvas));
+
+      // rearrange コマンドを実行
+      yield* executeCli(["node", "rearrange", "-f", testFile, "-p", "20"]);
+
+      // 結果を読み込んで検証
+      const canvas = yield* readCanvas(testFile);
+      const n1 = canvas.nodes?.find((n) => n.id === "n1");
+      const n2 = canvas.nodes?.find((n) => n.id === "n2");
+
+      assertNode(n1);
+      assertNode(n2);
+
+      // Y軸方向に押し出されて重なりが解消されていること
+      expect(n2.y - (n1.y + 50)).toBeGreaterThanOrEqual(19.9);
+
+      yield* fs.remove(testFile);
     }).pipe(provideTestContext);
 
     await Effect.runPromise(program);
@@ -1028,6 +1066,15 @@ describe("異常系", () => {
           .includes("Failure"),
       ).toBe(true);
       yield* fs.remove(testErrorFile);
+
+      // rearrange で壊れたファイルに対するエラー (catchAllのカバー)
+      const temporaryCorruptFile = "rearrange-corrupt-test.canvas";
+      yield* fs.writeFileString(temporaryCorruptFile, "invalid json");
+      const resultExit = yield* Effect.exit(
+        executeCli(["node", "rearrange", "-f", temporaryCorruptFile]),
+      );
+      expect(resultExit.toString().includes("Failure")).toBe(true);
+      yield* fs.remove(temporaryCorruptFile);
 
       // 各コマンドでの存在しないIDに対する更新エラー (catchAllのカバー)
       expect(

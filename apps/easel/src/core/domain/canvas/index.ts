@@ -6,3 +6,4 @@ export * from "./add-edge.js";
 export * from "./update-edge.js";
 export * from "./remove-edge.js";
 export * from "./get-canvas-item.js";
+export * from "./rearrange-nodes.js";

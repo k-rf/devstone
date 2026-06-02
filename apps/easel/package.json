@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsgo -p tsconfig.build.json",
-    "build:bun": "bun build src/main.ts --outfile dist/bun/easel.js --target bun",
+    "build:bun": "bun build src/main.ts --outfile dist/bun/easel.js --target bun --define \"import.meta.vitest=undefined\"",
     "typecheck": "tsgo -p tsconfig.check.json",
     "lint": "eslint --fix --max-warnings 0",
     "test": "vitest run"
