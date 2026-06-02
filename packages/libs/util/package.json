@@ -21,7 +21,9 @@
     "lint": "eslint --fix --max-warnings 0",
     "test": "vitest run"
   },
-  "dependencies": {},
+  "dependencies": {
+    "type-fest": "5.7.0"
+  },
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",
     "@devstone/configs-typescript": "workspace:*",
