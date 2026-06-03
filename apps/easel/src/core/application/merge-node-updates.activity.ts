@@ -3,7 +3,7 @@ import { compact } from "@devstone/libs-util";
 import { Effect, Option } from "effect";
 
 /**
- * 既存のノードに新しいパラメータをマージする Step
+ * 既存のノードに新しいパラメータをマージする Activity
  * @param node - 既存のノードオブジェクト
  * @param params - 更新用のパラメータ
  * @param params.x - 新しい X 座標
@@ -17,7 +17,7 @@ import { Effect, Option } from "effect";
  * @param params.label - 新しいラベル（Groupノード用）
  * @returns パラメータがマージされた新しいノードデータを示す Effect
  */
-export const mergeNodeUpdatesStep = (
+export const mergeNodeUpdatesActivity = (
   node: Node,
   params: {
     readonly x: Option.Option<number>;

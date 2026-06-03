@@ -2,12 +2,12 @@ import { Effect, type Option } from "effect";
 
 import * as Canvas from "../domain/canvas/index.js";
 
-import { findNodeStep } from "./find-node.step.js";
-import { mergeNodeUpdatesStep } from "./merge-node-updates.step.js";
-import { readCanvasStep } from "./read-canvas.step.js";
-import { validateNodeSchemaStep } from "./validate-node-schema.step.js";
-import { validateNodeTypeStep } from "./validate-node-type.step.js";
-import { writeCanvasStep } from "./write-canvas.step.js";
+import { findNodeActivity } from "./find-node.activity.js";
+import { mergeNodeUpdatesActivity } from "./merge-node-updates.activity.js";
+import { readCanvasActivity } from "./read-canvas.activity.js";
+import { validateNodeSchemaActivity } from "./validate-node-schema.activity.js";
+import { validateNodeTypeActivity } from "./validate-node-type.activity.js";
+import { writeCanvasActivity } from "./write-canvas.activity.js";
 
 /**
  * ノードを更新するための Workflow。
@@ -40,11 +40,11 @@ export const updateNodeWorkflow = (params: {
   readonly label?: Option.Option<string>;
 }) =>
   Effect.gen(function* () {
-    const canvas = yield* readCanvasStep();
-    const foundNode = yield* findNodeStep(canvas, params.id);
-    yield* validateNodeTypeStep(foundNode, params.type);
-    const mergedData = yield* mergeNodeUpdatesStep(foundNode, params);
-    const validated = yield* validateNodeSchemaStep(mergedData);
+    const canvas = yield* readCanvasActivity();
+    const foundNode = yield* findNodeActivity(canvas, params.id);
+    yield* validateNodeTypeActivity(foundNode, params.type);
+    const mergedData = yield* mergeNodeUpdatesActivity(foundNode, params);
+    const validated = yield* validateNodeSchemaActivity(mergedData);
     const updatedCanvas = yield* Canvas.updateNode(canvas, validated);
-    yield* writeCanvasStep(updatedCanvas);
+    yield* writeCanvasActivity(updatedCanvas);
   });

@@ -2,9 +2,9 @@ import { Effect } from "effect";
 
 import * as Canvas from "../domain/canvas/index.js";
 
-import { readCanvasStep } from "./read-canvas.step.js";
-import { validateEdgeSchemaStep } from "./validate-edge-schema.step.js";
-import { writeCanvasStep } from "./write-canvas.step.js";
+import { readCanvasActivity } from "./read-canvas.activity.js";
+import { validateEdgeSchemaActivity } from "./validate-edge-schema.activity.js";
+import { writeCanvasActivity } from "./write-canvas.activity.js";
 
 /**
  * 新しいエッジを検証してキャンバスに追加し、保存する Workflow
@@ -13,9 +13,9 @@ import { writeCanvasStep } from "./write-canvas.step.js";
  */
 export const addEdgeWorkflow = (edgeData: unknown) =>
   Effect.gen(function* () {
-    const canvas = yield* readCanvasStep();
-    const validated = yield* validateEdgeSchemaStep(edgeData);
+    const canvas = yield* readCanvasActivity();
+    const validated = yield* validateEdgeSchemaActivity(edgeData);
     const updatedCanvas = yield* Canvas.addEdge(canvas, validated);
-    yield* writeCanvasStep(updatedCanvas);
+    yield* writeCanvasActivity(updatedCanvas);
     return validated.id;
   });

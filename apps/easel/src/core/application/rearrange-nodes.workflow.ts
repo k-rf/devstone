@@ -3,8 +3,8 @@ import { Effect, Option } from "effect";
 
 import * as Canvas from "../domain/canvas/index.js";
 
-import { readCanvasStep } from "./read-canvas.step.js";
-import { writeCanvasStep } from "./write-canvas.step.js";
+import { readCanvasActivity } from "./read-canvas.activity.js";
+import { writeCanvasActivity } from "./write-canvas.activity.js";
 
 /**
  * キャンバス内のノードの重なりを解消（再配置）するための Workflow。
@@ -20,7 +20,7 @@ export const rearrangeNodesWorkflow = (options: {
   readonly damping: Option.Option<number>;
 }) =>
   Effect.gen(function* () {
-    const canvas = yield* readCanvasStep();
+    const canvas = yield* readCanvasActivity();
     const padding = Option.getOrUndefined(options.padding);
     const maxIterations = Option.getOrUndefined(options.maxIterations);
     const damping = Option.getOrUndefined(options.damping);
@@ -33,5 +33,5 @@ export const rearrangeNodesWorkflow = (options: {
 
     const updatedCanvas = yield* Canvas.rearrangeNodes(canvas, config);
 
-    yield* writeCanvasStep(updatedCanvas);
+    yield* writeCanvasActivity(updatedCanvas);
   });

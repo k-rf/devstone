@@ -3,9 +3,9 @@ import { Effect, type Option } from "effect";
 
 import * as Canvas from "../domain/canvas/index.js";
 
-import { moveNodeOptionsStep } from "./move-node-options.step.js";
-import { readCanvasStep } from "./read-canvas.step.js";
-import { writeCanvasStep } from "./write-canvas.step.js";
+import { moveNodeOptionsActivity } from "./move-node-options.activity.js";
+import { readCanvasActivity } from "./read-canvas.activity.js";
+import { writeCanvasActivity } from "./write-canvas.activity.js";
 
 /**
  * ノードを移動するための Workflow。
@@ -27,8 +27,8 @@ export const moveNodeWorkflow = (
   },
 ) =>
   Effect.gen(function* () {
-    const canvas = yield* readCanvasStep();
-    const moveOptions = yield* moveNodeOptionsStep(options);
+    const canvas = yield* readCanvasActivity();
+    const moveOptions = yield* moveNodeOptionsActivity(options);
     const updatedCanvas = yield* Canvas.moveNode(canvas, NodeId.make(id), moveOptions);
-    yield* writeCanvasStep(updatedCanvas);
+    yield* writeCanvasActivity(updatedCanvas);
   });

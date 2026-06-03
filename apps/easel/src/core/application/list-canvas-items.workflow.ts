@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 
-import { formatCanvasItemsStep } from "./format-canvas-items.step.js";
-import { readCanvasStep } from "./read-canvas.step.js";
+import { formatCanvasItemsActivity } from "./format-canvas-items.activity.js";
+import { readCanvasActivity } from "./read-canvas.activity.js";
 
 /**
  * キャンバスに含まれるすべてのアイテム情報をフォーマットされたテキスト表現で取得する Workflow
@@ -9,6 +9,6 @@ import { readCanvasStep } from "./read-canvas.step.js";
  */
 export const listCanvasItemsWorkflow = () =>
   Effect.gen(function* () {
-    const canvas = yield* readCanvasStep();
-    return yield* formatCanvasItemsStep(canvas);
+    const canvas = yield* readCanvasActivity();
+    return yield* formatCanvasItemsActivity(canvas);
   });

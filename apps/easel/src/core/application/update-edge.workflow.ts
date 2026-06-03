@@ -2,11 +2,11 @@ import { Effect, type Option } from "effect";
 
 import * as Canvas from "../domain/canvas/index.js";
 
-import { findEdgeStep } from "./find-edge.step.js";
-import { mergeEdgeUpdatesStep } from "./merge-edge-updates.step.js";
-import { readCanvasStep } from "./read-canvas.step.js";
-import { validateEdgeSchemaStep } from "./validate-edge-schema.step.js";
-import { writeCanvasStep } from "./write-canvas.step.js";
+import { findEdgeActivity } from "./find-edge.activity.js";
+import { mergeEdgeUpdatesActivity } from "./merge-edge-updates.activity.js";
+import { readCanvasActivity } from "./read-canvas.activity.js";
+import { validateEdgeSchemaActivity } from "./validate-edge-schema.activity.js";
+import { writeCanvasActivity } from "./write-canvas.activity.js";
 
 /**
  * エッジを更新するための Workflow。
@@ -35,10 +35,10 @@ export const updateEdgeWorkflow = (params: {
   readonly label: Option.Option<string>;
 }) =>
   Effect.gen(function* () {
-    const canvas = yield* readCanvasStep();
-    const foundEdge = yield* findEdgeStep(canvas, params.id);
-    const mergedData = yield* mergeEdgeUpdatesStep(foundEdge, params);
-    const validated = yield* validateEdgeSchemaStep(mergedData);
+    const canvas = yield* readCanvasActivity();
+    const foundEdge = yield* findEdgeActivity(canvas, params.id);
+    const mergedData = yield* mergeEdgeUpdatesActivity(foundEdge, params);
+    const validated = yield* validateEdgeSchemaActivity(mergedData);
     const updatedCanvas = yield* Canvas.updateEdge(canvas, validated);
-    yield* writeCanvasStep(updatedCanvas);
+    yield* writeCanvasActivity(updatedCanvas);
   });

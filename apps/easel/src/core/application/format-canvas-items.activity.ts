@@ -2,11 +2,11 @@ import { type JsonCanvas } from "@devstone/libs-json-canvas-spec";
 import { Effect } from "effect";
 
 /**
- * キャンバス内のアイテム情報を一覧表示用にフォーマットする Step
+ * キャンバス内のアイテム情報を一覧表示用にフォーマットする Activity
  * @param canvas - フォーマット対象のキャンバスデータ
  * @returns 整形された一覧の文字列を示す Effect
  */
-export const formatCanvasItemsStep = (canvas: JsonCanvas) =>
+export const formatCanvasItemsActivity = (canvas: JsonCanvas) =>
   Effect.sync(() => {
     const nodes = canvas.nodes ?? [];
     const edges = canvas.edges ?? [];

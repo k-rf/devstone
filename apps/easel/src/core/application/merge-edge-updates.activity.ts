@@ -3,7 +3,7 @@ import { compact } from "@devstone/libs-util";
 import { Effect, Option } from "effect";
 
 /**
- * 既存のエッジに新しいパラメータをマージする Step
+ * 既存のエッジに新しいパラメータをマージする Activity
  * @param edge - 既存のエッジオブジェクト
  * @param params - 更新用のパラメータ
  * @param params.fromNode - 接続元ノード ID
@@ -16,7 +16,7 @@ import { Effect, Option } from "effect";
  * @param params.label - エッジのラベル
  * @returns パラメータがマージされた新しいエッジデータを示す Effect
  */
-export const mergeEdgeUpdatesStep = (
+export const mergeEdgeUpdatesActivity = (
   edge: Edge,
   params: {
     readonly fromNode: Option.Option<string>;

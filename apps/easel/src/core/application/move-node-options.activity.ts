@@ -1,7 +1,7 @@
 import { Effect, Option } from "effect";
 
 /**
- * Option値から移動座標オプションを抽出する Step
+ * Option値から移動座標オプションを抽出する Activity
  * @param options - 座標移動のオプション
  * @param options.x - 移動先の絶対 X 座標
  * @param options.y - 移動先の絶対 Y 座標
@@ -9,7 +9,7 @@ import { Effect, Option } from "effect";
  * @param options.dy - 相対移動する Y 方向の距離
  * @returns 抽出された座標オプションオブジェクトを示す Effect
  */
-export const moveNodeOptionsStep = (options: {
+export const moveNodeOptionsActivity = (options: {
   readonly x: Option.Option<number>;
   readonly y: Option.Option<number>;
   readonly dx: Option.Option<number>;
