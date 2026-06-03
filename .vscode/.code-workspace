@@ -1,9 +1,7 @@
 {
   "folders": [
     { "name": "devstone", "path": "/workspaces/devstone" },
+    { "name": "~/.gemini/antigravity-cli", "path": "/home/devstone/.gemini/antigravity-cli" },
     { "name": "~/.claude", "path": "/home/devstone/.claude" }
   ],
-  "settings": {
-    "oxc.enable.oxfmt": false
-  }
 }
