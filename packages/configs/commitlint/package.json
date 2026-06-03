@@ -17,9 +17,9 @@
     "effect": "3.21.2"
   },
   "devDependencies": {
-    "@commitlint/types": "20.5.0",
+    "@commitlint/types": "21.0.1",
     "@typescript/native-preview": "7.0.0-dev.20260430.1",
-    "commitlint": "20.5.3",
+    "commitlint": "21.0.2",
     "cz-customizable": "7.5.4",
     "eslint": "10.2.1"
   }

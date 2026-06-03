@@ -2,10 +2,10 @@
   "$schema": "./cache/schemas/toolchains.json",
 
   "node": {
-    "version": "24.15.0"
+    "version": "26.3.0"
   },
   "pnpm": {
-    "version": "11.1.2"
+    "version": "11.5.1"
   },
   "typescript": {
     "projectConfigFileName": "tsconfig.json",

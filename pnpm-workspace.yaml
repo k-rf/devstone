@@ -13,6 +13,7 @@ allowBuilds:
   sharp: false
   unrs-resolver: false
   workerd: false
+  lefthook: true
 
 onlyBuiltDependencies:
   - lefthook
