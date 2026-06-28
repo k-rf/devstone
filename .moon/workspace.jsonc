@@ -10,6 +10,7 @@
       "packages/configs/*",
       "packages/libs/*",
       "packages/design-system/*",
+      "packages/design-system/*/*",
       "packages/plugins/*"
     ],
     "sources": {

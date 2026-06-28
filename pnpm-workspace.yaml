@@ -2,15 +2,18 @@ packages:
   - apps/*
   - packages/configs/*
   - packages/design-system/*
+  - packages/design-system/*/*
   - packages/libs/*
   - packages/plugins/*
 
 allowBuilds:
+  "@bundled-es-modules/glob": false
   "@parcel/watcher": false
   msgpackr-extract: false
   esbuild: false
   msw: false
   sharp: false
+  style-dictionary: false
   unrs-resolver: false
   workerd: false
   lefthook: true
