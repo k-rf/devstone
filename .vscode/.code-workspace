@@ -1,7 +1,8 @@
 {
   "folders": [
     { "name": "devstone", "path": "/workspaces/devstone" },
-    { "name": "~/.gemini/antigravity-cli", "path": "/home/devstone/.gemini/antigravity-cli" },
+    { "name": "~/.gemini/antigravity-cli/worktrees", "path": "/home/devstone/.gemini/antigravity-cli/worktrees" },
+    { "name": "~/.gemini", "path": "/home/devstone/.gemini" },
     { "name": "~/.claude", "path": "/home/devstone/.claude" }
   ],
 }

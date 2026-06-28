@@ -6,9 +6,11 @@
   "ignorePaths": [".gitignore", ".devcontainer"],
   "words": [
     "antigravitycli",
+    "autodocs",
     "bento",
     "Buildx",
     "bunx",
+    "codegen",
     "commitlint",
     "dedupe",
     "devstone",
@@ -30,6 +32,7 @@
     "unrs",
     "vitest",
     "workerd",
+    "worktrees",
     "xyflow"
   ]
 }
