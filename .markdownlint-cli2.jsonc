@@ -8,5 +8,11 @@
     }
   },
   "gitignore": true,
-  "ignores": [".git/**", "**/.claude/skills/**/FORMS.md"]
+  "ignores": [
+    ".git/**",
+    "**/.claude/skills/**/FORMS.md",
+    "**/build/**",
+    "**/dist/**",
+    "**/node_modules/**"
+  ]
 }
