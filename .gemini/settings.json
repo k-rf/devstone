@@ -1,8 +1,7 @@
 {
-  "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
   "mcpServers": {
     "notion-developers": {
-      "httpUrl": "https://developers.notion.com/mcp"
+      "serverURL": "https://developers.notion.com/mcp"
     }
   },
   "hooks": {
