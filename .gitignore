@@ -160,7 +160,7 @@ styled-system-studio
 .claude/settings.local.json
 
 # Local files
-apps/notion-toggl-bridge/scripts/seed.ts
+apps/notion-toggl-bridge/scripts/mapper.json
 .todo
 
 # Antigravity CLI
