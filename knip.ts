@@ -2,7 +2,8 @@ import { type KnipConfig } from "knip";
 
 const config: KnipConfig = {
   ignoreBinaries: ["moon", "op"],
-  ignoreDependencies: ["commitlint", "lint-staged", "nyc", "@devstone/easel"],
+  ignoreDependencies: ["commitlint", "lint-staged", "nyc", "lefthook"],
+  lefthook: false,
   workspaces: {
     ".": {},
     "apps/easel": {

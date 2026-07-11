@@ -1,6 +1,6 @@
 import { FileSystem, Path } from "@effect/platform";
 import { BunContext, BunRuntime } from "@effect/platform-bun";
-import { Array, Config, Effect, Option } from "effect";
+import { Array, Effect, Option } from "effect";
 
 import { findSubProjects } from "../utils/find-sub-projects.js";
 import { getProjectIdentifier } from "../utils/get-project-identifier.js";
@@ -10,7 +10,7 @@ const main = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem;
   const path = yield* Path.Path;
 
-  const rootDir = yield* Config.string("PROJECT_ROOT");
+  const rootDir = path.resolve(import.meta.dirname, "../../../../../");
   const rawDir = path.join(rootDir, "coverage", "raw");
 
   // 出力先準備
