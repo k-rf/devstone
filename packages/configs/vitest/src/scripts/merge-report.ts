@@ -1,7 +1,7 @@
 import { Command, Path } from "@effect/platform";
 import { type Process } from "@effect/platform/CommandExecutor";
 import { BunContext, BunRuntime } from "@effect/platform-bun";
-import { Config, Effect, Exit, Stream, String } from "effect";
+import { Effect, Exit, Stream, String } from "effect";
 
 const runString = <E, R>(stream: Stream.Stream<Uint8Array, E, R>): Effect.Effect<string, E, R> =>
   stream.pipe(Stream.decodeText(), Stream.runFold(String.empty, String.concat));
@@ -28,9 +28,9 @@ const runCommand = (command: Command.Command, scope: string) =>
   );
 
 const main = Effect.fn(function* () {
-  const rootDir = yield* Config.string("PROJECT_ROOT");
-
   const path = yield* Path.Path;
+  const rootDir = path.resolve(import.meta.dirname, "../../../../../");
+
   const coverageDir = path.join(rootDir, "coverage");
 
   const merge = Command.make(

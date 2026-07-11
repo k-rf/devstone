@@ -28,6 +28,9 @@ services:
         source: ${HOME}/.claude
         target: ${ROOT_REMOTE_HOME}/.claude
       - type: bind
+        source: ${HOME}/.cursor
+        target: ${ROOT_REMOTE_HOME}/.cursor
+      - type: bind
         source: ${HOME}/.gemini
         target: ${ROOT_REMOTE_HOME}/.gemini
       - type: bind

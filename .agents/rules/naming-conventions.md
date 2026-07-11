@@ -17,7 +17,7 @@
 | :--------------------------- | :---------------------------- | :-------------------- |
 | **Port (Tag)**               | なし                          | `TaskBoardPort`       |
 | **Adapter (Implementation)** | `Live` (サフィックス)         | `NotionTaskBoardLive` |
-| **Adapter (Mock)**           | `Test` / `Mock`               | `TestTaskBoardLive`   |
+| **Adapter (Mock)**           | `Mock` (プレフィックス)       | `MockTaskBoard`       |
 | **Service (Effect)**         | なし（動詞から開始）          | `startTogglTimer`     |
 | **Schema**                   | なし（名詞）                  | `TrackingRecord`      |
 
@@ -37,6 +37,8 @@
 - **Port**: `core/port/{inbound,outbound,repository}/xyz.port.ts`
 - **Workflow**: `core/application/xyz.workflow.ts` (ユースケースの全体フローを定義)
 - **Activity**: `core/application/xyz.activity.ts` (Workflow を構成する個別の処理アクティビティ)
+- **Input**: `core/application/xyz.input.ts` (アプリケーションサービスの入力スキーマ)
+- **Output**: `core/application/xyz.output.ts` (アプリケーションサービスの出力スキーマ)
 - **Adapter**: `adapter/outbound/xyz.<specific>.adapter.ts`
 - **Repository**: `adapter/repository/xyz.<specific>.repository.ts`
 - **Handler**: `adapter/inbound/xyz.handler.ts`
