@@ -79,41 +79,14 @@
 - コード品質・型システム規約（鉄の掟を含む）: `.agents/rules/code-quality.md`
 - 命名規則・用語の一貫性: `.agents/rules/naming-conventions.md`
 - コマンド一覧（moon / pnpm scripts）: `.agents/rules/commands.md`
+- 各アプリの起動・環境変数: `.agents/rules/applications.md`
 - スキルとルールの定義方針: `.agents/rules/agent-guidelines.md`
 
 テスト基準は `devstone-testing-standard`、UI / Storybook は `devstone-ui-storybook-standard` スキルを参照してください。
 
 ## Cursor Cloud specific instructions
 
-Cursor Cloud のスナップショットには、以下がセットアップ済みの状態で起動します。
-（依存の再取得は起動時の update script が `proto install` → `pnpm install` を実行します。）
-
-### ツールチェーン
-
-- ツールのバージョンは `proto`（`.prototools`）で管理されます: node 26.3.0 / pnpm 11.5.1 / bun 1.3.14 / moon 2.3.0。
-- `proto` の shim は `~/.bashrc` で PATH に追加されます。コマンドが見つからない場合は `source ~/.bashrc` してください。
-
-### ビルド前提（型チェック / lint）
-
-- `typecheck` と `lint` はワークスペースパッケージのビルド成果物（`dist`）を解決します。
-- `dist` が無い状態（クリーンチェックアウト直後など）では
-  `Cannot find module '@devstone/...'` で型チェックが失敗します。
-  先に `moon run :build` を実行してください（moon がキャッシュするため通常は一度で十分）。
-
-### サービスと実行方法
-
-コマンドの詳細は `.agents/rules/commands.md` および各 `package.json` の `scripts` を参照してください。
-
-- **easel**（`apps/easel`）: JSON-Canvas（`.canvas`）を編集する CLI。
-  ビルド後に `node apps/easel/dist/main.js --help` で実行できます。
-  1 文字オプションは単ダッシュ（例: `-x`, `-y`）、複数文字は二重ダッシュ（例: `--width`, `--text`）です。
-- **notion-toggl-bridge**（`apps/notion-toggl-bridge`）: Cloudflare Workers（Hono）。
-  - `package.json` の `dev` は `op run -- wrangler dev`（1Password 前提）です。
-  - 1Password が無い環境では `apps/notion-toggl-bridge/.dev.vars` に必要なシークレットを置き、
-    `pnpm exec wrangler dev` で直接起動できます（KV `TOGGL_MAPPER` は miniflare がローカル模擬）。
-  - 必須の環境変数は `src/adapter/inbound/http/env-validator.middleware.ts` の `Env` を参照
-    （`NOTION_TOGGL_BRIDGE_API_TOKEN` / `NOTION_WEBHOOK_SECRET` / `SLACK_WEBHOOK_URL` /
-    `TOGGL_API_TOKEN` / `TOGGL_WORKSPACE_ID`）。
-  - `GET /` は認証不要で稼働確認に使えます。`POST /toggl/start` は `X-Shared-Secret` ヘッダで検証します。
-  - 外部 API（Notion / Toggl / Slack）はテストでは MSW でモックされます。実 API 呼び出しには実トークンが必要です。
-  - KV へのマッパー投入は `scripts/seed.ts`（要 `scripts/mapper.json`、gitignore 対象）を参照。
+- 依存は起動時の update script（`proto install` → `pnpm install`）で自動整備されます。
+- `proto` の shim が PATH に無くコマンドが見つからない場合は `source ~/.bashrc` してください。
+- ビルド前提・コマンドは `.agents/rules/commands.md`、各アプリの起動・環境変数は
+  `.agents/rules/applications.md` を参照してください。

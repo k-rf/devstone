@@ -11,14 +11,15 @@
 
 ## 技術スタック
 
-| カテゴリ               | 技術                                     |
-| :--------------------- | :--------------------------------------- |
-| **言語**               | TypeScript (ESM)                         |
-| **ランタイム**         | Cloudflare Workers / Node.js             |
-| **パラダイム**         | Functional Programming (via `Effect-TS`) |
-| **Web フレームワーク** | Hono                                     |
-| **パッケージ管理**     | pnpm (Workspaces)                        |
-| **タスクランナー**     | moon                                     |
+| カテゴリ               | 技術                                      |
+| :--------------------- | :---------------------------------------- |
+| **言語**               | TypeScript (ESM)                          |
+| **ランタイム**         | Cloudflare Workers / Node.js              |
+| **パラダイム**         | Functional Programming (via `Effect-TS`)  |
+| **Web フレームワーク** | Hono                                      |
+| **パッケージ管理**     | pnpm (Workspaces)                         |
+| **タスクランナー**     | moon                                      |
+| **ツールチェーン管理** | proto（`.prototools` がバージョンの正本） |
 
 ## ディレクトリ構造
 
