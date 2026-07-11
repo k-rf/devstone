@@ -18,7 +18,6 @@
 **/dist
 **/node_modules
 CLAUDE.md
-GEMINI.md
 LICENSE
 pnpm-debug.log
 README.md

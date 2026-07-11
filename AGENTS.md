@@ -1,7 +1,7 @@
 # AGENTS.md
 
 このファイルは、本リポジトリで作業する AI コーディングエージェント向け指示の**正本（Single Source of Truth）**です。
-`CLAUDE.md` / `GEMINI.md` は本ファイルを参照するだけのアダプタです。人間向けの説明は `README.md` を参照してください。
+`CLAUDE.md` は本ファイルを `@AGENTS.md` でインポートするだけのアダプタです。人間向けの説明は `README.md` を参照してください。
 
 ## 言語設定
 

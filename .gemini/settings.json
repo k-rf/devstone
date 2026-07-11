@@ -1,4 +1,7 @@
 {
+  "context": {
+    "fileName": "AGENTS.md"
+  },
   "mcpServers": {
     "notion-developers": {
       "serverURL": "https://developers.notion.com/mcp"

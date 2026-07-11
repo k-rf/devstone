@@ -10,6 +10,7 @@
   "gitignore": true,
   "ignores": [
     ".git/**",
+    "CLAUDE.md",
     "**/.claude/skills/**/FORMS.md",
     "**/build/**",
     "**/dist/**",
