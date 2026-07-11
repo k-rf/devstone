@@ -31,7 +31,7 @@
 | `unicorn/filename-case`                  | Naming, Structure & Effect-TS  | [naming-conventions.md][naming_doc]                             | `unicorn/filename-case`                                                     |
 | `devstone/no-warnings`                   | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | CLI設定およびカスタムASTルール                                              |
 | `unicorn/no-null`                        | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `unicorn/no-null`                                                           |
-| `functional/prefer-readonly-type`        | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `eslint-plugin-functional`                                                  |
+| `functional/prefer-readonly-type`        | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `eslint-plugin-functional` (`prefer-readonly-type` / `immutable-data` 統合) |
 | `functional/no-let`                      | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `eslint-plugin-functional`                                                  |
 | `functional/no-loop-statements`          | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `eslint-plugin-functional`                                                  |
 | `no-restricted-syntax` (as any)          | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `no-restricted-syntax` (`any`キャスト禁止)                                  |
@@ -212,16 +212,15 @@
 - **カテゴリ**: Architecture & Boundary Rules
 - **目的 / 概要**: HTTPハンドラやCLIコマンドなどの Inbound Adapter 層は、
   入力値のパースと Workflow への委譲のみを担当すべきであり、
-  ビジネスロジックの組み立てや条件分岐（`if` や `switch`、三項演算子などの制御構造）を
-  行ってはならない。これには、入力値の構文検証（syntax validation）などの検証ロジックも含まれ、
-  一切の条件分岐文の記述が厳格に禁止される。
+  ビジネスロジックを組み立てるための条件分岐を行ってはならない。
+  入力値の構文検証（syntax validation）は Inbound Adapter またはミドルウェアの責務として行う。
 
   **設計背景と合理的理由**:
   インバウンドアダプター内に条件分岐が混入すると、アダプター自体がドメイン知識や制御フローの決定権を
   持つようになり、ヘキサゴナルアーキテクチャにおける境界が曖昧になる。そのため、バリデーションエラーの
   ハンドリングやロジックフローの分岐は、`Effect.flatMap` などの Effect-TS パイプライン、
   あるいは専用のミドルウェアに委譲しなければならない。これにより、インバウンドアダプターから
-  命令的な条件分岐制御ステートメントを完全に排除し、宣言的で型安全なエラーハンドリングと
+  命令的な条件分岐制御ステートメントを排除し、宣言的で型安全なエラーハンドリングと
   一貫したワークフロー実行を保証する。
 
 - **定義元ドキュメント**: [design-principles.md][design_doc] (lines 42-49)
@@ -257,7 +256,7 @@
 
 - **実装詳細**:
   `no-restricted-syntax` を用いて、`apps/*/src/adapter/inbound/**/*.ts` 内における
-  条件分岐のASTノードを禁止する。
+  手続き的な条件分岐のASTノードを禁止する。
 
   ```typescript
   // eslint.config.ts
@@ -269,16 +268,13 @@
           "error",
           {
             selector: "IfStatement",
-            message: "Inbound adapters should not contain conditional statements (IfStatement).",
+            message:
+              "Inbound adapters should not contain conditional statements (IfStatement). Prefer validation pipelines.",
           },
           {
             selector: "SwitchStatement",
             message:
-              "Inbound adapters should not contain conditional statements (SwitchStatement).",
-          },
-          {
-            selector: "ConditionalExpression",
-            message: "Inbound adapters should not contain ternary expressions.",
+              "Inbound adapters should not contain conditional statements (SwitchStatement). Prefer validation pipelines.",
           },
         ],
       },
@@ -333,7 +329,7 @@
   （`Payload`, `Input`, `Output`, `Record`）を持つ識別子は、
   それぞれ対応するディレクトリ内にのみ配置されなければならない。
   - `Payload` -> `/adapter/(inbound|outbound)/`
-  - `Input` / `Output` -> `/core/(application|port)/`
+  - `Input` / `Output` -> `/core/application/`
   - `Record` -> `/adapter/repository/`
   - _例外_:
     - UIコンポーネントライブラリ等（例: `/packages/design-system/`）配下のファイルはチェック対象外とする。
@@ -346,7 +342,7 @@
 - **コード例**:
   - **OK**:
     - `NotionWebhookPayload` (`webhook.payload.ts` / adapter/inbound配下)
-    - `CreateCanvasInput` (`create-canvas.input.ts` / core/port配下)
+    - `CreateCanvasInput` (`create-canvas.input.ts` / core/application配下)
   - **NG**:
     - `NotionWebhookPayload` (`task-board-item.ts` / core/domain配下)
 - **実装詳細**:
@@ -362,8 +358,8 @@
   ```typescript
   const BOUNDARIES: Record<string, RegExp> = {
     Payload: /\/adapter\/(inbound|outbound)\//,
-    Input: /\/core\/(application|port)\//,
-    Output: /\/core\/(application|port)\//,
+    Input: /\/core\/application\//,
+    Output: /\/core\/application\//,
     Record: /\/adapter\/repository\//,
   };
 
@@ -460,7 +456,7 @@
   ファイル名に正しい役割サフィックスを付与することを強制する
   （spec、test、index、preview等は除く）。
   - `/core/port/` -> `*.port.ts` or `*.port.tsx` (リポジトリポートである `/core/port/repository/` を含む)
-  - `/core/application/` -> `*.workflow.ts` or `*.activity.ts`
+  - `/core/application/` -> `*.workflow.ts`, `*.activity.ts`, `*.input.ts`, or `*.output.ts`
   - `/adapter/outbound/` -> `*.adapter.ts` or `*.payload.ts`
   - `/adapter/repository/` -> `*.repository.ts` or `*.record.ts`
   - `/adapter/inbound/` -> `*.handler.ts`, `*.payload.ts`, or `*.route.ts`
@@ -469,6 +465,7 @@
   - **OK**:
     - `apps/easel/src/core/application/add-edge.workflow.ts`
     - `apps/easel/src/core/port/repository/canvas.port.ts`
+    - `apps/easel/src/core/application/create-canvas.input.ts`
   - **NG**:
     - `apps/easel/src/core/application/add-edge.ts` (サフィックスがない)
 - **実装詳細**:
@@ -649,7 +646,7 @@
     サフィックス）で定義された `const` 変数については、型と値の双方を表現する役割を持つため例外的に `PascalCase`
     での記述を許容する。
   - 本番用のアダプター実装クラス（`/adapter/` 以下に配置され、テスト/モック用ファイル以外）については `Live` サフィックス（例：`NotionTaskBoardLive`）を強制する。
-  - テスト・モック用のアダプタークラス（`*.mock.ts` や `mocks` ディレクトリ配下）については、`Test` または `Mock` プレフィックスを強制する。
+  - テスト・モック用のアダプタークラス（`*.mock.ts` や `mocks` ディレクトリ配下）については、`Mock` プレフィックスを強制する。
 - **定義元ドキュメント**: [naming-conventions.md][naming_doc] (line 54)
 - **コード例**:
   - **OK**:
@@ -747,7 +744,7 @@
           {
             selector: "class",
             format: ["PascalCase"],
-            prefix: ["Test", "Mock"],
+            prefix: ["Mock"],
           },
         ],
       },
@@ -964,7 +961,7 @@
 - **カテゴリ**: Code Quality, Immutability & Value Handling
 - **目的 / 概要**: 全域関数（Total Functions）および Effect-TS のエラーチャネルの規律を保つため、本番コードでの `throw` 文の使用は原則禁止とする。
   ただし、テストファイル（`*.spec.ts`, `*.test.ts`）や Storybookファイル（`*.stories.tsx`、`play`関数内）においてはアサーションフレームワークが内部的に例外を使用するため、これらは除外されなければならない。
-- **定義元ドキュメント**: [code-quality.md][quality_doc] (line 11)
+- **定義元ドキュメント**: [code-quality.md][quality_doc] (line 31)
 - **コード例**:
   - **OK**:
 
@@ -1119,12 +1116,12 @@
   - ASTセレクター:
 
     ```text
-    VariableDeclarator[id.name='meta'] > ObjectExpression > Property[key.name='title'],
-    VariableDeclarator[id.name='meta'] > TSSatisfiesExpression > ObjectExpression > Property[key.name='title'],
-    VariableDeclarator[id.name='meta'] > TSAsExpression > ObjectExpression > Property[key.name='title'],
-    ExportDefaultDeclaration > ObjectExpression > Property[key.name='title'],
-    ExportDefaultDeclaration > TSSatisfiesExpression > ObjectExpression > Property[key.name='title'],
-    ExportDefaultDeclaration > TSAsExpression > ObjectExpression > Property[key.name='title']
+    VariableDeclarator[id.name='meta'] ObjectExpression Property[key.name='title'],
+    VariableDeclarator[id.name='meta'] TSSatisfiesExpression ObjectExpression Property[key.name='title'],
+    VariableDeclarator[id.name='meta'] TSAsExpression ObjectExpression Property[key.name='title'],
+    ExportDefaultDeclaration ObjectExpression Property[key.name='title'],
+    ExportDefaultDeclaration TSSatisfiesExpression ObjectExpression Property[key.name='title'],
+    ExportDefaultDeclaration TSAsExpression ObjectExpression Property[key.name='title']
     ```
 
 ---
@@ -1151,12 +1148,12 @@
   - ASTセレクター:
 
     ```text
-    VariableDeclarator[id.name='meta'] > ObjectExpression > Property[key.name='tags'] > ArrayExpression > Literal[value='autodocs'],
-    VariableDeclarator[id.name='meta'] > TSSatisfiesExpression > ObjectExpression > Property[key.name='tags'] > ArrayExpression > Literal[value='autodocs'],
-    VariableDeclarator[id.name='meta'] > TSAsExpression > ObjectExpression > Property[key.name='tags'] > ArrayExpression > Literal[value='autodocs'],
-    ExportDefaultDeclaration > ObjectExpression > Property[key.name='tags'] > ArrayExpression > Literal[value='autodocs'],
-    ExportDefaultDeclaration > TSSatisfiesExpression > ObjectExpression > Property[key.name='tags'] > ArrayExpression > Literal[value='autodocs'],
-    ExportDefaultDeclaration > TSAsExpression > ObjectExpression > Property[key.name='tags'] > ArrayExpression > Literal[value='autodocs']
+    VariableDeclarator[id.name='meta'] ObjectExpression Property[key.name='tags'] ArrayExpression Literal[value='autodocs'],
+    VariableDeclarator[id.name='meta'] TSSatisfiesExpression ObjectExpression Property[key.name='tags'] ArrayExpression Literal[value='autodocs'],
+    VariableDeclarator[id.name='meta'] TSAsExpression ObjectExpression Property[key.name='tags'] ArrayExpression Literal[value='autodocs'],
+    ExportDefaultDeclaration ObjectExpression Property[key.name='tags'] ArrayExpression Literal[value='autodocs'],
+    ExportDefaultDeclaration TSSatisfiesExpression ObjectExpression Property[key.name='tags'] ArrayExpression Literal[value='autodocs'],
+    ExportDefaultDeclaration TSAsExpression ObjectExpression Property[key.name='tags'] ArrayExpression Literal[value='autodocs']
     ```
 
 ---
