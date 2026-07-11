@@ -25,7 +25,11 @@ export const base = defineConfig(
         { fixStyle: "inline-type-imports", prefer: "type-imports" },
       ],
 
-      /** @remarks `as unknown as T` は型安全性を完全に破壊するため禁止する */
+      /**
+       * @remarks
+       * - `as unknown as T` は型安全性を完全に破壊するため禁止する
+       * - `as any` / `<any>` は静的型安全性を意図的に破壊するため禁止する
+       */
       "no-restricted-syntax": [
         "error",
         {
@@ -33,6 +37,12 @@ export const base = defineConfig(
             "TSAsExpression:has(> TSAsExpression.expression[typeAnnotation.type='TSUnknownKeyword'])",
           message:
             "`as unknown as` は型チェックを完全に迂回します。型安全になるように実装を見直してください。",
+        },
+        {
+          selector:
+            "TSAsExpression[typeAnnotation.type='TSAnyKeyword'], TSTypeAssertion[typeAnnotation.type='TSAnyKeyword']",
+          message:
+            "`as any` / `<any>` は型チェックを迂回します。型安全に書き直すか、一時的な回避には `@ts-expect-error <理由>` を使用してください。",
         },
         {
           // HACK: エラーになる条件がかなり緩いのでカスタムを作る
