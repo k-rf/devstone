@@ -40,3 +40,27 @@ git push origin HEAD:refs/heads/cursor/invalid-branch-name
 git push origin HEAD:refs/heads/feature/DEV-29/ruleset-smoke-test
 git push origin --delete feature/DEV-29/ruleset-smoke-test
 ```
+
+## Main branch protection
+
+`main` への直接 push・削除を防ぎ、PR 経由のマージと必須チェックを強制します。
+
+- 定義ファイル: [`main-branch-protection.json`](./main-branch-protection.json)
+- 主なルール:
+  - force push / 削除の禁止
+  - PR 必須（レビュー承認数は 0、未解決スレッドの解消は必須）
+  - マージ方法は `merge` のみ
+  - 必須ステータスチェック: `Run Checks`
+
+### Main branch protection の適用（リポジトリ管理者）
+
+```bash
+gh api --method POST repos/k-rf/devstone/rulesets --input .github/rulesets/main-branch-protection.json
+```
+
+既存 Ruleset を更新する場合は、Ruleset ID を指定して `PUT` します。
+
+```bash
+gh api repos/k-rf/devstone/rulesets
+gh api --method PUT repos/k-rf/devstone/rulesets/<ruleset-id> --input .github/rulesets/main-branch-protection.json
+```
