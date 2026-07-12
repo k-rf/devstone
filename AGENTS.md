@@ -78,6 +78,7 @@
 - 設計原則（SOLID / DRY / Hexagonal / DIP）: `.agents/rules/design-principles.md`
 - コード品質・型システム規約（鉄の掟を含む）: `.agents/rules/code-quality.md`
 - 命名規則・用語の一貫性: `.agents/rules/naming-conventions.md`
+- ブランチ命名規則: `.agents/rules/branch-naming.md`
 - コマンド一覧（moon / pnpm scripts）: `.agents/rules/commands.md`
 - 各アプリの起動・環境変数: `.agents/rules/applications.md`
 - スキルとルールの定義方針: `.agents/rules/agent-guidelines.md`
@@ -90,3 +91,4 @@
 - `proto` の shim が PATH に無くコマンドが見つからない場合は `source ~/.bashrc` してください。
 - ビルド前提・コマンドは `.agents/rules/commands.md`、各アプリの起動・環境変数は
   `.agents/rules/applications.md` を参照してください。
+- 作業ブランチは `.agents/rules/branch-naming.md` に従うこと。`cursor/...` のような自動生成名のまま開発・PR 作成してはならない。
