@@ -8,25 +8,18 @@
       "include": ["~ALL"],
       "exclude": [
         "refs/heads/main",
-        "refs/heads/feature/*",
-        "refs/heads/fix/*",
-        "refs/heads/chore/*",
-        "refs/heads/docs/*",
-        "refs/heads/refactor/*",
-        "refs/heads/hotfix/*",
-        "refs/heads/test/*",
-        "refs/heads/ci/*",
-        "refs/heads/release/*",
+        "refs/heads/feature/DEV-[0-9]*/*",
+        "refs/heads/fix/DEV-[0-9]*/*",
+        "refs/heads/chore/DEV-[0-9]*/*",
+        "refs/heads/docs/DEV-[0-9]*/*",
+        "refs/heads/refactor/DEV-[0-9]*/*",
+        "refs/heads/hotfix/DEV-[0-9]*/*",
+        "refs/heads/test/DEV-[0-9]*/*",
+        "refs/heads/ci/DEV-[0-9]*/*",
+        "refs/heads/release/DEV-[0-9]*/*",
         "refs/heads/dependabot/*/*"
       ]
     }
   },
-  "rules": [
-    {
-      "type": "creation"
-    },
-    {
-      "type": "update"
-    }
-  ]
+  "rules": [{ "type": "creation" }, { "type": "update" }]
 }

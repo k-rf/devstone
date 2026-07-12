@@ -8,8 +8,12 @@
 許可されていない名前のブランチ作成・更新を拒否します。
 
 - 定義ファイル: [`branch-naming.json`](./branch-naming.json)
-- 許可: `main`、`feature/*`、`fix/*`、`chore/*`、`docs/*`、`refactor/*`、`hotfix/*`、`test/*`、`ci/*`、`release/*`、`dependabot/*/*`
-- 拒否例: `cursor/...`、チケット ID なしの自由名、プレフィックスなし
+- 許可:
+  - `main`
+  - `{type}/DEV-{n}/{desc}`
+    （type = feature / fix / chore / docs / refactor / hotfix / test / ci / release）
+  - `dependabot/*/*`
+- 拒否例: `cursor/...`、チケット ID なし（例: `feature/add-login`）、プレフィックスなし
 
 ### 適用（リポジトリ管理者）
 
@@ -33,6 +37,6 @@ gh api --method PUT repos/k-rf/devstone/rulesets/<ruleset-id> --input .github/ru
 git push origin HEAD:refs/heads/cursor/invalid-branch-name
 
 # 適合: 成功すること
-git push origin HEAD:refs/heads/feature/DEV-29-ruleset-smoke-test
-git push origin --delete feature/DEV-29-ruleset-smoke-test
+git push origin HEAD:refs/heads/feature/DEV-29/ruleset-smoke-test
+git push origin --delete feature/DEV-29/ruleset-smoke-test
 ```
