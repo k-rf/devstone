@@ -9,7 +9,8 @@
 - **Case**:
   - `PascalCase`: クラス、インターフェース、`Context.Tag`、`Schema`、型定義。
   - `camelCase`: 変数、関数、プロパティ、`Effect` インスタンス。
-  - `kebab-case`: ファイル名、ディレクトリ名。
+  - `kebab-case`: ファイル名、ディレクトリ名、ブランチ名の説明部分。
+- **Git ブランチ**: 作業ブランチは [branch-naming.md](./branch-naming.md) に従う（例: `feature/DEV-29/short-description`）。
 
 ## 2. Effect-TS 固有の命名
 
