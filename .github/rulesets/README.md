@@ -7,7 +7,7 @@
 
 許可されていない名前のブランチ作成・更新を拒否します。
 
-- 定義ファイル: [`branch-naming.json`](./branch-naming.json)
+- 定義ファイル: [`branch-naming-convention.json`](./branch-naming-convention.json)
 - 許可:
   - `main`
   - `{type}/DEV-{n}/{desc}`
@@ -15,19 +15,19 @@
   - `dependabot/*/*`
 - 拒否例: `cursor/...`、チケット ID なし（例: `feature/add-login`）、プレフィックスなし
 
-### 適用（リポジトリ管理者）
+### Branch naming convention の適用（リポジトリ管理者）
 
 Cursor 統合トークンには Rulesets 作成権限がないため、**リポジトリ管理者**が次を実行してください。
 
 ```bash
-gh api --method POST repos/k-rf/devstone/rulesets --input .github/rulesets/branch-naming.json
+gh api --method POST repos/k-rf/devstone/rulesets --input .github/rulesets/branch-naming-convention.json
 ```
 
 既存 Ruleset を更新する場合は、Ruleset ID を指定して `PUT` します。
 
 ```bash
 gh api repos/k-rf/devstone/rulesets
-gh api --method PUT repos/k-rf/devstone/rulesets/<ruleset-id> --input .github/rulesets/branch-naming.json
+gh api --method PUT repos/k-rf/devstone/rulesets/<ruleset-id> --input .github/rulesets/branch-naming-convention.json
 ```
 
 ### 検証手順
