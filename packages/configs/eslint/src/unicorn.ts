@@ -43,6 +43,14 @@ export const unicorn = defineConfig({
   files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   extends: [pluginUnicorn.configs.recommended],
   rules: {
+    "unicorn/filename-case": [
+      "error",
+      {
+        case: "kebabCase",
+        ignore: ["README.md", "Dockerfile", "SKILL.md", "LICENSE"],
+      },
+    ],
+
     "unicorn/prevent-abbreviations": [
       "error",
       {
