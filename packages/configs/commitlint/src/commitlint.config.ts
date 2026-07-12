@@ -4,10 +4,10 @@ import { Match } from "effect";
 import { typeEnums } from "./type-enum.js";
 
 const emojis = typeEnums.map((typeEnum) => typeEnum.value).join("|");
-const subjectPattern = (options: { withKey: boolean }) => {
+const subjectPattern = (options: { hasKey: boolean }) => {
   return Match.value(options).pipe(
-    Match.when({ withKey: true }, () => new RegExp(String.raw`^(${emojis}) (.+-\d+) (.+)$`)),
-    Match.when({ withKey: false }, () => new RegExp(String.raw`^(${emojis}) (.+)$`)),
+    Match.when({ hasKey: true }, () => new RegExp(String.raw`^(${emojis}) (.+-\d+) (.+)$`)),
+    Match.when({ hasKey: false }, () => new RegExp(String.raw`^(${emojis}) (.+)$`)),
     Match.exhaustive,
   );
 };
@@ -23,7 +23,7 @@ const rules = {
 const config: UserConfig = {
   parserPreset: {
     parserOpts: {
-      headerPattern: subjectPattern({ withKey: false }),
+      headerPattern: subjectPattern({ hasKey: false }),
       headerCorrespondence: ["type", "subject"],
     },
   },

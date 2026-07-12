@@ -114,7 +114,7 @@ const stepRearrange = (
   nodes: readonly Node[],
   padding: number,
   damping: number,
-): Effect.Effect<{ nextNodes: readonly Node[]; moved: boolean }> => {
+): Effect.Effect<{ nextNodes: readonly Node[]; hasMoved: boolean }> => {
   const effects = getUniquePairs(nodes).map(([nodeA, nodeB]) =>
     calculatePairDelta(nodeA, nodeB, padding, damping),
   );
@@ -132,7 +132,7 @@ const stepRearrange = (
         }
       }
 
-      const { nextNodes, moved } = nodes.reduce(
+      const { nextNodes, hasMoved } = nodes.reduce(
         (acc, node) => {
           const delta = mergedDeltas[node.id];
 
@@ -142,15 +142,15 @@ const stepRearrange = (
                 ...acc.nextNodes,
                 { ...node, x: node.x + delta.dx, y: node.y + delta.dy },
               ],
-              moved: true,
+              hasMoved: true,
             };
           }
-          return { nextNodes: [...acc.nextNodes, node], moved: acc.moved };
+          return { nextNodes: [...acc.nextNodes, node], hasMoved: acc.hasMoved };
         },
-        { nextNodes: [] as Node[], moved: false },
+        { nextNodes: [] as Node[], hasMoved: false },
       );
 
-      return { nextNodes: nextNodes, moved: moved };
+      return { nextNodes: nextNodes, hasMoved: hasMoved };
     }),
   );
 };
@@ -183,8 +183,8 @@ export const rearrangeNodes = (
     if (iteration >= maxIterations) return Effect.succeed(currentNodes);
 
     return stepRearrange(currentNodes, padding, damping).pipe(
-      Effect.flatMap(({ nextNodes, moved }) => {
-        if (!moved) return Effect.succeed(nextNodes);
+      Effect.flatMap(({ nextNodes, hasMoved }) => {
+        if (!hasMoved) return Effect.succeed(nextNodes);
 
         return runLoop(nextNodes, iteration + 1);
       }),
