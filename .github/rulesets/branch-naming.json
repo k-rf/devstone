@@ -1,0 +1,32 @@
+{
+  "name": "Branch naming convention",
+  "target": "branch",
+  "enforcement": "active",
+  "bypass_actors": [],
+  "conditions": {
+    "ref_name": {
+      "include": ["~ALL"],
+      "exclude": [
+        "refs/heads/main",
+        "refs/heads/feature/*",
+        "refs/heads/fix/*",
+        "refs/heads/chore/*",
+        "refs/heads/docs/*",
+        "refs/heads/refactor/*",
+        "refs/heads/hotfix/*",
+        "refs/heads/test/*",
+        "refs/heads/ci/*",
+        "refs/heads/release/*",
+        "refs/heads/dependabot/*/*"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "type": "creation"
+    },
+    {
+      "type": "update"
+    }
+  ]
+}

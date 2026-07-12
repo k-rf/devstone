@@ -1,0 +1,38 @@
+# GitHub Repository Rulesets
+
+このディレクトリは、リポジトリに適用する GitHub Rulesets の定義を管理します。
+エージェント向けの説明は [`.agents/rules/branch-naming.md`](../../.agents/rules/branch-naming.md) を参照してください。
+
+## Branch naming convention
+
+許可されていない名前のブランチ作成・更新を拒否します。
+
+- 定義ファイル: [`branch-naming.json`](./branch-naming.json)
+- 許可: `main`、`feature/*`、`fix/*`、`chore/*`、`docs/*`、`refactor/*`、`hotfix/*`、`test/*`、`ci/*`、`release/*`、`dependabot/*/*`
+- 拒否例: `cursor/...`、チケット ID なしの自由名、プレフィックスなし
+
+### 適用（リポジトリ管理者）
+
+Cursor 統合トークンには Rulesets 作成権限がないため、**リポジトリ管理者**が次を実行してください。
+
+```bash
+gh api --method POST repos/k-rf/devstone/rulesets --input .github/rulesets/branch-naming.json
+```
+
+既存 Ruleset を更新する場合は、Ruleset ID を指定して `PUT` します。
+
+```bash
+gh api repos/k-rf/devstone/rulesets
+gh api --method PUT repos/k-rf/devstone/rulesets/<ruleset-id> --input .github/rulesets/branch-naming.json
+```
+
+### 検証手順
+
+```bash
+# 違反: 失敗すること
+git push origin HEAD:refs/heads/cursor/invalid-branch-name
+
+# 適合: 成功すること
+git push origin HEAD:refs/heads/feature/DEV-29-ruleset-smoke-test
+git push origin --delete feature/DEV-29-ruleset-smoke-test
+```
