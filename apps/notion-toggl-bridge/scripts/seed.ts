@@ -19,7 +19,7 @@ const loadConfig = () => {
 
   return Effect.promise(() => mapperFile.exists()).pipe(
     Effect.filterOrFail(
-      (exists) => exists,
+      (isExisting) => isExisting,
       () => new FileNotFound({ message: "mapper.json が見つかりません。" }),
     ),
     Effect.flatMap(() =>

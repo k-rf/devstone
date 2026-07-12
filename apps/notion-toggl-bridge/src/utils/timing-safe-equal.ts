@@ -51,8 +51,8 @@ if (import.meta.vitest) {
         .mockResolvedValueOnce(new Uint8Array(32).buffer)
         .mockResolvedValueOnce(new Uint8Array(16).buffer);
 
-      const result = await timingSafeEqual("short", "longer-input");
-      expect(result).toBe(false);
+      const isEqual = await timingSafeEqual("short", "longer-input");
+      expect(isEqual).toBe(false);
       signSpy.mockRestore();
     });
   });

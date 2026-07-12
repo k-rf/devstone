@@ -36,10 +36,10 @@ describe("正常系", () => {
       const fs = yield* FileSystem.FileSystem;
 
       // テスト用キャンバスの初期化 (既存ファイルの削除)
-      const exists = yield* fs
+      const isExisting = yield* fs
         .exists(testFile)
         .pipe(Effect.mapError((error) => new Error(`ファイル存在確認エラー: ${error.message}`)));
-      if (exists) {
+      if (isExisting) {
         yield* fs
           .remove(testFile)
           .pipe(Effect.mapError((error) => new Error(`ファイル削除エラー: ${error.message}`)));
@@ -704,8 +704,8 @@ describe("正常系", () => {
       yield* fs.remove(testFile);
 
       // アサーションを追加 (ファイルが正常にクリーンアップされたことの確認)
-      const cleanupSuccess = yield* fs.exists(testFile);
-      expect(cleanupSuccess).toBe(false);
+      const isCleanupRemaining = yield* fs.exists(testFile);
+      expect(isCleanupRemaining).toBe(false);
     }).pipe(provideTestContext);
 
     await Effect.runPromise(program);
@@ -718,10 +718,10 @@ describe("異常系", () => {
       const fs = yield* FileSystem.FileSystem;
 
       // テスト用キャンバスの初期化
-      const exists = yield* fs
+      const isExisting = yield* fs
         .exists(testFile)
         .pipe(Effect.mapError((error) => new Error(`ファイル存在確認エラー: ${error.message}`)));
-      if (exists) {
+      if (isExisting) {
         yield* fs
           .remove(testFile)
           .pipe(Effect.mapError((error) => new Error(`ファイル削除エラー: ${error.message}`)));
@@ -736,10 +736,10 @@ describe("異常系", () => {
       expect(result.toString().includes("Failure")).toBe(true);
 
       // クリーンアップ
-      const cleanupExists = yield* fs
+      const isCleanupExisting = yield* fs
         .exists(testFile)
         .pipe(Effect.mapError((error) => new Error(`ファイル存在確認エラー: ${error.message}`)));
-      if (cleanupExists) {
+      if (isCleanupExisting) {
         yield* fs
           .remove(testFile)
           .pipe(Effect.mapError((error) => new Error(`ファイル削除エラー: ${error.message}`)));
