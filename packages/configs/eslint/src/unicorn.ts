@@ -47,7 +47,6 @@ export const unicorn = defineConfig({
       "error",
       {
         case: "kebabCase",
-        ignore: ["README.md", "Dockerfile", "SKILL.md", "LICENSE"],
       },
     ],
 

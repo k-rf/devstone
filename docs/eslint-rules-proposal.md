@@ -765,7 +765,6 @@
   - **NG**: `TaskBoardItem.ts`, `slack_adapter.ts`
 - **実装詳細**:
   `eslint-plugin-unicorn` の `unicorn/filename-case` ルールを有効化する。
-  一部の特例ファイル（`README.md`, `Dockerfile` 等）は除外設定を追加する。
 
   ```typescript
   export default [
@@ -775,7 +774,6 @@
           "error",
           {
             case: "kebabCase",
-            ignore: ["README.md", "Dockerfile", "SKILL.md", "LICENSE"],
           },
         ],
       },
