@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Design Principles
 
 > [!NOTE] このファイルの役割

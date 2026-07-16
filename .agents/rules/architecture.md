@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Architecture
 
 > [!NOTE] このファイルの役割

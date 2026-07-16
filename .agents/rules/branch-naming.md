@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Branch Naming
 
 > [!NOTE] このファイルの役割

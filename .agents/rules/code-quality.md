@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Code Quality
 
 > [!NOTE] このファイルの役割

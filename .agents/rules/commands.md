@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Commands
 
 > [!NOTE] このファイルの役割
