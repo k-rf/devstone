@@ -31,20 +31,22 @@ export const moveNode = (
       );
     }
 
-    let nextX = node.x;
-    let nextY = node.y;
+    const resolveCoordinate = (
+      absolute: number | undefined,
+      relative: number | undefined,
+      current: number,
+    ): number => {
+      if (absolute !== undefined) {
+        return absolute;
+      }
+      if (relative !== undefined) {
+        return current + relative;
+      }
+      return current;
+    };
 
-    if (options.x !== undefined) {
-      nextX = options.x;
-    } else if (options.dx !== undefined) {
-      nextX += options.dx;
-    }
-
-    if (options.y !== undefined) {
-      nextY = options.y;
-    } else if (options.dy !== undefined) {
-      nextY += options.dy;
-    }
+    const nextX = resolveCoordinate(options.x, options.dx, node.x);
+    const nextY = resolveCoordinate(options.y, options.dy, node.y);
 
     const updatedNode = {
       ...node,

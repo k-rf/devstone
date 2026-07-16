@@ -19,12 +19,11 @@ export const timingSafeEqual = async (a: string, b: string): Promise<boolean> =>
   const bytesA = new Uint8Array(sigA);
   const bytesB = new Uint8Array(sigB);
 
-  let result = 0;
   // bytesA と bytesB の長さが同じであることを前提とするが、型安全性を確保しつつ、すべてのパスを検証可能な形にする
-  for (const [i, bitA] of bytesA.entries()) {
+  const result = bytesA.reduce((acc, bitA, i) => {
     const bitB = bytesB[i];
-    result |= typeof bitA === "number" && typeof bitB === "number" ? bitA ^ bitB : 1;
-  }
+    return acc | (typeof bitA === "number" && typeof bitB === "number" ? bitA ^ bitB : 1);
+  }, 0);
 
   // 定時間実行を実現するために、長さの比較もこのタイミングで行う
   return result === 0 && bytesA.length === bytesB.length;
