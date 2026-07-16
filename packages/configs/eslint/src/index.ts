@@ -9,3 +9,4 @@ export { markdown } from "./markdown.js";
 export { json } from "./json.js";
 export { unicorn } from "./unicorn.js";
 export { jsdoc } from "./jsdoc.js";
+export { functional } from "./functional.js";
