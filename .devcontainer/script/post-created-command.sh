@@ -12,6 +12,11 @@ pnpm install
 mkdir -p "${HOME}/.bash_completion.d"
 moon completions > "${HOME}/.bash_completion.d/moon.sh"
 
+# 非インタラクティブなSSH接続でもprotoのPATHが通るように、.bashrcの先頭に設定を挿入する
+if ! grep -q "export PROTO_HOME=" "${HOME}/.bashrc"; then
+    sed -i '1i # proto\nexport PROTO_HOME="$HOME/.proto"\nexport PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"\n' "${HOME}/.bashrc"
+fi
+
 cat >> "${HOME}/.bashrc" <<'EOF'
 
 # moon
