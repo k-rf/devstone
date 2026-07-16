@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Naming Conventions
 
 > [!NOTE] このファイルの役割

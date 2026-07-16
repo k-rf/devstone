@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Applications
 
 > [!NOTE] このファイルの役割
