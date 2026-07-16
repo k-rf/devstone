@@ -1,6 +1,16 @@
 import { defineConfig } from "eslint/config";
 
-import { base, cspell, importConfig, json, markdown, node, sonarjs, unicorn } from "./src/index.js";
+import {
+  base,
+  cspell,
+  functional,
+  importConfig,
+  json,
+  markdown,
+  node,
+  sonarjs,
+  unicorn,
+} from "./src/index.js";
 
 const config = defineConfig(
   { ignores: ["dist/"] },
@@ -13,6 +23,7 @@ const config = defineConfig(
   },
   base,
   cspell,
+  functional,
   importConfig,
   json,
   markdown,

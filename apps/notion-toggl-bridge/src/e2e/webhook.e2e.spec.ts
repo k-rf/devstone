@@ -100,9 +100,9 @@ describe("正常系", () => {
       body: JSON.stringify(validPayload),
     });
 
-    let capturedPromise: Promise<unknown> | undefined;
+    const captured: { promise?: Promise<unknown> } = {};
     const waitUntilSpy = vi.fn((promise: Promise<unknown>) => {
-      capturedPromise = promise;
+      captured.promise = promise;
     });
 
     const executionCtx: ExecutionContext = {
@@ -116,7 +116,7 @@ describe("正常系", () => {
     expect(res.status).toBe(202);
     expect(await res.json()).toStrictEqual({ message: "Accepted" });
 
-    if (capturedPromise) await capturedPromise;
+    if (captured.promise) await captured.promise;
   });
 });
 
@@ -180,9 +180,9 @@ describe("異常系", () => {
       body: JSON.stringify(validPayload),
     });
 
-    let capturedPromise: Promise<unknown> | undefined;
+    const captured: { promise?: Promise<unknown> } = {};
     const waitUntilSpy = vi.fn((promise: Promise<unknown>) => {
-      capturedPromise = promise;
+      captured.promise = promise;
     });
 
     const executionCtx: ExecutionContext = {
@@ -196,7 +196,7 @@ describe("異常系", () => {
 
     expect(res.status).toBe(202);
 
-    if (capturedPromise) await capturedPromise;
+    if (captured.promise) await captured.promise;
 
     expect(consoleSpy).toHaveBeenCalledWith(
       expect.stringContaining("Background task failed:"),

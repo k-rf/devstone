@@ -25,12 +25,12 @@ const clientEffect = makeTogglApiClient(apiToken, workspaceId);
 
 describe("正常系", () => {
   it("正しいペイロードで POST リクエストが送信されること", async () => {
-    let capturedBody: unknown;
+    const captured: { body?: unknown } = {};
     server.use(
       http.post(
         `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/time_entries`,
         async ({ request }) => {
-          capturedBody = await request.json();
+          captured.body = await request.json();
           return HttpResponse.json({ id: 999 });
         },
       ),
@@ -50,7 +50,7 @@ describe("正常系", () => {
 
     await Effect.runPromise(program);
 
-    const body = capturedBody as Record<string, unknown>;
+    const body = captured.body as Record<string, unknown>;
     expect(body).toMatchObject({
       description: title,
       project_id: projectId,

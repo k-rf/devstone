@@ -24,10 +24,10 @@ afterAll(() => {
 
 describe("正常系", () => {
   it("正常に通知が送れること", async () => {
-    let capturedBody: unknown;
+    const captured: { body?: unknown } = {};
     server.use(
       http.post(webhookUrl, async ({ request }) => {
-        capturedBody = await request.json();
+        captured.body = await request.json();
         return new HttpResponse(undefined, { status: 200 });
       }),
     );
@@ -40,7 +40,7 @@ describe("正常系", () => {
 
     await Effect.runPromise(program);
 
-    expect(capturedBody).toMatchObject({
+    expect(captured.body).toMatchObject({
       text: /Test Message/,
       attachments: [
         {
@@ -54,11 +54,11 @@ describe("正常系", () => {
   });
 
   it("details がない場合も正常に通知が送れること", async () => {
-    let capturedBody: unknown;
+    const captured: { body?: unknown } = {};
 
     server.use(
       http.post(webhookUrl, async ({ request }) => {
-        capturedBody = await request.json();
+        captured.body = await request.json();
         return new HttpResponse(undefined, { status: 200 });
       }),
     );
@@ -71,7 +71,7 @@ describe("正常系", () => {
 
     await Effect.runPromise(program);
 
-    expect(capturedBody).toMatchObject({
+    expect(captured.body).toMatchObject({
       attachments: [],
     });
   });

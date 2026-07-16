@@ -1,6 +1,7 @@
 import {
   base,
   cspell,
+  functional,
   importConfig,
   jsdoc,
   json,
@@ -20,6 +21,7 @@ const config = defineConfig(
   },
   base,
   cspell,
+  functional,
   importConfig,
   jsdoc,
   json,
