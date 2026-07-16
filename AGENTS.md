@@ -91,4 +91,6 @@
 - `proto` の shim が PATH に無くコマンドが見つからない場合は `source ~/.bashrc` してください。
 - ビルド前提・コマンドは `.agents/rules/commands.md`、各アプリの起動・環境変数は
   `.agents/rules/applications.md` を参照してください。
-- 作業ブランチは `.agents/rules/branch-naming.md` に従うこと。`cursor/...` のような自動生成名のまま開発・PR 作成してはならない。
+- 作業ブランチは `.agents/rules/branch-naming.md` に従うこと。Cursor Cloud は
+  `cursor/{type}/DEV-{n}/{desc}` 形式を使うこと。`cursor/cursor-xxxx` 等の自動生成名のまま
+  開発・PR 作成してはならない。

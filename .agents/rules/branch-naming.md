@@ -36,9 +36,22 @@
 - `chore/DEV-8/upgrade-pnpm`
 - `docs/DEV-15/update-agents-md`
 
+### Cursor Cloud 用フォーマット
+
+Cursor Cloud はブランチ名の先頭に `cursor/` を付けた次の形式を使う。
+
+```text
+cursor/{type}/{ticket-id}/{short-description}
+```
+
+例: `cursor/feature/DEV-30/cursor-cloud-ruleset`
+
+`cursor/cursor-xxxx` のような自動生成名（チケット ID なし）は禁止のまま。
+
 ### 悪い例（禁止）
 
-- `cursor/cursor-4cee`（プレフィックス不正・チケット ID なし）
+- `cursor/cursor-4cee`（自動生成名・チケット ID なし）
+- `cursor/invalid-branch-name`（命名規則に合致しない）
 - `feature/add-login`（チケット ID なし）
 - `DEV-29/feature`（プレフィックスなし）
 - `feature/dev-29/foo`（チケット ID は `DEV-` を大文字で書く）
@@ -51,15 +64,17 @@
 2. 変更の性質に合う `type` を 1 つ選ぶ。
 3. `short-description` を 2〜5 語程度の `kebab-case` で付ける。
 4. `main` から上記フォーマットのブランチを作成して作業する。
-5. **勝手な名前（`cursor/...`、日時だけ、ランダム文字列など）でブランチを切ってはならない。**
+5. **勝手な名前（`cursor/cursor-xxxx`、日時だけ、ランダム文字列など）でブランチを切ってはならない。**
+6. **Cursor Cloud で作業する場合**は `cursor/{type}/DEV-{n}/{desc}` 形式を使う（上記「Cursor Cloud 用フォーマット」参照）。
 
 ## 3. 例外（システムが作成するブランチ）
 
 人間・エージェントが作業用に切るブランチ以外で、次のみ許可する。
 
-| パターン        | 理由                         |
-| :-------------- | :--------------------------- |
-| `main`          | デフォルトブランチ           |
-| `dependabot/**` | Dependabot が自動生成する PR |
+| パターン                       | 理由                                       |
+| :----------------------------- | :----------------------------------------- |
+| `main`                         | デフォルトブランチ                         |
+| `cursor/{type}/DEV-{n}/{desc}` | Cursor Cloud が命名規則に従って作成する PR |
+| `dependabot/**`                | Dependabot が自動生成する PR               |
 
 これ以外の例外を増やしたい場合は、先にこのルールと GitHub Ruleset を更新し、ユーザーの承認を得ること。

@@ -17,6 +17,15 @@
         "refs/heads/test/DEV-[0-9]*/*",
         "refs/heads/ci/DEV-[0-9]*/*",
         "refs/heads/release/DEV-[0-9]*/*",
+        "refs/heads/cursor/feature/DEV-[0-9]*/*",
+        "refs/heads/cursor/fix/DEV-[0-9]*/*",
+        "refs/heads/cursor/chore/DEV-[0-9]*/*",
+        "refs/heads/cursor/docs/DEV-[0-9]*/*",
+        "refs/heads/cursor/refactor/DEV-[0-9]*/*",
+        "refs/heads/cursor/hotfix/DEV-[0-9]*/*",
+        "refs/heads/cursor/test/DEV-[0-9]*/*",
+        "refs/heads/cursor/ci/DEV-[0-9]*/*",
+        "refs/heads/cursor/release/DEV-[0-9]*/*",
         "refs/heads/dependabot/*/*"
       ]
     }
