@@ -1,7 +1,3 @@
-/**
- * `base` と層別設定で共有する `no-restricted-syntax` セレクタ。
- * flat config では後勝ちのため、上書き側はこれを含めて合成する。
- */
 export const baseRestrictedSyntaxSelectors = [
   {
     selector:

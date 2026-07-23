@@ -1,13 +1,7 @@
 import { defineConfig } from "eslint/config";
 
-import { baseRestrictedSyntaxSelectors } from "./base-restricted-syntax.js";
+import { baseRestrictedSyntaxSelectors } from "../shared/base-restricted-syntax.js";
 
-/**
- * Core層での副作用・非決定論的処理を禁止する設定。
- * 提案上のルール名: `devstone/no-core-side-effects`
- *
- * @see docs/eslint-rules-proposal.md
- */
 const coreSideEffectSelectors = [
   {
     selector: "TSTypeReference[typeName.name=/^(KVNamespace|D1Database|R2Bucket)$/]",

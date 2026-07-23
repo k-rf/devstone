@@ -2,7 +2,7 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import { configs } from "typescript-eslint";
 
-import { baseRestrictedSyntaxSelectors } from "./base-restricted-syntax.js";
+import { baseRestrictedSyntaxSelectors } from "./shared/base-restricted-syntax.js";
 
 export const base = defineConfig(
   {
