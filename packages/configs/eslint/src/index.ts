@@ -11,3 +11,4 @@ export { unicorn } from "./unicorn.js";
 export { jsdoc } from "./jsdoc.js";
 export { functional } from "./functional.js";
 export { namingConvention } from "./naming-convention.js";
+export { noCoreSideEffects } from "./no-core-side-effects/index.js";

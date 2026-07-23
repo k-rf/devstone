@@ -77,6 +77,11 @@
       "types": "./dist/naming-convention.d.ts",
       "dev": "./src/naming-convention.ts",
       "default": "./dist/naming-convention.js"
+    },
+    "./no-core-side-effects": {
+      "types": "./dist/no-core-side-effects/index.d.ts",
+      "dev": "./src/no-core-side-effects/index.ts",
+      "default": "./dist/no-core-side-effects/index.js"
     }
   },
   "scripts": {
