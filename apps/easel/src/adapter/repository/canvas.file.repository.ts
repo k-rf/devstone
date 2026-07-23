@@ -58,7 +58,7 @@ export const CanvasFileRepository = Layer.effect(
     return {
       read: () =>
         Effect.gen(function* () {
-          const isExisting = yield* fs.exists(config.filePath).pipe(
+          const exists = yield* fs.exists(config.filePath).pipe(
             Effect.mapError(
               (error) =>
                 new CanvasError({
@@ -68,7 +68,7 @@ export const CanvasFileRepository = Layer.effect(
             ),
           );
 
-          if (!isExisting) {
+          if (!exists) {
             return { nodes: [], edges: [] };
           }
 

@@ -24,17 +24,17 @@ export const updateEdge = (
     }
 
     const nodes = canvas.nodes ?? [];
-    const hasFromNode = nodes.some((n) => n.id === edge.fromNode);
-    const hasToNode = nodes.some((n) => n.id === edge.toNode);
+    const fromExists = nodes.some((n) => n.id === edge.fromNode);
+    const toExists = nodes.some((n) => n.id === edge.toNode);
 
-    if (!hasFromNode) {
+    if (!fromExists) {
       return yield* Effect.fail(
         new CanvasError({
           message: `参照されている接続元ノード '${edge.fromNode}' が見つかりませんでした`,
         }),
       );
     }
-    if (!hasToNode) {
+    if (!toExists) {
       return yield* Effect.fail(
         new CanvasError({
           message: `参照されている接続先ノード '${edge.toNode}' が見つかりませんでした`,

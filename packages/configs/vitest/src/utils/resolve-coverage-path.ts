@@ -11,7 +11,7 @@ export const resolveCoveragePath = (projectPath: string) =>
     const coverageFile = path.join(projectPath, "coverage", "coverage.json");
 
     return yield* fs.exists(coverageFile).pipe(
-      Effect.map((isExisting) => (isExisting ? Option.some(coverageFile) : Option.none())),
+      Effect.map((exists) => (exists ? Option.some(coverageFile) : Option.none())),
       Effect.catchAll(() => Effect.succeed(Option.none())),
     );
   });

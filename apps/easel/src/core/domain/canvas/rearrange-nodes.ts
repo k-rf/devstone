@@ -44,8 +44,8 @@ const calculateAxisDelta = (
   const cB = getCenter(nodeB);
   const deltaValue = overlap * damping * 0.5;
 
-  const isALessThanB = cA < cB || (cA === cB && nodeA.id < nodeB.id);
-  const value = isALessThanB ? deltaValue : -deltaValue;
+  const aPrecedesB = cA < cB || (cA === cB && nodeA.id < nodeB.id);
+  const value = aPrecedesB ? deltaValue : -deltaValue;
 
   return axis === "x"
     ? {

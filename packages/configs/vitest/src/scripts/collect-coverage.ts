@@ -15,9 +15,7 @@ const main = Effect.gen(function* () {
 
   // 出力先準備
   yield* fs.exists(rawDir).pipe(
-    Effect.flatMap((isExisting) =>
-      isExisting ? fs.remove(rawDir, { recursive: true }) : Effect.void,
-    ),
+    Effect.flatMap((exists) => (exists ? fs.remove(rawDir, { recursive: true }) : Effect.void)),
     Effect.flatMap(() => fs.makeDirectory(rawDir, { recursive: true })),
   );
 
