@@ -1,25 +1,6 @@
 import { defineConfig } from "eslint/config";
 
 /**
- * boolean 変数・パラメータ向けのプレフィックス規則。
- * prefix 除去後の残りが PascalCase になるため format は PascalCase。
- */
-const booleanPrefixOptions = [
-  {
-    selector: "variable",
-    types: ["boolean"],
-    format: ["PascalCase"],
-    prefix: ["is", "has", "should", "can"],
-  },
-  {
-    selector: "parameter",
-    types: ["boolean"],
-    format: ["PascalCase"],
-    prefix: ["is", "has", "should", "can"],
-  },
-] as const;
-
-/**
  * Schema / 境界モデル定数などの PascalCase const を許容する規則。
  */
 const pascalCaseConstOption = {
@@ -103,7 +84,6 @@ const sharedTypeAndPropertyOptions = [
  * セレクタは上から順に最初のマッチが適用される（default はフォールバック）。
  */
 const baseNamingConventionOptions = [
-  ...booleanPrefixOptions,
   pascalCaseConstOption,
   ...sharedIdentifierOptions,
   ...sharedTypeAndPropertyOptions,
@@ -115,7 +95,6 @@ const baseNamingConventionOptions = [
  * class セレクタは typeLike より先に置く必要がある。
  */
 const adapterLiveNamingConventionOptions = [
-  ...booleanPrefixOptions,
   pascalCaseConstOption,
   ...sharedIdentifierOptions,
   {
@@ -134,13 +113,12 @@ const adapterLiveNamingConventionOptions = [
  * モック・テスト用アダプター向け: class に Mock プレフィックスを要求する。
  */
 const adapterMockNamingConventionOptions = [
-  ...booleanPrefixOptions,
   pascalCaseConstOption,
   ...sharedIdentifierOptions,
   {
     selector: "class",
     format: ["PascalCase"],
-    prefix: ["Mock"],
+    suffix: ["Mock"],
   },
   ...sharedTypeAndPropertyOptions,
 ];
