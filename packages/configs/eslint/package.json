@@ -72,6 +72,11 @@
       "types": "./dist/functional.d.ts",
       "dev": "./src/functional.ts",
       "default": "./dist/functional.js"
+    },
+    "./naming-convention": {
+      "types": "./dist/naming-convention.d.ts",
+      "dev": "./src/naming-convention.ts",
+      "default": "./dist/naming-convention.js"
     }
   },
   "scripts": {

@@ -22,7 +22,7 @@ trigger: always_on
 | :--------------------------- | :---------------------------- | :-------------------- |
 | **Port (Tag)**               | なし                          | `TaskBoardPort`       |
 | **Adapter (Implementation)** | `Live` (サフィックス)         | `NotionTaskBoardLive` |
-| **Adapter (Mock)**           | `Mock` (プレフィックス)       | `MockTaskBoard`       |
+| **Adapter (Mock)**           | `Mock` (サフィックス)         | `TaskBoardMock`       |
 | **Service (Effect)**         | なし（動詞から開始）          | `startTogglTimer`     |
 | **Schema**                   | なし（名詞）                  | `TrackingRecord`      |
 
@@ -60,6 +60,12 @@ trigger: always_on
 
 ## 5. 真実を語る名前
 
-- **Boolean**: `is`, `has`, `should`, `can` で開始します。
+- **Boolean**: 以下の文法パターンを用いて、英語として自然で意図が明確に伝わる命名を行います。単に `is` や `can` などのプレフィックスを強制するのではなく、状況に応じて適切な品詞や助動詞を使い分けてください。
+  1. **`be` 動詞 + 形容詞**: 今その状態にあるかどうか（例: `isActive`, `isEmpty`）
+  2. **動詞の三人称単数現在形（三単現）**: その動作・状態に該当するか（例: `exists`, `contains`）
+  3. **サ変動詞の過去分詞形**: すでにその状態にされているか。受動態であることを明確にしたい場合は `be` 動詞を伴うこともある（例: `checked`, `selected`, `isLocked`）
+  4. **助動詞 + 動詞**: 助動詞（`can`, `should`, `will` など）の表すニュアンスを利用する（例: `canPlay`, `shouldNotify`, `willFetch`）
+  5. **現在分詞**: 現時点でその動作・処理が継続しているかどうかを表す（例: `running`, `downloading`）
+  6. **`has` / `have` + 過去分詞**: 処理がすでに完了しているかどうかを表す（例: `hasFinished`, `done`）
 - **Collection**: `items`, `records` などの複数形、あるいは `List` サフィックスを検討してください。
 - **Effect**: 副作用を伴う場合は、その振る舞いを明示する動詞を選んでください。

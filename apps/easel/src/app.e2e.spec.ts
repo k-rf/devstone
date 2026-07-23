@@ -704,8 +704,8 @@ describe("正常系", () => {
       yield* fs.remove(testFile);
 
       // アサーションを追加 (ファイルが正常にクリーンアップされたことの確認)
-      const cleanupSuccess = yield* fs.exists(testFile);
-      expect(cleanupSuccess).toBe(false);
+      const exists = yield* fs.exists(testFile);
+      expect(exists).toBe(false);
     }).pipe(provideTestContext);
 
     await Effect.runPromise(program);

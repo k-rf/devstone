@@ -646,14 +646,14 @@
     サフィックス）で定義された `const` 変数については、型と値の双方を表現する役割を持つため例外的に `PascalCase`
     での記述を許容する。
   - 本番用のアダプター実装クラス（`/adapter/` 以下に配置され、テスト/モック用ファイル以外）については `Live` サフィックス（例：`NotionTaskBoardLive`）を強制する。
-  - テスト・モック用のアダプタークラス（`*.mock.ts` や `mocks` ディレクトリ配下）については、`Mock` プレフィックスを強制する。
+  - テスト・モック用のアダプタークラス（`*.mock.ts` や `mocks` ディレクトリ配下）については、`Mock` サフィックス（例：`TaskBoardMock`）を強制する。
 - **定義元ドキュメント**: [naming-conventions.md][naming_doc] (line 54)
 - **コード例**:
   - **OK**:
     - `const isValid: boolean = true;`
     - `const TrackingRecord = Schema.Struct(...)` (PascalCase const Schema)
     - `class NotionTaskBoardLive implements TaskBoard`
-    - `class MockTaskBoard implements TaskBoard`
+    - `class TaskBoardMock implements TaskBoard`
   - **NG**:
     - `const valid: boolean = true;`
     - `const trackingRecord = Schema.Struct(...)` (camelCase)
