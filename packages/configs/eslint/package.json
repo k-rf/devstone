@@ -82,6 +82,11 @@
       "types": "./dist/no-core-side-effects.d.ts",
       "dev": "./src/no-core-side-effects.ts",
       "default": "./dist/no-core-side-effects.js"
+    },
+    "./export-role-suffixes": {
+      "types": "./dist/export-role-suffixes.d.ts",
+      "dev": "./src/export-role-suffixes.ts",
+      "default": "./dist/export-role-suffixes.js"
     }
   },
   "scripts": {
