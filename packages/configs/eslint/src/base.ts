@@ -27,7 +27,7 @@ export const base = defineConfig(
         { fixStyle: "inline-type-imports", prefer: "type-imports" },
       ],
 
-      /** @remarks `as unknown as T` は型安全性を完全に破壊するため禁止する */
+      /** @remarks ワークスペース共通の構文制限（`no-restricted-syntax/presets/base`）を適用する */
       "no-restricted-syntax": ["error", ...baseRestrictedSyntax],
     },
   },
