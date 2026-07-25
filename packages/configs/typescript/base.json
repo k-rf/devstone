@@ -2,6 +2,8 @@
   "$schema": "https://www.schemastore.org/tsconfig",
 
   "compilerOptions": {
+    "customConditions": ["dev"],
+
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
