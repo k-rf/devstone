@@ -34,7 +34,7 @@ export const addEdge = (canvas: JsonCanvas, edge: Edge): Effect.Effect<JsonCanva
     const edges = canvas.edges ?? [];
     const index = edges.findIndex((e) => e.id === edge.id);
     const nextEdges =
-      index === -1 ? [...edges, edge] : edges.map((current, i) => (i === index ? edge : current));
+      index === -1 ? [...edges, edge] : [...edges.slice(0, index), edge, ...edges.slice(index + 1)];
     return { ...canvas, edges: nextEdges };
   });
 

@@ -13,7 +13,7 @@ export const addNode = (canvas: JsonCanvas, node: Node): Effect.Effect<JsonCanva
     const nodes = canvas.nodes ?? [];
     const index = nodes.findIndex((n) => n.id === node.id);
     const nextNodes =
-      index === -1 ? [...nodes, node] : nodes.map((current, i) => (i === index ? node : current));
+      index === -1 ? [...nodes, node] : [...nodes.slice(0, index), node, ...nodes.slice(index + 1)];
     return { ...canvas, nodes: nextNodes };
   });
 

@@ -44,7 +44,7 @@ export const updateEdge = (
 
     return {
       ...canvas,
-      edges: edges.map((current, i) => (i === index ? edge : current)),
+      edges: [...edges.slice(0, index), edge, ...edges.slice(index + 1)],
     };
   });
 

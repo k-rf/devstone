@@ -24,7 +24,7 @@ export const updateNode = (
     }
     return {
       ...canvas,
-      nodes: nodes.map((current, i) => (i === index ? node : current)),
+      nodes: [...nodes.slice(0, index), node, ...nodes.slice(index + 1)],
     };
   });
 
