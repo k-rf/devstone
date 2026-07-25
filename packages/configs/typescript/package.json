@@ -10,7 +10,7 @@
     "lint": "eslint --fix --max-warnings 0"
   },
   "devDependencies": {
-    "@typescript/native": "npm:typescript@7.0.2",
-    "eslint": "10.2.1"
+    "eslint": "10.2.1",
+    "typescript": "7.0.2"
   }
 }

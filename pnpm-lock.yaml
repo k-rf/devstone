@@ -20,18 +20,15 @@ importers:
       '@types/node':
         specifier: 25.9.1
         version: 25.9.1
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       commitlint:
         specifier: 21.0.2
-        version: 21.0.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)(conventional-commits-parser@6.4.0)
+        version: 21.0.2(@types/node@25.9.1)(conventional-commits-parser@6.4.0)(typescript@7.0.2)
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
       eslint-import-resolver-typescript:
         specifier: 4.4.4
-        version: 4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0))
+        version: 4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.1(eslint@10.2.1(jiti@2.7.0))(typescript@7.0.2))(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0))
       jiti:
         specifier: 2.7.0
         version: 2.7.0
@@ -54,8 +51,8 @@ importers:
         specifier: 6.1.3
         version: 6.1.3
       typescript:
-        specifier: npm:@typescript/typescript6@6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: 7.0.2
+        version: 7.0.2
 
   apps/easel:
     dependencies:
@@ -96,9 +93,6 @@ importers:
       '@types/node':
         specifier: 25.9.1
         version: 25.9.1
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       '@vitest/coverage-istanbul':
         specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
@@ -109,11 +103,11 @@ importers:
         specifier: 4.57.2
         version: 4.57.2(tslib@2.8.1)
       typescript:
-        specifier: npm:@typescript/typescript6@6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: 7.0.2
+        version: 7.0.2
       vitest:
         specifier: 4.1.5
-        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
 
   apps/notion-toggl-bridge:
     dependencies:
@@ -145,9 +139,6 @@ importers:
       '@faker-js/faker':
         specifier: 10.4.0
         version: 10.4.0
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       '@vitest/coverage-istanbul':
         specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
@@ -156,13 +147,13 @@ importers:
         version: 10.2.1(jiti@2.7.0)
       msw:
         specifier: 2.14.2
-        version: 2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)
+        version: 2.14.2(@types/node@25.9.1)(typescript@7.0.2)
       typescript:
-        specifier: npm:@typescript/typescript6@6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: 7.0.2
+        version: 7.0.2
       vitest:
         specifier: 4.1.5
-        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
       wrangler:
         specifier: 4.86.0
         version: 4.86.0(@cloudflare/workers-types@4.20260430.1)
@@ -176,9 +167,6 @@ importers:
       '@commitlint/types':
         specifier: 21.0.1
         version: 21.0.1
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       commitlint:
         specifier: 21.0.2
         version: 21.0.2(@types/node@25.9.1)(conventional-commits-parser@6.4.0)(typescript@7.0.2)
@@ -188,6 +176,9 @@ importers:
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
 
   packages/configs/eslint:
     dependencies:
@@ -233,9 +224,6 @@ importers:
       globals:
         specifier: 17.5.0
         version: 17.5.0
-      typescript:
-        specifier: npm:@typescript/typescript6@6.0.2
-        version: '@typescript/typescript6@6.0.2'
       typescript-eslint:
         specifier: 8.59.1
         version: 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0))
@@ -246,15 +234,18 @@ importers:
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
+      typescript:
+        specifier: npm:@typescript/typescript6@6.0.2
+        version: '@typescript/typescript6@6.0.2'
 
   packages/configs/typescript:
     devDependencies:
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
 
   packages/configs/vitest:
     devDependencies:
@@ -270,9 +261,6 @@ importers:
       '@types/node':
         specifier: 25.9.1
         version: 25.9.1
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       '@vitest/coverage-istanbul':
         specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
@@ -285,6 +273,9 @@ importers:
       nyc:
         specifier: 18.0.0
         version: 18.0.0
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
       vite:
         specifier: 8.0.10
         version: 8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)
@@ -309,9 +300,6 @@ importers:
       '@types/node':
         specifier: 25.9.1
         version: 25.9.1
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       effect:
         specifier: 3.21.2
         version: 3.21.2
@@ -319,11 +307,11 @@ importers:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
       typescript:
-        specifier: npm:@typescript/typescript6@6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: 7.0.2
+        version: 7.0.2
       vitest:
         specifier: 4.1.5
-        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
 
   packages/libs/util:
     dependencies:
@@ -346,27 +334,24 @@ importers:
       '@types/node':
         specifier: 25.9.1
         version: 25.9.1
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
       typescript:
-        specifier: npm:@typescript/typescript6@6.0.2
-        version: '@typescript/typescript6@6.0.2'
+        specifier: 7.0.2
+        version: 7.0.2
       vitest:
         specifier: 4.1.5
-        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+        version: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
 
   packages/plugins/claude:
     devDependencies:
-      '@typescript/native':
-        specifier: npm:typescript@7.0.2
-        version: typescript@7.0.2
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
 
 packages:
 
@@ -5545,7 +5530,7 @@ snapshots:
       cjs-module-lexer: 1.4.3
       esbuild: 0.27.3
       miniflare: 4.20260426.0
-      vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+      vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
       wrangler: 4.86.0(@cloudflare/workers-types@4.20260430.1)
       zod: 3.25.76
     transitivePeerDependencies:
@@ -5569,21 +5554,6 @@ snapshots:
     optional: true
 
   '@cloudflare/workers-types@4.20260430.1': {}
-
-  '@commitlint/cli@21.0.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)(conventional-commits-parser@6.4.0)':
-    dependencies:
-      '@commitlint/format': 21.0.1
-      '@commitlint/lint': 21.0.2
-      '@commitlint/load': 21.0.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)
-      '@commitlint/read': 21.0.2(conventional-commits-parser@6.4.0)
-      '@commitlint/types': 21.0.1
-      tinyexec: 1.2.4
-      yargs: 18.0.0
-    transitivePeerDependencies:
-      - '@types/node'
-      - conventional-commits-filter
-      - conventional-commits-parser
-      - typescript
 
   '@commitlint/cli@21.0.2(@types/node@25.9.1)(conventional-commits-parser@6.4.0)(typescript@7.0.2)':
     dependencies:
@@ -5629,21 +5599,6 @@ snapshots:
       '@commitlint/rules': 21.0.2
       '@commitlint/types': 21.0.1
 
-  '@commitlint/load@21.0.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)':
-    dependencies:
-      '@commitlint/config-validator': 21.0.1
-      '@commitlint/execute-rule': 21.0.1
-      '@commitlint/resolve-extends': 21.0.1
-      '@commitlint/types': 21.0.1
-      cosmiconfig: 9.0.1(@typescript/typescript6@6.0.2)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.9.1)(@typescript/typescript6@6.0.2)(cosmiconfig@9.0.1(@typescript/typescript6@6.0.2))
-      es-toolkit: 1.46.1
-      is-plain-obj: 4.1.0
-      picocolors: 1.1.1
-    transitivePeerDependencies:
-      - '@types/node'
-      - typescript
-
   '@commitlint/load@21.0.2(@types/node@25.9.1)(typescript@7.0.2)':
     dependencies:
       '@commitlint/config-validator': 21.0.1
@@ -5651,7 +5606,7 @@ snapshots:
       '@commitlint/resolve-extends': 21.0.1
       '@commitlint/types': 21.0.1
       cosmiconfig: 9.0.1(typescript@7.0.2)
-      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.9.1)(cosmiconfig@9.0.1(@typescript/typescript6@6.0.2))(typescript@7.0.2)
+      cosmiconfig-typescript-loader: 6.2.0(@types/node@25.9.1)(cosmiconfig@9.0.1(typescript@7.0.2))(typescript@7.0.2)
       es-toolkit: 1.46.1
       is-plain-obj: 4.1.0
       picocolors: 1.1.1
@@ -6999,6 +6954,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@typescript-eslint/project-service@8.59.1(typescript@7.0.2)':
+    dependencies:
+      '@typescript-eslint/tsconfig-utils': 8.59.1(typescript@7.0.2)
+      '@typescript-eslint/types': 8.59.1
+      debug: 4.4.3
+      typescript: 7.0.2
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
+
   '@typescript-eslint/scope-manager@8.59.1':
     dependencies:
       '@typescript-eslint/types': 8.59.1
@@ -7007,6 +6972,11 @@ snapshots:
   '@typescript-eslint/tsconfig-utils@8.59.1(@typescript/typescript6@6.0.2)':
     dependencies:
       typescript: '@typescript/typescript6@6.0.2'
+
+  '@typescript-eslint/tsconfig-utils@8.59.1(typescript@7.0.2)':
+    dependencies:
+      typescript: 7.0.2
+    optional: true
 
   '@typescript-eslint/type-utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0))':
     dependencies:
@@ -7037,6 +7007,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@typescript-eslint/typescript-estree@8.59.1(typescript@7.0.2)':
+    dependencies:
+      '@typescript-eslint/project-service': 8.59.1(typescript@7.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.59.1(typescript@7.0.2)
+      '@typescript-eslint/types': 8.59.1
+      '@typescript-eslint/visitor-keys': 8.59.1
+      debug: 4.4.3
+      minimatch: 10.2.5
+      semver: 7.8.5
+      tinyglobby: 0.2.16
+      ts-api-utils: 2.5.0(typescript@7.0.2)
+      typescript: 7.0.2
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
+
   '@typescript-eslint/utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0))':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.2.1(jiti@2.7.0))
@@ -7047,6 +7033,18 @@ snapshots:
       typescript: '@typescript/typescript6@6.0.2'
     transitivePeerDependencies:
       - supports-color
+
+  '@typescript-eslint/utils@8.59.1(eslint@10.2.1(jiti@2.7.0))(typescript@7.0.2)':
+    dependencies:
+      '@eslint-community/eslint-utils': 4.9.1(eslint@10.2.1(jiti@2.7.0))
+      '@typescript-eslint/scope-manager': 8.59.1
+      '@typescript-eslint/types': 8.59.1
+      '@typescript-eslint/typescript-estree': 8.59.1(typescript@7.0.2)
+      eslint: 10.2.1(jiti@2.7.0)
+      typescript: 7.0.2
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
 
   '@typescript-eslint/visitor-keys@8.59.1':
     dependencies:
@@ -7176,20 +7174,6 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vitest/browser-playwright@4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(playwright@1.60.0)(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))(vitest@4.1.5)':
-    dependencies:
-      '@vitest/browser': 4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))(vitest@4.1.5)
-      '@vitest/mocker': 4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
-      playwright: 1.60.0
-      tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
-    transitivePeerDependencies:
-      - bufferutil
-      - msw
-      - utf-8-validate
-      - vite
-    optional: true
-
   '@vitest/browser-playwright@4.1.5(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(playwright@1.60.0)(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))(vitest@4.1.5)':
     dependencies:
       '@vitest/browser': 4.1.5(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))(vitest@4.1.5)
@@ -7197,24 +7181,6 @@ snapshots:
       playwright: 1.60.0
       tinyrainbow: 3.1.0
       vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
-    transitivePeerDependencies:
-      - bufferutil
-      - msw
-      - utf-8-validate
-      - vite
-    optional: true
-
-  '@vitest/browser@4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))(vitest@4.1.5)':
-    dependencies:
-      '@blazediff/core': 1.9.1
-      '@vitest/mocker': 4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
-      '@vitest/utils': 4.1.5
-      magic-string: 0.30.21
-      pngjs: 7.0.0
-      sirv: 3.0.2
-      tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
-      ws: 8.20.0
     transitivePeerDependencies:
       - bufferutil
       - msw
@@ -7252,7 +7218,7 @@ snapshots:
       magicast: 0.5.2
       obug: 2.1.1
       tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+      vitest: 4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -7264,15 +7230,6 @@ snapshots:
       '@vitest/utils': 4.1.5
       chai: 6.2.2
       tinyrainbow: 3.1.0
-
-  '@vitest/mocker@4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))':
-    dependencies:
-      '@vitest/spy': 4.1.5
-      estree-walker: 3.0.3
-      magic-string: 0.30.21
-    optionalDependencies:
-      msw: 2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)
-      vite: 8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)
 
   '@vitest/mocker@4.1.5(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
@@ -7618,16 +7575,6 @@ snapshots:
 
   comment-parser@1.4.6: {}
 
-  commitlint@21.0.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)(conventional-commits-parser@6.4.0):
-    dependencies:
-      '@commitlint/cli': 21.0.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2)(conventional-commits-parser@6.4.0)
-      '@commitlint/types': 21.0.1
-    transitivePeerDependencies:
-      - '@types/node'
-      - conventional-commits-filter
-      - conventional-commits-parser
-      - typescript
-
   commitlint@21.0.2(@types/node@25.9.1)(conventional-commits-parser@6.4.0)(typescript@7.0.2):
     dependencies:
       '@commitlint/cli': 21.0.2(@types/node@25.9.1)(conventional-commits-parser@6.4.0)(typescript@7.0.2)
@@ -7666,28 +7613,12 @@ snapshots:
     dependencies:
       browserslist: 4.28.1
 
-  cosmiconfig-typescript-loader@6.2.0(@types/node@25.9.1)(@typescript/typescript6@6.0.2)(cosmiconfig@9.0.1(@typescript/typescript6@6.0.2)):
+  cosmiconfig-typescript-loader@6.2.0(@types/node@25.9.1)(cosmiconfig@9.0.1(typescript@7.0.2))(typescript@7.0.2):
     dependencies:
       '@types/node': 25.9.1
-      cosmiconfig: 9.0.1(@typescript/typescript6@6.0.2)
-      jiti: 2.7.0
-      typescript: '@typescript/typescript6@6.0.2'
-
-  cosmiconfig-typescript-loader@6.2.0(@types/node@25.9.1)(cosmiconfig@9.0.1(@typescript/typescript6@6.0.2))(typescript@7.0.2):
-    dependencies:
-      '@types/node': 25.9.1
-      cosmiconfig: 9.0.1(@typescript/typescript6@6.0.2)
+      cosmiconfig: 9.0.1(typescript@7.0.2)
       jiti: 2.7.0
       typescript: 7.0.2
-
-  cosmiconfig@9.0.1(@typescript/typescript6@6.0.2):
-    dependencies:
-      env-paths: 2.2.1
-      import-fresh: 3.3.1
-      js-yaml: 4.1.1
-      parse-json: 5.2.0
-    optionalDependencies:
-      typescript: '@typescript/typescript6@6.0.2'
 
   cosmiconfig@9.0.1(typescript@7.0.2):
     dependencies:
@@ -8033,7 +7964,7 @@ snapshots:
     optionalDependencies:
       unrs-resolver: 1.11.1
 
-  eslint-import-resolver-typescript@4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0)):
+  eslint-import-resolver-typescript@4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.1(eslint@10.2.1(jiti@2.7.0))(typescript@7.0.2))(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0)):
     dependencies:
       debug: 4.4.3
       eslint: 10.2.1(jiti@2.7.0)
@@ -8044,7 +7975,7 @@ snapshots:
       tinyglobby: 0.2.16
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import-x: 4.16.2(@typescript-eslint/utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)))(eslint@10.2.1(jiti@2.7.0))
+      eslint-plugin-import-x: 4.16.2(@typescript-eslint/utils@8.59.1(eslint@10.2.1(jiti@2.7.0))(typescript@7.0.2))(eslint@10.2.1(jiti@2.7.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -8086,6 +8017,25 @@ snapshots:
       '@typescript-eslint/utils': 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0))
     transitivePeerDependencies:
       - supports-color
+
+  eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.1(eslint@10.2.1(jiti@2.7.0))(typescript@7.0.2))(eslint@10.2.1(jiti@2.7.0)):
+    dependencies:
+      '@package-json/types': 0.0.12
+      '@typescript-eslint/types': 8.59.1
+      comment-parser: 1.4.6
+      debug: 4.4.3
+      eslint: 10.2.1(jiti@2.7.0)
+      eslint-import-context: 0.1.9(unrs-resolver@1.11.1)
+      is-glob: 4.0.3
+      minimatch: 10.2.5
+      semver: 7.8.5
+      stable-hash-x: 0.2.0
+      unrs-resolver: 1.11.1
+    optionalDependencies:
+      '@typescript-eslint/utils': 8.59.1(eslint@10.2.1(jiti@2.7.0))(typescript@7.0.2)
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
 
   eslint-plugin-jsdoc@62.9.0(eslint@10.2.1(jiti@2.7.0)):
     dependencies:
@@ -9561,31 +9511,6 @@ snapshots:
     optionalDependencies:
       msgpackr-extract: 3.0.3
 
-  msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2):
-    dependencies:
-      '@inquirer/confirm': 6.0.12(@types/node@25.9.1)
-      '@mswjs/interceptors': 0.41.3
-      '@open-draft/deferred-promise': 3.0.0
-      '@types/statuses': 2.0.6
-      cookie: 1.1.1
-      graphql: 16.13.2
-      headers-polyfill: 5.0.1
-      is-node-process: 1.2.0
-      outvariant: 1.4.3
-      path-to-regexp: 6.3.0
-      picocolors: 1.1.1
-      rettime: 0.11.8
-      statuses: 2.0.2
-      strict-event-emitter: 0.5.1
-      tough-cookie: 6.0.1
-      type-fest: 5.7.0
-      until-async: 3.0.2
-      yargs: 17.7.2
-    optionalDependencies:
-      typescript: '@typescript/typescript6@6.0.2'
-    transitivePeerDependencies:
-      - '@types/node'
-
   msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2):
     dependencies:
       '@inquirer/confirm': 6.0.12(@types/node@25.9.1)
@@ -9610,7 +9535,6 @@ snapshots:
       typescript: 7.0.2
     transitivePeerDependencies:
       - '@types/node'
-    optional: true
 
   multipasta@0.2.7: {}
 
@@ -10434,6 +10358,11 @@ snapshots:
     dependencies:
       typescript: 6.0.3
 
+  ts-api-utils@2.5.0(typescript@7.0.2):
+    dependencies:
+      typescript: 7.0.2
+    optional: true
+
   ts-declaration-location@1.0.7(@typescript/typescript6@6.0.2):
     dependencies:
       picomatch: 4.0.4
@@ -10628,35 +10557,6 @@ snapshots:
       fsevents: 2.3.3
       jiti: 2.7.0
       yaml: 2.9.0
-
-  vitest@4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)):
-    dependencies:
-      '@vitest/expect': 4.1.5
-      '@vitest/mocker': 4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
-      '@vitest/pretty-format': 4.1.5
-      '@vitest/runner': 4.1.5
-      '@vitest/snapshot': 4.1.5
-      '@vitest/spy': 4.1.5
-      '@vitest/utils': 4.1.5
-      es-module-lexer: 2.1.0
-      expect-type: 1.3.0
-      magic-string: 0.30.21
-      obug: 2.1.1
-      pathe: 2.0.3
-      picomatch: 4.0.4
-      std-env: 4.1.0
-      tinybench: 2.9.0
-      tinyexec: 1.2.4
-      tinyglobby: 0.2.16
-      tinyrainbow: 3.1.0
-      vite: 8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 25.9.1
-      '@vitest/browser-playwright': 4.1.5(msw@2.14.2(@types/node@25.9.1)(@typescript/typescript6@6.0.2))(playwright@1.60.0)(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))(vitest@4.1.5)
-      '@vitest/coverage-istanbul': 4.1.5(vitest@4.1.5)
-    transitivePeerDependencies:
-      - msw
 
   vitest@4.1.5(@types/node@25.9.1)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0)):
     dependencies:
