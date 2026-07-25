@@ -228,6 +228,9 @@ importers:
         specifier: 8.59.1
         version: 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0))
     devDependencies:
+      '@typescript/native':
+        specifier: npm:typescript@7.0.2
+        version: typescript@7.0.2
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)
