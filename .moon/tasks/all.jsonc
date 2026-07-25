@@ -10,7 +10,8 @@
       "description": "TypeScriptの型チェックを実行します。"
     },
     "lint": {
-      "description": "ESLintでコードを検査します。"
+      "description": "ESLintでコードを検査します。",
+      "dependsOn": ["^:build"]
     },
     "build": {
       "description": "ビルドを実行します。",
