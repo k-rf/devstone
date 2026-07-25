@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist",
-    "typecheck": "tsgo -p tsconfig.check.json",
+    "typecheck": "tsc -p tsconfig.check.json",
     "lint": "eslint --fix --max-warnings 0"
   },
   "devDependencies": {
-    "eslint": "10.2.1"
+    "eslint": "10.2.1",
+    "typescript": "7.0.2"
   }
 }
