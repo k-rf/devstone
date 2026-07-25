@@ -31,7 +31,7 @@ export const KvAdapterLive = (kvNamespace: KVNamespace) =>
           kvNamespace.put(
             key,
             value,
-            ttlSeconds === undefined ? undefined : { expirationTtl: ttlSeconds },
+            ttlSeconds === undefined ? {} : { expirationTtl: ttlSeconds },
           ),
         catch: (e) =>
           new CacheError({
