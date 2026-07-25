@@ -27,7 +27,7 @@ export const base = defineConfig(
         { fixStyle: "inline-type-imports", prefer: "type-imports" },
       ],
 
-      /** @remarks ワークスペース共通の構文制限（`no-restricted-syntax/presets/base`）を適用する */
+      /** @remarks ワークスペース共通の構文制限を適用する */
       "no-restricted-syntax": ["error", ...baseRestrictedSyntax],
     },
   },
