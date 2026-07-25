@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { Effect, Option } from "effect";
+import { Effect, Option, Ref } from "effect";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -25,12 +25,12 @@ const clientEffect = makeTogglApiClient(apiToken, workspaceId);
 
 describe("正常系", () => {
   it("正しいペイロードで POST リクエストが送信されること", async () => {
-    const captured: { body?: unknown } = {};
+    const capturedBody = Effect.runSync(Ref.make<unknown>(undefined));
     server.use(
       http.post(
         `https://api.track.toggl.com/api/v9/workspaces/${String(workspaceId)}/time_entries`,
         async ({ request }) => {
-          captured.body = await request.json();
+          await Effect.runPromise(Ref.set(capturedBody, await request.json()));
           return HttpResponse.json({ id: 999 });
         },
       ),
@@ -50,7 +50,7 @@ describe("正常系", () => {
 
     await Effect.runPromise(program);
 
-    const body = captured.body as Record<string, unknown>;
+    const body = Effect.runSync(Ref.get(capturedBody)) as Record<string, unknown>;
     expect(body).toMatchObject({
       description: title,
       project_id: projectId,

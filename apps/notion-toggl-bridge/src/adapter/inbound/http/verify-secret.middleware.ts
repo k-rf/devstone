@@ -9,8 +9,8 @@ import { type Bindings } from "./types";
  * シークレット検証ミドルウェア
  */
 export const verifySecretMiddleware = createMiddleware<{
-  Bindings: Bindings;
-  Variables: { env: Env };
+  readonly Bindings: Bindings;
+  readonly Variables: { readonly env: Env };
 }>(async (c, next) => {
   const receivedSecret = c.req.header("X-Shared-Secret");
   const expectedSecret = c.env.NOTION_WEBHOOK_SECRET;

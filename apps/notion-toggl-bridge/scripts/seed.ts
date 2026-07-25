@@ -5,9 +5,9 @@ import { Data, Effect, Schema } from "effect";
 
 import { promiseChain } from "../src/utils/promise-chain";
 
-class FileNotFound extends Data.TaggedError("FileNotFound")<{ message: string }> {}
-class FileReadError extends Data.TaggedError("FileReadError")<{ message: string }> {}
-class WranglerError extends Data.TaggedError("WranglerError")<{ message: string }> {}
+class FileNotFound extends Data.TaggedError("FileNotFound")<{ readonly message: string }> {}
+class FileReadError extends Data.TaggedError("FileReadError")<{ readonly message: string }> {}
+class WranglerError extends Data.TaggedError("WranglerError")<{ readonly message: string }> {}
 
 const ConfigSchema = Schema.Struct({
   namespaceId: Schema.String,

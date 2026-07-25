@@ -1,8 +1,11 @@
-import { JsonCanvas as JsonCanvasSchema, type JsonCanvas } from "@devstone/libs-json-canvas-spec";
-import { Effect, Layer, Schema } from "effect";
+import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec";
+import { Effect, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
-import { CanvasRepository } from "../port/repository/canvas.repository.js";
+import {
+  makeCanvasRef,
+  makeTestCanvasRepository,
+} from "../../test-utils/make-test-canvas-repository.js";
 
 import { listCanvasItemsWorkflow } from "./list-canvas-items.workflow.js";
 
@@ -14,22 +17,10 @@ const initialCanvas = Schema.decodeUnknownSync(JsonCanvasSchema)({
   edges: [{ id: "edge-1", fromNode: "node-1", toNode: "node-2", color: "1" }],
 });
 
-const makeTestCanvasRepository = (canvasRef: { current: JsonCanvas }) =>
-  Layer.succeed(
-    CanvasRepository,
-    CanvasRepository.of({
-      read: () => Effect.sync(() => canvasRef.current),
-      write: (canvas) =>
-        Effect.sync(() => {
-          canvasRef.current = canvas;
-        }),
-    }),
-  );
-
 describe("キャンバスアイテム一覧をフォーマット出力するワークフロー", () => {
   describe("正常系", () => {
     it("キャンバス内のすべてのノードとエッジが整形された文字列として取得できること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const program = listCanvasItemsWorkflow().pipe(
         Effect.provide(makeTestCanvasRepository(state)),
       );

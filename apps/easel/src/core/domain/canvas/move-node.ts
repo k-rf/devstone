@@ -19,7 +19,7 @@ import { CanvasError } from "../errors.js";
 export const moveNode = (
   canvas: JsonCanvas,
   nodeId: NodeId,
-  options: { x?: number; y?: number; dx?: number; dy?: number },
+  options: { readonly x?: number; readonly y?: number; readonly dx?: number; readonly dy?: number },
 ): Effect.Effect<JsonCanvas, CanvasError> =>
   Effect.gen(function* () {
     const nodes = canvas.nodes ? [...canvas.nodes] : [];

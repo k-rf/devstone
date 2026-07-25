@@ -1,7 +1,7 @@
 import { NodeId, type Node } from "@devstone/libs-json-canvas-spec";
 
 export const findNode = (
-  nodes: Node[],
+  nodes: readonly Node[],
   nodeId: NodeId,
 ): readonly [node: Node, index: number] | readonly [node: undefined, index: -1] => {
   const index = nodes.findIndex((n) => n.id === nodeId);
@@ -17,7 +17,7 @@ if (import.meta.vitest) {
 
   it("正常系", () => {
     // Arrange
-    const nodes: Node[] = [
+    const nodes: readonly Node[] = [
       { id: NodeId.make("n1"), type: "text", x: 0, y: 0, width: 10, height: 10, text: "hello" },
       { id: NodeId.make("n2"), type: "text", x: 0, y: 0, width: 10, height: 10, text: "hello" },
     ];
@@ -32,7 +32,7 @@ if (import.meta.vitest) {
 
   it("異常系", () => {
     // Arrange
-    const nodes: Node[] = [
+    const nodes: readonly Node[] = [
       { id: NodeId.make("n1"), type: "text", x: 0, y: 0, width: 10, height: 10, text: "hello" },
       { id: NodeId.make("n2"), type: "text", x: 0, y: 0, width: 10, height: 10, text: "hello" },
     ];

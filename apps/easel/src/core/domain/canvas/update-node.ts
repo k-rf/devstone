@@ -15,15 +15,17 @@ export const updateNode = (
   node: Node,
 ): Effect.Effect<JsonCanvas, CanvasError> =>
   Effect.gen(function* () {
-    const nodes = canvas.nodes ? [...canvas.nodes] : [];
+    const nodes = canvas.nodes ?? [];
     const index = nodes.findIndex((n) => n.id === node.id);
     if (index === -1) {
       return yield* Effect.fail(
         new CanvasError({ message: `ID '${node.id}' のノードが見つかりませんでした` }),
       );
     }
-    nodes[index] = node;
-    return { ...canvas, nodes: nodes };
+    return {
+      ...canvas,
+      nodes: nodes.map((current, i) => (i === index ? node : current)),
+    };
   });
 
 if (import.meta.vitest) {

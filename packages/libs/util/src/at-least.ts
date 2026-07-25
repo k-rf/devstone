@@ -9,7 +9,7 @@ import { type PositiveInteger } from "./positive-integer.js";
  * @returns 配列の長さが min 以上であれば true、そうでなければ false
  */
 export const atLeast = <T, U extends number>(
-  value: T[],
+  value: readonly T[],
   min: PositiveInteger<U>,
 ): value is AtLeast<T, U> => {
   return value.length >= min;
@@ -21,11 +21,15 @@ export const atLeast = <T, U extends number>(
  * @template N - 最小の要素数 (正の整数)
  * @template Acc - 再帰処理用の内部アキュムレータ
  */
-export type AtLeast<T, N extends number, Acc extends T[] = []> = `${N}` extends `-${N}`
-  ? []
+export type AtLeast<
+  T,
+  N extends number,
+  Acc extends readonly T[] = readonly [],
+> = `${N}` extends `-${N}`
+  ? readonly []
   : Acc["length"] extends N
-    ? [...Acc, ...T[]]
-    : AtLeast<T, N, [...Acc, T]>;
+    ? readonly [...Acc, ...(readonly T[])]
+    : AtLeast<T, N, readonly [...Acc, T]>;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

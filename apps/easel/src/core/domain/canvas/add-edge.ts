@@ -31,14 +31,11 @@ export const addEdge = (canvas: JsonCanvas, edge: Edge): Effect.Effect<JsonCanva
       );
     }
 
-    const edges = canvas.edges ? [...canvas.edges] : [];
+    const edges = canvas.edges ?? [];
     const index = edges.findIndex((e) => e.id === edge.id);
-    if (index === -1) {
-      edges.push(edge);
-    } else {
-      edges[index] = edge;
-    }
-    return { ...canvas, edges: edges };
+    const nextEdges =
+      index === -1 ? [...edges, edge] : edges.map((current, i) => (i === index ? edge : current));
+    return { ...canvas, edges: nextEdges };
   });
 
 if (import.meta.vitest) {

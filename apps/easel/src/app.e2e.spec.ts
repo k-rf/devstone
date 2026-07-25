@@ -10,7 +10,7 @@ import { assertNode } from "./test-utils/assert-node/assert-node.js";
 import { assertTextNode } from "./test-utils/assert-node/assert-text-node.js";
 import { mockFileSystem } from "./test-utils/mock-fs.js";
 
-const executeCli = (args: string[]) => runCli(["node", "main.js", ...args]);
+const executeCli = (args: readonly string[]) => runCli(["node", "main.js", ...args]);
 
 const provideTestContext = <R, E, A>(effect: Effect.Effect<A, E, R>) =>
   effect.pipe(Effect.provide(mockFileSystem), Effect.provide(BunContext.layer));

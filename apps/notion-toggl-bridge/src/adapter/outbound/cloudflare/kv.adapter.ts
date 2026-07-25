@@ -7,7 +7,11 @@ import { CacheError, CachePort } from "../../../core/port/outbound/cloudflare/ca
  */
 export interface KVNamespace {
   readonly get: (key: string) => Promise<string | null>;
-  readonly put: (key: string, value: string, options?: { expirationTtl?: number }) => Promise<void>;
+  readonly put: (
+    key: string,
+    value: string,
+    options?: { readonly expirationTtl?: number },
+  ) => Promise<void>;
 }
 
 export const KvAdapterLive = (kvNamespace: KVNamespace) =>
@@ -23,13 +27,12 @@ export const KvAdapterLive = (kvNamespace: KVNamespace) =>
       }),
     put: (key, value, ttlSeconds) =>
       Effect.tryPromise({
-        try: () => {
-          const options: { expirationTtl?: number } = {};
-          if (ttlSeconds !== undefined) {
-            options.expirationTtl = ttlSeconds;
-          }
-          return kvNamespace.put(key, value, options);
-        },
+        try: () =>
+          kvNamespace.put(
+            key,
+            value,
+            ttlSeconds === undefined ? undefined : { expirationTtl: ttlSeconds },
+          ),
         catch: (e) =>
           new CacheError({
             message: `KV put error`,

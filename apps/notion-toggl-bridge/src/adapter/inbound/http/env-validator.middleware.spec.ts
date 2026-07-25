@@ -23,7 +23,7 @@ const validEnv: Bindings = {
 
 describe("正常系", () => {
   it("有効な環境変数の場合、next() が呼ばれ env がセットされること", async () => {
-    const app = new Hono<{ Variables: { env: Env } }>();
+    const app = new Hono<{ readonly Variables: { readonly env: Env } }>();
     app.use("*", envValidatorMiddleware);
     app.get("/", (c) => c.json(c.var.env));
 

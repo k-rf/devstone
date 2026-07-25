@@ -15,7 +15,7 @@ export const updateEdge = (
   edge: Edge,
 ): Effect.Effect<JsonCanvas, CanvasError> =>
   Effect.gen(function* () {
-    const edges = canvas.edges ? [...canvas.edges] : [];
+    const edges = canvas.edges ?? [];
     const index = edges.findIndex((e) => e.id === edge.id);
     if (index === -1) {
       return yield* Effect.fail(
@@ -42,8 +42,10 @@ export const updateEdge = (
       );
     }
 
-    edges[index] = edge;
-    return { ...canvas, edges: edges };
+    return {
+      ...canvas,
+      edges: edges.map((current, i) => (i === index ? edge : current)),
+    };
   });
 
 if (import.meta.vitest) {

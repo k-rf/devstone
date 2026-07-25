@@ -1,9 +1,13 @@
-import { JsonCanvas as JsonCanvasSchema, type JsonCanvas } from "@devstone/libs-json-canvas-spec";
-import { Effect, Layer, Option, Schema } from "effect";
+import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec";
+import { Effect, Option, Schema } from "effect";
 import { expect, it } from "vitest";
 
 import { assertNode } from "../../test-utils/assert-node/assert-node.js";
-import { CanvasRepository } from "../port/repository/canvas.repository.js";
+import {
+  getCanvas,
+  makeCanvasRef,
+  makeTestCanvasRepository,
+} from "../../test-utils/make-test-canvas-repository.js";
 
 import { rearrangeNodesWorkflow } from "./rearrange-nodes.workflow.js";
 
@@ -15,20 +19,8 @@ const initialCanvas = Schema.decodeUnknownSync(JsonCanvasSchema)({
   edges: [],
 });
 
-const makeTestCanvasRepository = (canvasRef: { current: JsonCanvas }) =>
-  Layer.succeed(
-    CanvasRepository,
-    CanvasRepository.of({
-      read: () => Effect.sync(() => canvasRef.current),
-      write: (canvas) =>
-        Effect.sync(() => {
-          canvasRef.current = canvas;
-        }),
-    }),
-  );
-
 it("再配置を実行したとき、重なっているノードの座標が自動で押し出されて更新されること", async () => {
-  const state = { current: { ...initialCanvas } };
+  const state = makeCanvasRef({ ...initialCanvas });
   const program = rearrangeNodesWorkflow({
     padding: Option.some(20),
     maxIterations: Option.some(50),
@@ -37,8 +29,8 @@ it("再配置を実行したとき、重なっているノードの座標が自�
 
   await Effect.runPromise(program);
 
-  const n1 = state.current.nodes?.find((n) => n.id === "node-1");
-  const n2 = state.current.nodes?.find((n) => n.id === "node-2");
+  const n1 = getCanvas(state).nodes?.find((n) => n.id === "node-1");
+  const n2 = getCanvas(state).nodes?.find((n) => n.id === "node-2");
 
   assertNode(n1);
   assertNode(n2);
@@ -48,7 +40,7 @@ it("再配置を実行したとき、重なっているノードの座標が自�
 });
 
 it("オプション（padding, maxIterations, damping）に None を指定したとき、デフォルト値が適用されて正常に完了すること", async () => {
-  const state = { current: { ...initialCanvas } };
+  const state = makeCanvasRef({ ...initialCanvas });
   const program = rearrangeNodesWorkflow({
     padding: Option.none(),
     maxIterations: Option.none(),
@@ -57,8 +49,8 @@ it("オプション（padding, maxIterations, damping）に None を指定した
 
   await Effect.runPromise(program);
 
-  const n1 = state.current.nodes?.find((n) => n.id === "node-1");
-  const n2 = state.current.nodes?.find((n) => n.id === "node-2");
+  const n1 = getCanvas(state).nodes?.find((n) => n.id === "node-1");
+  const n2 = getCanvas(state).nodes?.find((n) => n.id === "node-2");
 
   assertNode(n1);
   assertNode(n2);
@@ -68,7 +60,7 @@ it("オプション（padding, maxIterations, damping）に None を指定した
 });
 
 it("damping オプションを指定したとき、指定された減衰係数が適用されること", async () => {
-  const state = { current: { ...initialCanvas } };
+  const state = makeCanvasRef({ ...initialCanvas });
   // damping を非常に小さく (0.01) 設定すると、maxIterations: 1 のときにはほとんど動かないはず
   const program = rearrangeNodesWorkflow({
     padding: Option.some(20),
@@ -78,8 +70,8 @@ it("damping オプションを指定したとき、指定された減衰係数�
 
   await Effect.runPromise(program);
 
-  const n1 = state.current.nodes?.find((n) => n.id === "node-1");
-  const n2 = state.current.nodes?.find((n) => n.id === "node-2");
+  const n1 = getCanvas(state).nodes?.find((n) => n.id === "node-1");
+  const n2 = getCanvas(state).nodes?.find((n) => n.id === "node-2");
 
   assertNode(n1);
   assertNode(n2);

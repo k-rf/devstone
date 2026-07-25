@@ -10,14 +10,11 @@ import { Effect, Schema } from "effect";
  */
 export const addNode = (canvas: JsonCanvas, node: Node): Effect.Effect<JsonCanvas> =>
   Effect.sync(() => {
-    const nodes = canvas.nodes ? [...canvas.nodes] : [];
+    const nodes = canvas.nodes ?? [];
     const index = nodes.findIndex((n) => n.id === node.id);
-    if (index === -1) {
-      nodes.push(node);
-    } else {
-      nodes[index] = node;
-    }
-    return { ...canvas, nodes: nodes };
+    const nextNodes =
+      index === -1 ? [...nodes, node] : nodes.map((current, i) => (i === index ? node : current));
+    return { ...canvas, nodes: nextNodes };
   });
 
 if (import.meta.vitest) {

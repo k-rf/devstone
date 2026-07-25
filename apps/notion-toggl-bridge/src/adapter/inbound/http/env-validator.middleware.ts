@@ -21,8 +21,8 @@ export type Env = Schema.Schema.Type<typeof Env>;
  * 起動時（最初のfetch時）に設定漏れを検知する
  */
 export const envValidatorMiddleware = createMiddleware<{
-  Bindings: Bindings;
-  Variables: { env: Env };
+  readonly Bindings: Bindings;
+  readonly Variables: { readonly env: Env };
 }>(async (c, next) => {
   const result = Schema.decodeUnknownEither(Env)(c.env);
 

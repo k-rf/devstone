@@ -8,7 +8,7 @@ const env = { NOTION_WEBHOOK_SECRET: secret };
 
 describe("正常系", () => {
   it("正しいシークレットの場合、next() が呼ばれること", async () => {
-    const app = new Hono<{ Bindings: { NOTION_WEBHOOK_SECRET: string } }>();
+    const app = new Hono<{ readonly Bindings: { readonly NOTION_WEBHOOK_SECRET: string } }>();
     app.use("*", verifySecretMiddleware);
     app.get("/", (c) => c.text("ok"));
 
@@ -21,7 +21,7 @@ describe("正常系", () => {
 
 describe("異常系", () => {
   it("シークレットが不足している場合、401 を返すこと", async () => {
-    const app = new Hono<{ Bindings: { NOTION_WEBHOOK_SECRET: string } }>();
+    const app = new Hono<{ readonly Bindings: { readonly NOTION_WEBHOOK_SECRET: string } }>();
     app.use("*", verifySecretMiddleware);
     app.get("/", (c) => c.text("ok"));
 
@@ -32,7 +32,7 @@ describe("異常系", () => {
   });
 
   it("シークレットが正しくない場合、401 を返すこと", async () => {
-    const app = new Hono<{ Bindings: { NOTION_WEBHOOK_SECRET: string } }>();
+    const app = new Hono<{ readonly Bindings: { readonly NOTION_WEBHOOK_SECRET: string } }>();
     app.use("*", verifySecretMiddleware);
     app.get("/", (c) => c.text("ok"));
 

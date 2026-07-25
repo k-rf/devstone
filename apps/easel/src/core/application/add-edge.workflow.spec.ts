@@ -1,8 +1,12 @@
-import { JsonCanvas as JsonCanvasSchema, type JsonCanvas } from "@devstone/libs-json-canvas-spec";
-import { Effect, Layer, Schema } from "effect";
+import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec";
+import { Effect, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
-import { CanvasRepository } from "../port/repository/canvas.repository.js";
+import {
+  getCanvas,
+  makeCanvasRef,
+  makeTestCanvasRepository,
+} from "../../test-utils/make-test-canvas-repository.js";
 
 import { addEdgeWorkflow } from "./add-edge.workflow.js";
 
@@ -14,22 +18,10 @@ const initialCanvas = Schema.decodeUnknownSync(JsonCanvasSchema)({
   edges: [],
 });
 
-const makeTestCanvasRepository = (canvasRef: { current: JsonCanvas }) =>
-  Layer.succeed(
-    CanvasRepository,
-    CanvasRepository.of({
-      read: () => Effect.sync(() => canvasRef.current),
-      write: (canvas) =>
-        Effect.sync(() => {
-          canvasRef.current = canvas;
-        }),
-    }),
-  );
-
 describe("キャンバスへのエッジ追加ワークフロー", () => {
   describe("正常系", () => {
     it("正しいエッジデータを渡した場合、エッジが正常に追加され、そのIDが返されること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const newEdgeData = { id: "edge-2", fromNode: "node-2", toNode: "node-1", color: "2" };
       const program = addEdgeWorkflow(newEdgeData).pipe(
         Effect.provide(makeTestCanvasRepository(state)),
@@ -38,13 +30,13 @@ describe("キャンバスへのエッジ追加ワークフロー", () => {
       const addedId = await Effect.runPromise(program);
 
       expect(addedId).toBe("edge-2");
-      expect(state.current.edges?.length).toBe(1);
+      expect(getCanvas(state).edges?.length).toBe(1);
     });
   });
 
   describe("異常系", () => {
     it("必須属性が欠けているなどの不正なエッジデータの場合、検証エラーが返されること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const invalidEdgeData = { id: "edge-2", color: "1" };
       const program = addEdgeWorkflow(invalidEdgeData).pipe(
         Effect.provide(makeTestCanvasRepository(state)),

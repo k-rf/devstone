@@ -4,7 +4,7 @@ import { Match } from "effect";
 import { typeEnums } from "./type-enum.js";
 
 const emojis = typeEnums.map((typeEnum) => typeEnum.value).join("|");
-const subjectPattern = (options: { withKey: boolean }) => {
+const subjectPattern = (options: { readonly withKey: boolean }) => {
   return Match.value(options).pipe(
     Match.when({ withKey: true }, () => new RegExp(String.raw`^(${emojis}) (.+-\d+) (.+)$`)),
     Match.when({ withKey: false }, () => new RegExp(String.raw`^(${emojis}) (.+)$`)),
@@ -32,7 +32,7 @@ const config: UserConfig = {
       rules: {
         "ticket-empty": (parsed, when) => {
           return Match.value(when).pipe(
-            Match.withReturnType<[boolean, string]>(),
+            Match.withReturnType<readonly [boolean, string]>(),
             Match.when("always", () => [parsed["ticket"] === undefined, "ticket must be empty"]),
             Match.when("never", () => [parsed["ticket"] !== undefined, "ticket may not be empty"]),
             Match.orElse(() => [false, "Unknown `when` value"]),
