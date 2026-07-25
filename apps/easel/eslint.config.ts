@@ -7,6 +7,7 @@ import {
   json,
   markdown,
   namingConvention,
+  noCoreSideEffects,
   node,
   sonarjs,
   unicorn,
@@ -31,6 +32,7 @@ const config = defineConfig(
   markdown,
   namingConvention,
   node,
+  noCoreSideEffects,
   sonarjs,
   unicorn,
 );

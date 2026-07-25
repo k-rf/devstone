@@ -2,6 +2,8 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import { configs } from "typescript-eslint";
 
+import { base as baseRestrictedSyntax } from "./no-restricted-syntax/presets/base.js";
+
 export const base = defineConfig(
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
@@ -25,27 +27,8 @@ export const base = defineConfig(
         { fixStyle: "inline-type-imports", prefer: "type-imports" },
       ],
 
-      /** @remarks `as unknown as T` は型安全性を完全に破壊するため禁止する */
-      "no-restricted-syntax": [
-        "error",
-        {
-          selector:
-            "TSAsExpression:has(> TSAsExpression.expression[typeAnnotation.type='TSUnknownKeyword'])",
-          message:
-            "`as unknown as` は型チェックを完全に迂回します。型安全になるように実装を見直してください。",
-        },
-        {
-          // HACK: エラーになる条件がかなり緩いのでカスタムを作る
-          selector:
-            "CallExpression:matches([callee.name='describe'], [callee.object.name='describe'])[arguments.0.type='Literal'][arguments.0.value=/^[a-zA-Z0-9$]+$/]",
-          message:
-            "describe の説明に関数名やクラス名などの識別子を繰り返すことは禁止されています。意味のあるコンテキストを記述してください。",
-        },
-        {
-          selector: "ImportDeclaration[importKind='type']",
-          message: "import type ... ではなく、import { type ... } を使用してください。",
-        },
-      ],
+      /** @remarks ワークスペース共通の構文制限を適用する */
+      "no-restricted-syntax": ["error", ...baseRestrictedSyntax],
     },
   },
   {

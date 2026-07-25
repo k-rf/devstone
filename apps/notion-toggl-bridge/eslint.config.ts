@@ -6,6 +6,7 @@ import {
   jsdoc,
   json,
   namingConvention,
+  noCoreSideEffects,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -27,6 +28,7 @@ const config = defineConfig(
   jsdoc,
   json,
   namingConvention,
+  noCoreSideEffects,
   sonarjs,
   unicorn,
   {
