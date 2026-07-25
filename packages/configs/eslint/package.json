@@ -86,8 +86,8 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsgo -p tsconfig.build.json",
-    "typecheck": "tsgo -p tsconfig.check.json",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.check.json",
     "lint": "eslint --fix --max-warnings 0"
   },
   "dependencies": {
@@ -102,13 +102,14 @@
     "eslint-plugin-n": "17.24.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-sonarjs": "4.0.3",
+    "eslint-plugin-sonarjs": "4.2.0",
     "eslint-plugin-unicorn": "64.0.0",
     "globals": "17.5.0",
+    "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-eslint": "8.59.1"
   },
   "devDependencies": {
-    "@typescript/native-preview": "7.0.0-dev.20260430.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "eslint": "10.2.1"
   },
   "peerDependencies": {

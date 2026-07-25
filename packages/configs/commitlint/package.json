@@ -9,8 +9,8 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsgo -p tsconfig.build.json",
-    "typecheck": "tsgo -p tsconfig.check.json",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.check.json",
     "lint": "eslint --fix --max-warnings 0"
   },
   "dependencies": {
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@commitlint/types": "21.0.1",
-    "@typescript/native-preview": "7.0.0-dev.20260430.1",
+    "@typescript/native": "npm:typescript@7.0.2",
     "commitlint": "21.0.2",
     "cz-customizable": "7.5.4",
     "eslint": "10.2.1"
