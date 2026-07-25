@@ -1,3 +1,6 @@
+/**
+ * describe の説明に識別子名だけを繰り返すことを禁止し、意味のあるコンテキスト記述を促す。
+ */
 export const noDescribeIdentifierName = [
   {
     // HACK: エラーになる条件がかなり緩いのでカスタムを作る

@@ -4,6 +4,10 @@ import { noNondeterministicDate } from "../selectors/no-nondeterministic-date.js
 
 import { base } from "./base.js";
 
+/**
+ * Core層向けの `no-restricted-syntax` セレクタ集合。
+ * base に加え、ストレージ型参照と非決定的処理を禁止する。
+ */
 export const noCoreSideEffects = [
   ...base,
   ...noCloudflareStorageTypes,

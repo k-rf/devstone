@@ -1,3 +1,6 @@
+/**
+ * `as unknown as T` による型チェックの完全迂回を禁止する。
+ */
 export const noAsUnknownAs = [
   {
     selector:

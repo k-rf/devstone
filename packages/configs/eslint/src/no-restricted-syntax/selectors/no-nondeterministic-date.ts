@@ -1,3 +1,6 @@
+/**
+ * Core層での非決定的な Date 利用を禁止し、Effect-TS の Clock へ誘導する。
+ */
 export const noNondeterministicDate = [
   {
     selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
