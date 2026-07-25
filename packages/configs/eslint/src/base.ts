@@ -2,7 +2,7 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import { configs } from "typescript-eslint";
 
-import { baseRestrictedSyntaxSelectors } from "./shared/base-restricted-syntax.js";
+import { base as baseRestrictedSyntax } from "./no-restricted-syntax/presets/base.js";
 
 export const base = defineConfig(
   {
@@ -28,7 +28,7 @@ export const base = defineConfig(
       ],
 
       /** @remarks `as unknown as T` は型安全性を完全に破壊するため禁止する */
-      "no-restricted-syntax": ["error", ...baseRestrictedSyntaxSelectors],
+      "no-restricted-syntax": ["error", ...baseRestrictedSyntax],
     },
   },
   {
