@@ -9,6 +9,18 @@ export const promiseChain = <T>(funcs: readonly (() => Promise<T>)[]) => {
 if (import.meta.vitest) {
   const { it, expect, vi } = import.meta.vitest;
 
+  const assertDefined: <T>(value: T | undefined) => asserts value is T = (value) => {
+    if (value === undefined) {
+      throw new Error("値が未定義です");
+    }
+  };
+
+  it("assertDefined は undefined のとき例外を送出すること", () => {
+    expect(() => {
+      assertDefined(undefined);
+    }).toThrow("値が未定義です");
+  });
+
   it("複数の非同期関数が順番に直列で実行されること", async () => {
     const f1 = vi.fn().mockResolvedValue("first");
     const f2 = vi.fn().mockResolvedValue("second");
@@ -24,12 +36,9 @@ if (import.meta.vitest) {
     const f1Order = f1.mock.invocationCallOrder[0];
     const f2Order = f2.mock.invocationCallOrder[0];
     const f3Order = f3.mock.invocationCallOrder[0];
-    expect(f1Order).toBeDefined();
-    expect(f2Order).toBeDefined();
-    expect(f3Order).toBeDefined();
-    if (f1Order === undefined || f2Order === undefined || f3Order === undefined) {
-      throw new Error("invocationCallOrder が未定義です");
-    }
+    assertDefined(f1Order);
+    assertDefined(f2Order);
+    assertDefined(f3Order);
     expect(f1Order).toBeLessThan(f2Order);
     expect(f2Order).toBeLessThan(f3Order);
   });
