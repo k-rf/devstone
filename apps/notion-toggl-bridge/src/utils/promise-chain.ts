@@ -1,3 +1,5 @@
+import { assertDefined } from "../test-utils/assert-defined/assert-defined.js";
+
 export const promiseChain = <T>(funcs: readonly (() => Promise<T>)[]) => {
   if (funcs.length === 0) {
     throw new Error("promiseChain には1つ以上の関数が必要です");
@@ -8,18 +10,6 @@ export const promiseChain = <T>(funcs: readonly (() => Promise<T>)[]) => {
 
 if (import.meta.vitest) {
   const { it, expect, vi } = import.meta.vitest;
-
-  const assertDefined: <T>(value: T | undefined) => asserts value is T = (value) => {
-    if (value === undefined) {
-      throw new Error("値が未定義です");
-    }
-  };
-
-  it("assertDefined は undefined のとき例外を送出すること", () => {
-    expect(() => {
-      assertDefined(undefined);
-    }).toThrow("値が未定義です");
-  });
 
   it("複数の非同期関数が順番に直列で実行されること", async () => {
     const f1 = vi.fn().mockResolvedValue("first");
