@@ -1,5 +1,10 @@
-export const promiseChain = <T>(funcs: readonly (() => Promise<T>)[]) =>
-  funcs.reduce((prev, func) => () => prev().then(() => func()));
+export const promiseChain = <T>(funcs: readonly (() => Promise<T>)[]) => {
+  if (funcs.length === 0) {
+    throw new Error("promiseChain には1つ以上の関数が必要です");
+  }
+
+  return funcs.reduce((prev, func) => () => prev().then(() => func()));
+};
 
 if (import.meta.vitest) {
   const { it, expect, vi } = import.meta.vitest;
@@ -36,6 +41,10 @@ if (import.meta.vitest) {
 
     expect(result).toBe("only");
     expect(f1).toHaveBeenCalledTimes(1);
+  });
+
+  it("空配列の場合、分かりやすいエラーを投げること", () => {
+    expect(() => promiseChain([])).toThrow("promiseChain には1つ以上の関数が必要です");
   });
 
   it("途中の関数でエラーが発生した場合、以降の実行が中断されエラーが伝播すること", async () => {
