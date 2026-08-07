@@ -164,9 +164,30 @@ importers:
         specifier: 3.21.2
         version: 3.21.2
     devDependencies:
+      '@commitlint/lint':
+        specifier: 21.2.0
+        version: 21.2.0
+      '@commitlint/parse':
+        specifier: 21.2.0
+        version: 21.2.0
       '@commitlint/types':
-        specifier: 21.0.1
-        version: 21.0.1
+        specifier: 21.2.0
+        version: 21.2.0
+      '@devstone/configs-eslint':
+        specifier: workspace:*
+        version: link:../eslint
+      '@devstone/configs-typescript':
+        specifier: workspace:*
+        version: link:../typescript
+      '@devstone/configs-vitest':
+        specifier: workspace:*
+        version: link:../vitest
+      '@types/bun':
+        specifier: 1.3.14
+        version: 1.3.14
+      '@types/node':
+        specifier: 25.9.1
+        version: 25.9.1
       commitlint:
         specifier: 21.0.2
         version: 21.0.2(@types/node@25.9.1)(conventional-commits-parser@7.1.0)(typescript@7.0.2)
@@ -179,6 +200,9 @@ importers:
       typescript:
         specifier: 7.0.2
         version: 7.0.2
+      vitest:
+        specifier: 4.1.5
+        version: 4.1.5(@types/node@25.9.1)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
 
   packages/configs/eslint:
     dependencies:

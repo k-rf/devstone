@@ -45,29 +45,32 @@ gitmoji は、コミットメッセージに絵文字プレフィックスを使
 ## メッセージフォーマット
 
 ```plaintext
-<emoji> <件名行>
+<emoji> <課題キー> <件名行>
 ```
+
+課題キーは必須。特定できない場合はコミットせず確認を求める。
+許可される絵文字の正本は `packages/configs/commitlint/src/type-enum.ts`。
 
 ### 英語の例
 
 ```plaintext
-✨ Add user authentication with JWT
-🐛 Fix race condition in WebSocket handler
-♻️ Refactor tsconfig files to extend shared configuration
-🔧 Update ESLint configuration for stricter rules
-⬆️ Upgrade Moon to v2 and migrate configuration to JSONC
-📝 Add API documentation for payment endpoints
+✨ DEV-42 Add user authentication with JWT
+🚑️ DEV-12 Fix race condition in WebSocket handler
+♻️ DEV-8 Refactor tsconfig files to extend shared configuration
+🔧 DEV-1 Update ESLint configuration for stricter rules
+⬆️ DEV-15 Upgrade Moon to v2 and migrate configuration to JSONC
+📝 DEV-20 Add API documentation for payment endpoints
 ```
 
 ### 日本語の例
 
 ```plaintext
-✨ JWT を使用したユーザー認証を追加する
-🐛 WebSocket ハンドラーの競合状態を修正する
-♻️ tsconfig を共有設定パッケージから拡張するようにリファクタリングする
-🔧 ESLint の設定をより厳格なルールに更新する
-⬆️ Moon を v2 にアップグレードし JSONC 設定に移行する
-📝 決済エンドポイントの API ドキュメントを追加する
+✨ DEV-42 JWT を使用したユーザー認証を追加する
+🚑️ DEV-12 WebSocket ハンドラーの競合状態を修正する
+♻️ DEV-8 tsconfig を共有設定パッケージから拡張するようにリファクタリングする
+🔧 DEV-1 ESLint の設定をより厳格なルールに更新する
+⬆️ DEV-15 Moon を v2 にアップグレードし JSONC 設定に移行する
+📝 DEV-20 決済エンドポイントの API ドキュメントを追加する
 ```
 
 ## 絵文字選択戦略

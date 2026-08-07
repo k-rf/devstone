@@ -4,6 +4,6 @@
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "types": ["bun", "node"]
+    "types": ["bun", "node", "vitest/importMeta"]
   }
 }
