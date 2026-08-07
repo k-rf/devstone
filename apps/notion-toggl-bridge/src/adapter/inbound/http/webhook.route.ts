@@ -14,7 +14,10 @@ import { type Bindings } from "./types";
 import { verifySecretMiddleware } from "./verify-secret.middleware";
 import { NotionWebhookPayload } from "./webhook.payload";
 
-const webhookRoute = new Hono<{ Bindings: Bindings; Variables: { env: Env } }>();
+const webhookRoute = new Hono<{
+  readonly Bindings: Bindings;
+  readonly Variables: { readonly env: Env };
+}>();
 
 webhookRoute.post(
   "/start",

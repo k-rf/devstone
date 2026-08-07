@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { Effect, Ref } from "effect";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -100,9 +101,9 @@ describe("正常系", () => {
       body: JSON.stringify(validPayload),
     });
 
-    const captured: { promise?: Promise<unknown> } = {};
+    const capturedPromise = Effect.runSync(Ref.make<Promise<unknown> | undefined>(undefined));
     const waitUntilSpy = vi.fn((promise: Promise<unknown>) => {
-      captured.promise = promise;
+      Effect.runSync(Ref.set(capturedPromise, promise));
     });
 
     const executionCtx: ExecutionContext = {
@@ -116,7 +117,8 @@ describe("正常系", () => {
     expect(res.status).toBe(202);
     expect(await res.json()).toStrictEqual({ message: "Accepted" });
 
-    if (captured.promise) await captured.promise;
+    const backgroundPromise = Effect.runSync(Ref.get(capturedPromise));
+    if (backgroundPromise) await backgroundPromise;
   });
 });
 
@@ -180,9 +182,9 @@ describe("異常系", () => {
       body: JSON.stringify(validPayload),
     });
 
-    const captured: { promise?: Promise<unknown> } = {};
+    const capturedPromise = Effect.runSync(Ref.make<Promise<unknown> | undefined>(undefined));
     const waitUntilSpy = vi.fn((promise: Promise<unknown>) => {
-      captured.promise = promise;
+      Effect.runSync(Ref.set(capturedPromise, promise));
     });
 
     const executionCtx: ExecutionContext = {
@@ -196,7 +198,8 @@ describe("異常系", () => {
 
     expect(res.status).toBe(202);
 
-    if (captured.promise) await captured.promise;
+    const backgroundPromise = Effect.runSync(Ref.get(capturedPromise));
+    if (backgroundPromise) await backgroundPromise;
 
     expect(consoleSpy).toHaveBeenCalledWith(
       expect.stringContaining("Background task failed:"),

@@ -7,7 +7,7 @@ import { assertNode } from "../../../test-utils/assert-node/assert-node.js";
 /**
  * ノード間の重なりを解消するためのデルタ（移動量）を保持するマップ型。
  */
-type DeltaMap = Record<string, { dx: number; dy: number }>;
+type DeltaMap = Record<string, { readonly dx: number; readonly dy: number }>;
 
 /**
  * ノードの中心X座標を計算します。
@@ -114,7 +114,7 @@ const stepRearrange = (
   nodes: readonly Node[],
   padding: number,
   damping: number,
-): Effect.Effect<{ nextNodes: readonly Node[]; hasMoved: boolean }> => {
+): Effect.Effect<{ readonly nextNodes: readonly Node[]; readonly hasMoved: boolean }> => {
   const effects = getUniquePairs(nodes).map(([nodeA, nodeB]) =>
     calculatePairDelta(nodeA, nodeB, padding, damping),
   );
@@ -122,15 +122,20 @@ const stepRearrange = (
   // ペアごとの衝突判定を並行（unbounded）で実行する
   return Effect.all(effects, { concurrency: "unbounded" }).pipe(
     Effect.map((deltas) => {
-      const mergedDeltas: Record<string, { dx: number; dy: number }> = {};
-
       // デルタ（移動量）を各ノードごとに累積する
-      for (const delta of deltas) {
-        for (const [id, value] of objectEntries(delta)) {
-          const current = mergedDeltas[id] ?? { dx: 0, dy: 0 };
-          mergedDeltas[id] = { dx: current.dx + value.dx, dy: current.dy + value.dy };
-        }
-      }
+      const mergedDeltas = deltas.reduce<
+        Readonly<Record<string, { readonly dx: number; readonly dy: number }>>
+      >(
+        (acc, delta) =>
+          objectEntries(delta).reduce((inner, [id, value]) => {
+            const current = inner[id] ?? { dx: 0, dy: 0 };
+            return {
+              ...inner,
+              [id]: { dx: current.dx + value.dx, dy: current.dy + value.dy },
+            };
+          }, acc),
+        {},
+      );
 
       const { nextNodes, hasMoved } = nodes.reduce(
         (acc, node) => {
@@ -147,7 +152,7 @@ const stepRearrange = (
           }
           return { nextNodes: [...acc.nextNodes, node], hasMoved: acc.hasMoved };
         },
-        { nextNodes: [] as Node[], hasMoved: false },
+        { nextNodes: [] as readonly Node[], hasMoved: false },
       );
 
       return { nextNodes: nextNodes, hasMoved: hasMoved };
@@ -167,7 +172,11 @@ const stepRearrange = (
  */
 export const rearrangeNodes = (
   canvas: JsonCanvas,
-  options: { padding?: number; maxIterations?: number; damping?: number } = {},
+  options: {
+    readonly padding?: number;
+    readonly maxIterations?: number;
+    readonly damping?: number;
+  } = {},
 ): Effect.Effect<JsonCanvas> => {
   const padding = options.padding ?? 20;
   const maxIterations = options.maxIterations ?? 50;

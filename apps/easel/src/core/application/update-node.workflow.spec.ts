@@ -1,9 +1,13 @@
-import { JsonCanvas as JsonCanvasSchema, type JsonCanvas } from "@devstone/libs-json-canvas-spec";
-import { Effect, Layer, Option, Schema } from "effect";
+import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec";
+import { Effect, Option, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
 import { assertTextNode } from "../../test-utils/assert-node/assert-text-node.js";
-import { CanvasRepository } from "../port/repository/canvas.repository.js";
+import {
+  getCanvas,
+  makeCanvasRef,
+  makeTestCanvasRepository,
+} from "../../test-utils/make-test-canvas-repository.js";
 
 import { updateNodeWorkflow } from "./update-node.workflow.js";
 
@@ -15,22 +19,10 @@ const initialCanvas = Schema.decodeUnknownSync(JsonCanvasSchema)({
   edges: [],
 });
 
-const makeTestCanvasRepository = (canvasRef: { current: JsonCanvas }) =>
-  Layer.succeed(
-    CanvasRepository,
-    CanvasRepository.of({
-      read: () => Effect.sync(() => canvasRef.current),
-      write: (canvas) =>
-        Effect.sync(() => {
-          canvasRef.current = canvas;
-        }),
-    }),
-  );
-
 describe("キャンバス内ノードの更新ワークフロー", () => {
   describe("正常系", () => {
     it("存在するノードに対して正しいパラメータを渡したとき、データが正常にマージされて更新されること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const program = updateNodeWorkflow({
         id: "node-1",
         type: "text",
@@ -44,7 +36,7 @@ describe("キャンバス内ノードの更新ワークフロー", () => {
 
       await Effect.runPromise(program);
 
-      const foundNode = state.current.nodes?.find((n) => n.id === "node-1");
+      const foundNode = getCanvas(state).nodes?.find((n) => n.id === "node-1");
 
       assertTextNode(foundNode);
       expect(foundNode.text).toBe("Updated");
@@ -55,7 +47,7 @@ describe("キャンバス内ノードの更新ワークフロー", () => {
 
   describe("異常系", () => {
     it("不正な色や座標などのパラメータを渡したとき、検証エラーが返されること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const program = updateNodeWorkflow({
         id: "node-1",
         type: "text",
@@ -74,7 +66,7 @@ describe("キャンバス内ノードの更新ワークフロー", () => {
     });
 
     it("更新対象のノード ID がキャンバスに存在しないとき、ノード未検出のエラーが返されること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const program = updateNodeWorkflow({
         id: "non-existent-node",
         type: "text",
@@ -93,7 +85,7 @@ describe("キャンバス内ノードの更新ワークフロー", () => {
     });
 
     it("更新対象のノードと渡されたパラメータのノードタイプが一致しないとき、タイプ不一致のエラーが返されること", async () => {
-      const state = { current: { ...initialCanvas } };
+      const state = makeCanvasRef({ ...initialCanvas });
       const program = updateNodeWorkflow({
         id: "node-1", // textノード
         type: "file", // fileノードとして更新しようとする

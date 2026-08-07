@@ -1,5 +1,5 @@
-type ObjectEntries<T extends Record<PropertyKey, unknown>> = {
-  [K in keyof T]: [key: K, value: T[K]];
+type ObjectEntries<T extends Record<PropertyKey, unknown>> = readonly {
+  readonly [K in keyof T]: readonly [key: K, value: T[K]];
 }[keyof T][];
 
 /**

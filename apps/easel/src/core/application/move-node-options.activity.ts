@@ -21,11 +21,10 @@ export const moveNodeOptionsActivity = (options: {
     const dxValue = Option.getOrUndefined(options.dx);
     const dyValue = Option.getOrUndefined(options.dy);
 
-    const moveOptions: { x?: number; y?: number; dx?: number; dy?: number } = {};
-    if (xValue !== undefined) moveOptions.x = xValue;
-    if (yValue !== undefined) moveOptions.y = yValue;
-    if (dxValue !== undefined) moveOptions.dx = dxValue;
-    if (dyValue !== undefined) moveOptions.dy = dyValue;
-
-    return moveOptions;
+    return {
+      ...(xValue === undefined ? {} : { x: xValue }),
+      ...(yValue === undefined ? {} : { y: yValue }),
+      ...(dxValue === undefined ? {} : { dx: dxValue }),
+      ...(dyValue === undefined ? {} : { dy: dyValue }),
+    };
   });

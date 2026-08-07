@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Ref } from "effect";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
@@ -24,10 +24,10 @@ afterAll(() => {
 
 describe("正常系", () => {
   it("正常に通知が送れること", async () => {
-    const captured: { body?: unknown } = {};
+    const capturedBody = Effect.runSync(Ref.make<unknown>(undefined));
     server.use(
       http.post(webhookUrl, async ({ request }) => {
-        captured.body = await request.json();
+        await Effect.runPromise(Ref.set(capturedBody, await request.json()));
         return new HttpResponse(undefined, { status: 200 });
       }),
     );
@@ -40,7 +40,7 @@ describe("正常系", () => {
 
     await Effect.runPromise(program);
 
-    expect(captured.body).toMatchObject({
+    expect(Effect.runSync(Ref.get(capturedBody))).toMatchObject({
       text: /Test Message/,
       attachments: [
         {
@@ -54,11 +54,11 @@ describe("正常系", () => {
   });
 
   it("details がない場合も正常に通知が送れること", async () => {
-    const captured: { body?: unknown } = {};
+    const capturedBody = Effect.runSync(Ref.make<unknown>(undefined));
 
     server.use(
       http.post(webhookUrl, async ({ request }) => {
-        captured.body = await request.json();
+        await Effect.runPromise(Ref.set(capturedBody, await request.json()));
         return new HttpResponse(undefined, { status: 200 });
       }),
     );
@@ -71,7 +71,7 @@ describe("正常系", () => {
 
     await Effect.runPromise(program);
 
-    expect(captured.body).toMatchObject({
+    expect(Effect.runSync(Ref.get(capturedBody))).toMatchObject({
       attachments: [],
     });
   });
