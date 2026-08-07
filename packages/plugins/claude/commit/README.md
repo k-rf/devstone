@@ -6,7 +6,7 @@
 
 - **差分レビュー**: 変更の妥当性を自動検証（セキュリティ・整合性・完全性）
 - **コミット計画**: 単一責任原則と依存関係順序に基づくコミット分割
-- **メッセージ生成**: gitmoji / Conventional Commits 対応、追加プレフィックス（チケットキー等）対応
+- **メッセージ生成**: gitmoji + 必須課題キー（`<emoji> <課題キー> <件名>`）。Conventional Commits は拒否
 - **インタラクティブ実行**: ステップごとにユーザー確認を挟むインタラクティブ実行
 
 ## 使い方
@@ -26,8 +26,7 @@ JSON Schema が `schemas/commit.schema.json` に提供されており、`$schema
 {
   "$schema": "../../packages/plugins/claude/commit/schemas/commit.schema.json",
   "style": "gitmoji",
-  "language": "en",
-  "scope": false
+  "language": "en"
 }
 ```
 
@@ -36,12 +35,10 @@ JSON Schema が `schemas/commit.schema.json` に提供されており、`$schema
 
 ### フィールド
 
-| フィールド     | デフォルト | 説明                                                    |
-| -------------- | ---------- | ------------------------------------------------------- |
-| `style`        | `gitmoji`  | コミットメッセージのスタイル: `gitmoji`、`conventional` |
-| `language`     | `en`       | メッセージの言語: `en`、`ja` 等                         |
-| `scope`        | `false`    | スコープをメッセージに含めるか                          |
-| `customPrefix` | —          | 追加プレフィックス（例: チケットキー `PROJ-123`）       |
+| フィールド | デフォルト | 説明                                                      |
+| ---------- | ---------- | --------------------------------------------------------- |
+| `style`    | `gitmoji`  | コミットメッセージのスタイル（`gitmoji` のみ。CC は廃止） |
+| `language` | `en`       | メッセージの言語: `en`、`ja` 等                           |
 
 ## コンポーネント
 

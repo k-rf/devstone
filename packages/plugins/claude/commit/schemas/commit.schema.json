@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Commit Plugin 設定",
-  "description": "コミットプラグインのプロジェクト固有設定",
+  "description": "コミットプラグインのプロジェクト固有設定。ヘッダーは `<emoji> <課題キー> <件名>` 形式のみ。",
   "type": "object",
   "properties": {
     "$schema": {
@@ -10,25 +10,15 @@
     },
     "style": {
       "type": "string",
-      "enum": ["gitmoji", "conventional"],
+      "enum": ["gitmoji"],
       "default": "gitmoji",
-      "description": "コミットメッセージのスタイル"
+      "description": "コミットメッセージのスタイル。Conventional Commits は廃止済み。"
     },
     "language": {
       "type": "string",
       "default": "en",
       "description": "メッセージの言語（ISO 639-1 コード）",
       "examples": ["en", "ja"]
-    },
-    "scope": {
-      "type": "boolean",
-      "default": false,
-      "description": "スコープをメッセージに含めるか（例: feat(auth):）"
-    },
-    "customPrefix": {
-      "type": "string",
-      "description": "追加プレフィックスのパターン（例: チケットキー「PROJ-123」）。任意のスタイルと組み合わせて使用できる。",
-      "examples": ["PROJ-123", "[ISSUE-456]"]
     }
   },
   "additionalProperties": false

@@ -1,6 +1,6 @@
 ---
 name: commit-message
-description: コミットメッセージの生成、作成、フォーマット、gitmoji、Conventional Commits、コミットメッセージの規約などをユーザーが求めた際に使用されるスキル。コミットメッセージのスタイルとフォーマット規則に関する知識を提供する。
+description: コミットメッセージの生成、作成、フォーマット、gitmoji、コミットメッセージの規約などをユーザーが求めた際に使用されるスキル。コミットメッセージのスタイルとフォーマット規則に関する知識を提供する。
 user-invocable: false
 ---
 
@@ -12,12 +12,38 @@ user-invocable: false
 
 `.claude/configs/commit.json` が存在する場合、プロジェクト固有の設定を読み込む。
 
-| フィールド     | デフォルト | 説明                                                    |
-| -------------- | ---------- | ------------------------------------------------------- |
-| `style`        | `gitmoji`  | コミットメッセージのスタイル: `gitmoji`、`conventional` |
-| `language`     | `en`       | メッセージの言語: `en`、`ja` 等の ISO 639-1 コード      |
-| `scope`        | `false`    | スコープをメッセージに含めるか（例: `feat(auth):`）     |
-| `customPrefix` | —          | 追加プレフィックス（例: チケットキー `PROJ-123`）       |
+| フィールド | デフォルト | 説明                                                        |
+| ---------- | ---------- | ----------------------------------------------------------- |
+| `style`    | `gitmoji`  | コミットメッセージのスタイル（本リポジトリは gitmoji 固定） |
+| `language` | `en`       | メッセージの言語: `en`、`ja` 等の ISO 639-1 コード          |
+
+## 必須フォーマット
+
+ヘッダーは次の形式のみを許可する（Conventional Commits は禁止・自動検証で拒否される）:
+
+```text
+<emoji> <課題キー> <件名>
+```
+
+例:
+
+```text
+✨ DEV-33 コミットメッセージ規約を統一する
+🔧 DEV-1 設定を更新する
+```
+
+- **絵文字**: `packages/configs/commitlint/src/type-enum.ts` の定義に従う（詳細は `references/gitmoji.md`）
+- **課題キー**: `DEV-<数字>` 形式（ブランチ命名のチケット ID と同じ）
+- **件名**: 72文字以内。英語は命令形、日本語は動詞終止形
+
+### 課題キーの解決
+
+次の順で課題キーを特定する:
+
+1. ユーザーやチケットから明示された課題キー
+2. 現在ブランチ名に含まれる `DEV-<数字>`（例: `cursor/chore/DEV-33/commit-message-convention` → `DEV-33`）
+
+**課題キーを特定できない場合はコミットしない。** ユーザーに課題キーを確認して停止する。推測でキーを捏造しない。
 
 ## メッセージ品質ガイドライン
 
@@ -35,10 +61,8 @@ user-invocable: false
 
 ## スタイルリファレンス
 
-設定されたスタイルに応じて適切なリファレンスを参照する：
-
 - **gitmoji**: `references/gitmoji.md` で絵文字の選択とフォーマットを確認する
-- **conventional**: `references/conventional-commits.md` でタイププレフィックスとフォーマットを確認する
+- Conventional Commits（`type(scope):`）は使用しない。`commit-msg` フックが拒否する
 
 ## コミットメッセージのフォーマット
 
@@ -49,7 +73,7 @@ Bash 経由でコミットを作成する際は、常に HEREDOC 形式を使用
 
 ```bash
 git commit -m "$(cat <<'EOF'
-<prefix> [customPrefix] <件名>
+<emoji> <課題キー> <件名>
 
 <この変更が行われた理由を説明する本文>
 EOF
@@ -61,4 +85,4 @@ EOF
 ### リファレンスファイル
 
 - **`references/gitmoji.md`** — 絵文字リファレンスと選択戦略
-- **`references/conventional-commits.md`** — Conventional Commits 仕様
+- **`references/conventional-commits.md`** — 禁止形式の参照（使用しないこと）
