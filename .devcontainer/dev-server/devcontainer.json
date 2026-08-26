@@ -1,0 +1,31 @@
+{
+  "name": "devstone-dev-server",
+  "remoteUser": "devstone",
+  "dockerComposeFile": "../compose.dev.yaml",
+  "initializeCommand": ".devcontainer/script/initialize-command.sh",
+  "postCreateCommand": ".devcontainer/script/post-created-command.sh ${localEnv:HOME}",
+  "service": "app",
+  "features": {
+    "ghcr.io/itsmechlark/features/1password": "latest",
+    "ghcr.io/devcontainers/features/github-cli": "latest",
+    "ghcr.io/devcontainers/features/sshd": "latest"
+  },
+  "workspaceFolder": "/workspaces/devstone",
+  "overrideCommand": true,
+  "shutdownAction": "none",
+  "mounts": [
+    {
+      "source": "${localEnv:HOME}/.gitconfig",
+      "target": "/home/devstone/.gitconfig",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:SSH_AUTH_SOCK}",
+      "target": "${remoteEnv:HOME}/.ssh/ssh-agent",
+      "type": "bind"
+    }
+  ],
+  "containerEnv": {
+    "SSH_AUTH_SOCK": "${remoteEnv:HOME}/.ssh/ssh-agent"
+  }
+}

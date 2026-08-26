@@ -3,7 +3,7 @@
   "useGitignore": true,
   "gitignoreRoot": "..",
   "ignoreRandomStrings": true,
-  "ignorePaths": [".gitignore", ".devcontainer"],
+  "ignorePaths": [".gitignore", ".devcontainer", ".vscode/extensions.json"],
   "words": [
     "antigravitycli",
     "autodocs",

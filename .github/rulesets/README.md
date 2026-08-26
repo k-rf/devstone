@@ -12,9 +12,13 @@
   - `main`
   - `{type}/DEV-{n}/{desc}`
     （type = feature / fix / chore / docs / refactor / hotfix / test / ci / release）
-  - `cursor/{type}/DEV-{n}/{desc}`（Cursor Cloud 用。上記と同じ type を使用）
   - `dependabot/*/*`
-- 拒否例: `cursor/cursor-xxxx`（自動生成名）、`cursor/invalid-branch-name`、チケット ID なし（例: `feature/add-login`）、プレフィックスなし
+- 拒否例:
+  - `cursor/cursor-xxxx`（自動生成名）
+  - `cursor/invalid-branch-name`
+  - `cursor/{type}/DEV-{n}/{desc}`
+  - チケット ID なし（例: `feature/add-login`）
+  - プレフィックスなし
 
 ### Branch naming convention の適用（リポジトリ管理者）
 
@@ -37,12 +41,11 @@ gh api --method PUT repos/k-rf/devstone/rulesets/<ruleset-id> --input .github/ru
 # 違反: 失敗すること
 git push origin HEAD:refs/heads/cursor/invalid-branch-name
 git push origin HEAD:refs/heads/cursor/cursor-4083
+git push origin HEAD:refs/heads/cursor/feature/DEV-30/ruleset-smoke-test
 
 # 適合: 成功すること
 git push origin HEAD:refs/heads/feature/DEV-29/ruleset-smoke-test
-git push origin HEAD:refs/heads/cursor/feature/DEV-30/ruleset-smoke-test
 git push origin --delete feature/DEV-29/ruleset-smoke-test
-git push origin --delete cursor/feature/DEV-30/ruleset-smoke-test
 ```
 
 ## Main branch protection
