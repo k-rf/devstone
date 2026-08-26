@@ -1,5 +1,5 @@
 ---
-name: Commit Workflow
+name: commit-workflow
 description: 差分の検証、コミット計画の立案、および計画の実行までの一連のインタラクティブなコミットプロセスをオーケストレートします。
 ---
 
