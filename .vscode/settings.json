@@ -20,6 +20,8 @@
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
 
+  "isort.args": ["--profile", "black"],
+
   "markdownlint.configFile": ".markdownlint-cli2.jsonc",
 
   "oxc.enable.oxfmt": true,
@@ -32,6 +34,13 @@
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
 
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+
   "[shellscript][dotenv][ignore][properties]": {
     "files.eol": "\n",
     "editor.defaultFormatter": "foxundermoon.shell-format"
@@ -41,7 +50,7 @@
     "editor.quickSuggestions": {
       "strings": true
     },
-    "editor.defaultFormatter": "docker.docker"
+    "editor.defaultFormatter": "ms-azuretools.vscode-containers"
   },
 
   "[markdown][instructions][prompt][chatagent][skill]": {
