@@ -11,7 +11,8 @@ ENV PATH=${PATH}:${REMOTE_HOME}/.proto/tools/node/globals/bin
 # パッケージのインストール
 # ------------------------------------------------------------------------------
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get install -y --no-install-recommends ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq zip unzip libatomic1
+  && apt-get install -y --no-install-recommends \
+  ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq zip unzip libatomic1 build-essential bubblewrap
 
 # Docker のインストール
 RUN mkdir -p /etc/apt/keyrings && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -46,14 +47,17 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 # ローカルにパッケージのインストール
 # ------------------------------------------------------------------------------
 USER ${REMOTE_USER}
+ENV CODEX_NON_INTERACTIVE=true
+ENV NTN_INSTALL_DIR="${REMOTE_HOME}/.local/bin"
+
 RUN bash -c "$(curl -fsSL https://moonrepo.dev/install/proto.sh)" -- --yes
 RUN bash -c "$(curl -fsSL https://claude.ai/install.sh)"
 RUN bash -c "$(curl -fsSL https://antigravity.google/cli/install.sh)"
+RUN bash -c "$(curl -fsSL https://cursor.com/install -fsS)"
+RUN bash -c "$(curl -fsSL https://chatgpt.com/codex/install.sh)"
+RUN bash -c "$(curl -fsSL https://ntn.dev)"
 RUN sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes \
   && echo 'eval "$(starship init bash)"' >> ${REMOTE_HOME}/.bashrc
-
-ENV NTN_INSTALL_DIR="${REMOTE_HOME}/.local/bin"
-RUN bash -c "$(curl -fsSL https://ntn.dev)"
 
 # プロンプトのカスタマイズ
 # ------------------------------------------------------------------------------
