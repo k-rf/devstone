@@ -4,6 +4,7 @@
   "dockerComposeFile": "../compose.dev.yaml",
   "initializeCommand": ".devcontainer/script/initialize-command.sh",
   "postCreateCommand": ".devcontainer/script/post-created-command.sh ${localEnv:HOME}",
+  "postStartCommand": ".devcontainer/script/post-start-command.sh",
   "service": "app",
   "features": {
     "ghcr.io/itsmechlark/features/1password": "latest",

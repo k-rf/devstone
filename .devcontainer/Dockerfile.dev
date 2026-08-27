@@ -5,7 +5,8 @@ ARG REMOTE_USER
 ARG REMOTE_WORKSPACES
 ARG REMOTE_HOME
 
-ENV PATH=${PATH}:${REMOTE_HOME}/.proto/tools/node/globals/bin
+ENV PROTO_HOME=${REMOTE_HOME}/.proto
+ENV PATH=${PATH}:${PROTO_HOME}/tools/node/globals/bin:${PROTO_HOME}/shims:${PROTO_HOME}/bin
 
 # パッケージのインストール
 # ------------------------------------------------------------------------------
