@@ -8,7 +8,11 @@
   "features": {
     "ghcr.io/itsmechlark/features/1password": "latest",
     "ghcr.io/devcontainers/features/github-cli": "latest",
-    "ghcr.io/devcontainers/features/sshd": "latest"
+    "ghcr.io/devcontainers/features/sshd": "latest",
+    "ghcr.io/devcontainers/features/docker-outside-of-docker": {
+      "version": "latest",
+      "moby": false
+    }
   },
   "workspaceFolder": "/workspaces/devstone",
   "overrideCommand": true,
@@ -21,11 +25,11 @@
     },
     {
       "source": "${localEnv:SSH_AUTH_SOCK}",
-      "target": "${remoteEnv:HOME}/.ssh/ssh-agent",
+      "target": "/home/devstone/.ssh/ssh-agent",
       "type": "bind"
     }
   ],
   "containerEnv": {
-    "SSH_AUTH_SOCK": "${remoteEnv:HOME}/.ssh/ssh-agent"
+    "SSH_AUTH_SOCK": "/home/devstone/.ssh/ssh-agent"
   }
 }
