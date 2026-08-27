@@ -7,12 +7,10 @@ services:
         - REMOTE_USER=${ROOT_REMOTE_USER}
         - REMOTE_WORKSPACES=${ROOT_REMOTE_WORKSPACES}
         - REMOTE_HOME=${ROOT_REMOTE_HOME}
-        - DOCKER_GID=${DOCKER_GID}
     ports:
       - 2222:2222
     group_add:
       - root
-      - ${DOCKER_GID}
     env_file:
       - .env
       - .env.local
@@ -42,9 +40,6 @@ services:
       - type: bind
         source: ${HOME}/.config/cursor/auth.json
         target: ${ROOT_REMOTE_HOME}/.config/cursor/auth.json
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
 
       - type: volume
         source: root-bash-history
