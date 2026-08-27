@@ -21,11 +21,11 @@
     },
     {
       "source": "${localEnv:SSH_AUTH_SOCK}",
-      "target": "${remoteEnv:HOME}/.ssh/ssh-agent",
+      "target": "/home/devstone/.ssh/ssh-agent",
       "type": "bind"
     }
   ],
   "containerEnv": {
-    "SSH_AUTH_SOCK": "${remoteEnv:HOME}/.ssh/ssh-agent"
+    "SSH_AUTH_SOCK": "/home/devstone/.ssh/ssh-agent"
   }
 }
