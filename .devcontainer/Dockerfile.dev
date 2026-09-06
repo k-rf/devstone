@@ -49,6 +49,12 @@ RUN mkdir -p /opt/orca \
   && sh /tmp/extract-orca-appimage.sh \
   && rm /tmp/extract-orca-appimage.sh
 
+# difftastic（構文木ベースの横並び diff ツール）
+# ------------------------------------------------------------------------------
+RUN curl -sSL https://github.com/Wilfred/difftastic/releases/latest/download/difft-x86_64-unknown-linux-gnu.tar.gz \
+  | tar -xz -C /usr/local/bin \
+  && chmod +x /usr/local/bin/difft
+
 # ローカルにパッケージのインストール
 # ------------------------------------------------------------------------------
 USER ${REMOTE_USER}
