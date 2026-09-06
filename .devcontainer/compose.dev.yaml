@@ -9,6 +9,7 @@ services:
         - REMOTE_HOME=${ROOT_REMOTE_HOME}
     ports:
       - 2222:2222
+      - 6768:6768
     group_add:
       - root
     env_file:
@@ -40,6 +41,9 @@ services:
       - type: bind
         source: ${HOME}/.config/cursor/auth.json
         target: ${ROOT_REMOTE_HOME}/.config/cursor/auth.json
+      - type: bind
+        source: ${HOME}/.orca/worktrees
+        target: ${ROOT_REMOTE_HOME}/.orca/worktrees
 
       - type: volume
         source: root-bash-history
@@ -47,6 +51,9 @@ services:
       - type: volume
         source: root-vscode-extensions
         target: ${ROOT_REMOTE_HOME}/.vscode-server/extensions
+      - type: volume
+        source: root-orca-config
+        target: ${ROOT_REMOTE_HOME}/.config/orca
 
 networks:
   default:
@@ -57,3 +64,5 @@ volumes:
     name: ${ROOT_BASH_HISTORY_VOLUME_NAME}
   root-vscode-extensions:
     name: ${ROOT_VSCODE_EXTENSIONS_VOLUME_NAME}
+  root-orca-config:
+    name: ${ROOT_ORCA_CONFIG_VOLUME_NAME}

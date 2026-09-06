@@ -4,13 +4,19 @@ set -euo pipefail
 
 LOCAL_HOME=$1
 
+mkdir -p "${HOME}/.ssh"
+chmod 700 "${HOME}/.ssh"
+
+echo "${SSH_PUB_KEY}" >> "${HOME}/.ssh/authorized_keys"
+chmod 600 "${HOME}/.ssh/authorized_keys"
+
 # REMARKS: ホームディレクトリにホストコンピューターと同等のパスで `.claude` を配置するためのシンボリックリンクを作成する。
 sudo mkdir -p "${LOCAL_HOME}"
 sudo ln -sf "${HOME}/.claude" "${LOCAL_HOME}/.claude"
 
 proto install
 
-# Orca SSH relay 等はホーム起点で動くため、ワークスペースの .prototools だけでは proto::detect::failed になり Node/Python 未検出と判定される。
+# REMARKS: Orca SSH relay 等はホーム起点で動くため、ワークスペースの .prototools だけでは proto::detect::failed になり Node/Python 未検出と判定される。
 python "$(dirname "$0")/pin-proto-globals.py" .prototools
 
 pnpm install
@@ -26,9 +32,3 @@ source ${HOME}/.bash_completion.d/moon.sh
 EOF
 
 pnpm exec lefthook install
-
-mkdir -p "${HOME}/.ssh"
-chmod 700 "${HOME}/.ssh"
-
-echo "${SSH_PUB_KEY}" >> "${HOME}/.ssh/authorized_keys"
-chmod 600 "${HOME}/.ssh/authorized_keys"
