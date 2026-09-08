@@ -6,7 +6,7 @@ Conventional Commits は、コミットメッセージに構造化された形�
 ## メッセージフォーマット
 
 ```plaintext
-<type>[optional scope]: <description>
+<type>[optional scope]: [customPrefix] <description>
 
 [optional body]
 

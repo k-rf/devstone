@@ -1,5 +1,6 @@
 {
   "$schema": "../../packages/plugins/claude/commit/schemas/commit.schema.json",
   "language": "ja",
-  "style": "gitmoji"
+  "style": "gitmoji",
+  "customPrefix": "DEV-<issue-number>"
 }

@@ -45,7 +45,7 @@ gitmoji は、コミットメッセージに絵文字プレフィックスを使
 ## メッセージフォーマット
 
 ```plaintext
-<emoji> <件名行>
+<emoji> [customPrefix] <件名行>
 ```
 
 ### 英語の例
