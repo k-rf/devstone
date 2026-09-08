@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/env python
 
 """Pin selected tools from workspace .prototools to proto global config."""
 

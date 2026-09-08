@@ -1,11 +1,12 @@
 {
-  "name": "devstone-dev-server",
+  "name": "devstone-server",
   "remoteUser": "devstone",
   "dockerComposeFile": "../compose.dev.yaml",
   "initializeCommand": ".devcontainer/script/initialize-command.sh",
-  "postCreateCommand": ".devcontainer/script/post-created-command.sh ${localEnv:HOME}",
-  "postStartCommand": ".devcontainer/script/post-start-command.sh",
-  "service": "app",
+  "postCreateCommand": ".devcontainer/server/script/post-created-command.sh ${localEnv:HOME}",
+  "postStartCommand": ".devcontainer/server/script/post-start-command.sh",
+  "service": "server",
+  "runServices": ["server"],
   "features": {
     "ghcr.io/itsmechlark/features/1password": "latest",
     "ghcr.io/devcontainers/features/github-cli": "latest",
