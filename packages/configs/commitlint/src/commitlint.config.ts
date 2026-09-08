@@ -6,7 +6,10 @@ import { typeEnums } from "./type-enum.js";
 const emojis = typeEnums.map((typeEnum) => typeEnum.value).join("|");
 const subjectPattern = (options: { readonly withKey: boolean }) => {
   return Match.value(options).pipe(
-    Match.when({ withKey: true }, () => new RegExp(String.raw`^(${emojis}) (.+-\d+) (.+)$`)),
+    Match.when(
+      { withKey: true },
+      () => new RegExp(String.raw`^(${emojis}) ([A-Z]+-\d+|#\d+) (.+)$`),
+    ),
     Match.when({ withKey: false }, () => new RegExp(String.raw`^(${emojis}) (.+)$`)),
     Match.exhaustive,
   );
@@ -23,8 +26,8 @@ const rules = {
 const config: UserConfig = {
   parserPreset: {
     parserOpts: {
-      headerPattern: subjectPattern({ withKey: false }),
-      headerCorrespondence: ["type", "subject"],
+      headerPattern: subjectPattern({ withKey: true }),
+      headerCorrespondence: ["type", "ticket", "subject"],
     },
   },
   plugins: [
@@ -34,9 +37,20 @@ const config: UserConfig = {
           return Match.value(when).pipe(
             Match.withReturnType<readonly [boolean, string]>(),
             Match.when("always", () => [parsed["ticket"] === undefined, "ticket must be empty"]),
-            Match.when("never", () => [parsed["ticket"] !== undefined, "ticket may not be empty"]),
+            Match.when("never", () => [
+              parsed["ticket"] !== undefined && parsed["ticket"] !== "",
+              "ticket may not be empty",
+            ]),
             Match.orElse(() => [false, "Unknown `when` value"]),
           );
+        },
+        "subject-no-conventional-prefix": (parsed) => {
+          if (typeof parsed["subject"] !== "string") return [true, ""];
+          const isConventional =
+            /^(?:feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\(.*\))?!?:/i.test(
+              parsed["subject"].trim(),
+            );
+          return [!isConventional, "subject must not start with Conventional Commits prefix"];
         },
       },
     },
@@ -45,7 +59,8 @@ const config: UserConfig = {
     "type-enum": rules["type-enum"],
     "type-empty": [RuleConfigSeverity.Error, "never"],
     "subject-empty": [RuleConfigSeverity.Error, "never"],
-    "ticket-empty": [RuleConfigSeverity.Error, "always"],
+    "ticket-empty": [RuleConfigSeverity.Error, "never"],
+    "subject-no-conventional-prefix": [RuleConfigSeverity.Error, "always"],
     "header-full-stop": [RuleConfigSeverity.Error, "never", "."],
   },
 };
