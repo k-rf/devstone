@@ -1,5 +1,6 @@
-#!/bin/sh
-set -eu
+#! /usr/bin/env bash
+
+set -euo pipefail
 
 # AppImage type 2: SquashFS is appended immediately after the ELF,
 # including the section-header table.
