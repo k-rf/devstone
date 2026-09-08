@@ -40,7 +40,20 @@ user-invocable: false
 - **gitmoji**: `references/gitmoji.md` で絵文字の選択とフォーマットを確認する
 - **conventional**: `references/conventional-commits.md` でタイププレフィックスとフォーマットを確認する
 
+### スタイルの統一と混在の禁止
+
+- `commit.json` で指定されたスタイルを遵守し、絵文字と Conventional Commits プレフィックスの併用（例: `✨ feat:`）や、スタイルの混在を禁止する。
+
 ## コミットメッセージのフォーマット
+
+### フォーマット規則
+
+```plaintext
+<prefix> [customPrefix] <件名>
+```
+
+- `customPrefix` が設定されている場合、コミットヘッダーに必ずプレフィックスを含める（例: 課題キーなど）。
+- プレフィックスの値はチケットや作業ブランチ名から取得する。特定できない場合はコミットを作成せずユーザーに確認を求めて停止する。
 
 ### Bash での HEREDOC 形式
 

@@ -50,11 +50,11 @@ allowed-tools: Bash(git *), Read, Glob, Grep, Task, AskUserQuestion
    - コミット後に最終状態を復元する
 4. `package.json` の変更時は `pnpm install` を実行して lockfile を再生成する
 5. HEREDOC 形式でコミットを作成する。
-   `<件名>` は計画のコミット見出し、 `<本文>` は計画の「本文」フィールドに対応する：
+   `<見出し>` は計画のコミット見出し（`<prefix> [customPrefix] <件名>`）、 `<本文>` は計画の「本文」フィールドに対応する：
 
    ```bash
    git commit -m "$(cat <<'EOF'
-   <件名>
+   <見出し>
 
    <本文>
    EOF
