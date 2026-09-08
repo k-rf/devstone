@@ -12,7 +12,7 @@ ENV PATH=${PATH}:${PROTO_HOME}/tools/node/globals/bin:${PROTO_HOME}/shims:${PROT
 # ------------------------------------------------------------------------------
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install -y --no-install-recommends \
-  ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq zip unzip squashfs-tools libatomic1 build-essential bubblewrap \
+  ca-certificates curl gnupg less locales lsb-release openssh-client sudo xz-utils jq zip unzip squashfs-tools libatomic1 build-essential bubblewrap \
   xvfb libgtk-3-0t64 libnss3 libatk1.0-0t64 libatk-bridge2.0-0t64 libgbm1 libasound2t64 \
   libxtst6 libcups2t64 libdrm2 libxkbcommon0 libpango-1.0-0 libcairo2 libatspi2.0-0t64 \
   libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libxrender1 libx11-xcb1 libxcb-dri3-0 libxss1
