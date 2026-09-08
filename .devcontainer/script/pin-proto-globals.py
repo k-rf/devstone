@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+
 """Pin selected tools from workspace .prototools to proto global config."""
 
 from __future__ import annotations

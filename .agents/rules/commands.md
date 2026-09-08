@@ -40,11 +40,12 @@ trigger: always_on
 
 ### コード品質維持
 
-| 用途              | コマンド                  | 補足                                 |
-| :---------------- | :------------------------ | :----------------------------------- |
-| **自動修正**      | `pnpm run lint`           | ESLint による修正を試みます。        |
-| **Markdown 修正** | `pnpm run lint:md`        | Markdown の構文を自動修正します。    |
-| **Git Hooks**     | `lefthook run pre-commit` | コミット前の検証を手動で実行します。 |
+| 用途               | コマンド                  | 補足                                      |
+| :----------------- | :------------------------ | :---------------------------------------- |
+| **自動修正**       | `pnpm run lint`           | ESLint による修正を試みます。             |
+| **Markdown 修正**  | `pnpm run lint:md`        | Markdown の構文を自動修正します。         |
+| **スペルチェック** | `pnpm run lint:spell`     | cspell CLI でワークスペースを検査します。 |
+| **Git Hooks**      | `lefthook run pre-commit` | コミット前の検証を手動で実行します。      |
 
 ## 開発のヒント
 

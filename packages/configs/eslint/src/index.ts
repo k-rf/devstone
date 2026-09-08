@@ -3,7 +3,6 @@ export { react } from "./react.js";
 export { node } from "./node.js";
 export { importConfig } from "./import.js";
 export { sonarjs } from "./sonarjs.js";
-export { cspell } from "./cspell.js";
 export { css } from "./css.js";
 export { markdown } from "./markdown.js";
 export { json } from "./json.js";

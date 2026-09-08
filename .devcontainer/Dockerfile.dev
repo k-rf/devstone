@@ -12,7 +12,10 @@ ENV PATH=${PATH}:${PROTO_HOME}/tools/node/globals/bin:${PROTO_HOME}/shims:${PROT
 # ------------------------------------------------------------------------------
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install -y --no-install-recommends \
-  ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq zip unzip libatomic1 build-essential bubblewrap
+  ca-certificates curl gnupg less locales lsb-release sudo xz-utils jq zip unzip squashfs-tools libatomic1 build-essential bubblewrap \
+  xvfb libgtk-3-0t64 libnss3 libatk1.0-0t64 libatk-bridge2.0-0t64 libgbm1 libasound2t64 \
+  libxtst6 libcups2t64 libdrm2 libxkbcommon0 libpango-1.0-0 libcairo2 libatspi2.0-0t64 \
+  libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libxrender1 libx11-xcb1 libxcb-dri3-0 libxss1
 
 # ユーザー設定
 # ------------------------------------------------------------------------------
@@ -31,9 +34,26 @@ ENV LANG=ja_JP.UTF-8
 # ------------------------------------------------------------------------------
 RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   && mkdir -p /commandhistory ${REMOTE_HOME}/.vscode-server/extensions ${REMOTE_HOME}/.ssh \
+    ${REMOTE_HOME}/.config/orca \
   && touch /commandhistory/.bash_history \
   && chown -R ${REMOTE_USER}:${REMOTE_USER} /commandhistory ${REMOTE_HOME}/.vscode-server ${REMOTE_HOME}/.ssh \
+    ${REMOTE_HOME}/.config \
   && echo ${SNIPPET} >> "${REMOTE_HOME}/.bashrc"
+
+# Orca serve（ヘッドレス。AppImage は実行せず SquashFS として展開する）
+# ------------------------------------------------------------------------------
+COPY script/extract-orca-appimage.sh /tmp/extract-orca-appimage.sh
+RUN mkdir -p /opt/orca \
+  && curl -fL https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage \
+       -o /opt/orca/orca-linux.AppImage \
+  && sh /tmp/extract-orca-appimage.sh \
+  && rm /tmp/extract-orca-appimage.sh
+
+# difftastic（構文木ベースの横並び diff ツール）
+# ------------------------------------------------------------------------------
+RUN curl -sSL https://github.com/Wilfred/difftastic/releases/latest/download/difft-x86_64-unknown-linux-gnu.tar.gz \
+  | tar -xz -C /usr/local/bin \
+  && chmod +x /usr/local/bin/difft
 
 # ローカルにパッケージのインストール
 # ------------------------------------------------------------------------------

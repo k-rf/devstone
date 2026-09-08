@@ -2,7 +2,6 @@ import { defineConfig } from "eslint/config";
 
 import {
   base,
-  cspell,
   functional,
   importConfig,
   json,
@@ -23,7 +22,6 @@ const config = defineConfig(
     },
   },
   base,
-  cspell,
   functional,
   importConfig,
   json,

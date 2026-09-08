@@ -12,7 +12,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
 
-  "eslint.rules.customizations": [{ "rule": "@cspell/spellchecker", "severity": "off" }],
   "eslint.useFlatConfig": true,
   "eslint.workingDirectories": [{ "mode": "auto" }],
 

@@ -28,11 +28,6 @@
       "dev": "./src/node.ts",
       "default": "./dist/node.js"
     },
-    "./cspell": {
-      "types": "./dist/cspell.d.ts",
-      "dev": "./src/cspell.ts",
-      "default": "./dist/cspell.js"
-    },
     "./import": {
       "types": "./dist/import.d.ts",
       "dev": "./src/import.ts",
@@ -91,7 +86,6 @@
     "lint": "eslint --fix --max-warnings 0"
   },
   "dependencies": {
-    "@cspell/eslint-plugin": "10.0.0",
     "@eslint/css": "1.1.0",
     "@eslint/js": "10.0.1",
     "@eslint/json": "1.2.0",
