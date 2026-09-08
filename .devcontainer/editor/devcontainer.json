@@ -1,14 +1,14 @@
 {
-  "name": "devstone",
+  "name": "devstone-editor",
   "remoteUser": "devstone",
-  "dockerComposeFile": "./compose.dev.yaml",
+  "dockerComposeFile": "../compose.dev.yaml",
   "initializeCommand": ".devcontainer/script/initialize-command.sh",
-  "postCreateCommand": ".devcontainer/script/post-created-command.sh ${localEnv:HOME}",
-  "service": "app",
+  "postCreateCommand": ".devcontainer/editor/script/post-created-command.sh ${localEnv:HOME}",
+  "service": "editor",
+  "runServices": ["editor"],
   "features": {
     "ghcr.io/itsmechlark/features/1password": "latest",
     "ghcr.io/devcontainers/features/github-cli": "latest",
-    "ghcr.io/devcontainers/features/sshd": "latest",
     "ghcr.io/devcontainers/features/docker-outside-of-docker": {
       "version": "latest",
       "moby": false
@@ -63,7 +63,10 @@
         "yoavbls.pretty-ts-errors",
         "Yukai.map-replace-js",
         "yzhang.markdown-all-in-one"
-      ]
+      ],
+      "settings": {
+        "oxc.path.node": "${containerEnv:ROOT_REMOTE_HOME}/.proto/bin/node"
+      }
     }
   }
 }

@@ -3,6 +3,8 @@
 set -euo pipefail
 
 LOCAL_HOME=$1
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+SHARED_SCRIPT_DIR=$(cd "${SCRIPT_DIR}/../../script" && pwd)
 
 mkdir -p "${HOME}/.ssh"
 chmod 700 "${HOME}/.ssh"
@@ -20,7 +22,7 @@ sudo git config --system alias.dft "-c diff.external=\"difft --color always\" -c
 proto install
 
 # REMARKS: Orca SSH relay 等はホーム起点で動くため、ワークスペースの .prototools だけでは proto::detect::failed になり Node/Python 未検出と判定される。
-python "$(dirname "$0")/pin-proto-globals.py" .prototools
+python "${SHARED_SCRIPT_DIR}/pin-proto-globals.py" .prototools
 
 pnpm install
 moon run :build

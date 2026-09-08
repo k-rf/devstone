@@ -1,56 +1,99 @@
-services:
-  app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile.dev
-      args:
-        - REMOTE_USER=${ROOT_REMOTE_USER}
-        - REMOTE_WORKSPACES=${ROOT_REMOTE_WORKSPACES}
-        - REMOTE_HOME=${ROOT_REMOTE_HOME}
-    ports:
-      - 2222:2222
-      - 6768:6768
-    group_add:
-      - root
-    env_file:
-      - .env
-      - .env.local
-    container_name: ${ROOT_CONTAINER_NAME}
-    working_dir: ${ROOT_REMOTE_WORKSPACES}
-    user: ${ROOT_REMOTE_USER}
-    tty: true
-    volumes:
-      - type: bind
-        source: ..
-        target: ${PROJECT_ROOT}
-      - type: bind
-        source: ${HOME}/.claude
-        target: ${ROOT_REMOTE_HOME}/.claude
-      - type: bind
-        source: ${HOME}/.codex
-        target: ${ROOT_REMOTE_HOME}/.codex
-      - type: bind
-        source: ${HOME}/.cursor
-        target: ${ROOT_REMOTE_HOME}/.cursor
-      - type: bind
-        source: ${HOME}/.gemini
-        target: ${ROOT_REMOTE_HOME}/.gemini
-      - type: bind
-        source: ${HOME}/.claude.json
-        target: ${ROOT_REMOTE_HOME}/.claude.json
-      - type: bind
-        source: ${HOME}/.config/cursor/auth.json
-        target: ${ROOT_REMOTE_HOME}/.config/cursor/auth.json
-      - type: bind
-        source: ${HOME}/.orca/worktrees
-        target: ${ROOT_REMOTE_HOME}/.orca/worktrees
+x-common: &common
+  build:
+    context: .
+    dockerfile: ./Dockerfile.dev
+    args:
+      - REMOTE_USER=${ROOT_REMOTE_USER}
+      - REMOTE_WORKSPACES=${ROOT_REMOTE_WORKSPACES}
+      - REMOTE_HOME=${ROOT_REMOTE_HOME}
+  group_add:
+    - root
+  env_file:
+    - .env
+    - .env.local
+  working_dir: ${ROOT_REMOTE_WORKSPACES}
+  user: ${ROOT_REMOTE_USER}
+  tty: true
 
-      - type: volume
-        source: root-bash-history
-        target: /commandhistory
+x-volume-repo: &volume-repo
+  type: bind
+  source: ..
+  target: ${PROJECT_ROOT}
+
+x-volume-claude: &volume-claude
+  type: bind
+  source: ${HOME}/.claude
+  target: ${ROOT_REMOTE_HOME}/.claude
+
+x-volume-codex: &volume-codex
+  type: bind
+  source: ${HOME}/.codex
+  target: ${ROOT_REMOTE_HOME}/.codex
+
+x-volume-cursor: &volume-cursor
+  type: bind
+  source: ${HOME}/.cursor
+  target: ${ROOT_REMOTE_HOME}/.cursor
+
+x-volume-gemini: &volume-gemini
+  type: bind
+  source: ${HOME}/.gemini
+  target: ${ROOT_REMOTE_HOME}/.gemini
+
+x-volume-claude-json: &volume-claude-json
+  type: bind
+  source: ${HOME}/.claude.json
+  target: ${ROOT_REMOTE_HOME}/.claude.json
+
+x-volume-cursor-auth: &volume-cursor-auth
+  type: bind
+  source: ${HOME}/.config/cursor/auth.json
+  target: ${ROOT_REMOTE_HOME}/.config/cursor/auth.json
+
+x-volume-orca-worktrees: &volume-orca-worktrees
+  type: bind
+  source: ${HOME}/.orca/worktrees
+  target: ${ROOT_REMOTE_HOME}/.orca/worktrees
+
+x-volume-bash-history: &volume-bash-history
+  type: volume
+  source: root-bash-history
+  target: /commandhistory
+
+services:
+  editor:
+    <<: *common
+    container_name: ${ROOT_CONTAINER_NAME}-editor
+    volumes:
+      - *volume-repo
+      - *volume-claude
+      - *volume-codex
+      - *volume-cursor
+      - *volume-gemini
+      - *volume-claude-json
+      - *volume-cursor-auth
+      - *volume-orca-worktrees
+      - *volume-bash-history
       - type: volume
         source: root-vscode-extensions
         target: ${ROOT_REMOTE_HOME}/.vscode-server/extensions
+
+  server:
+    <<: *common
+    container_name: ${ROOT_CONTAINER_NAME}-server
+    ports:
+      - 2222:2222
+      - 6768:6768
+    volumes:
+      - *volume-repo
+      - *volume-claude
+      - *volume-codex
+      - *volume-cursor
+      - *volume-gemini
+      - *volume-claude-json
+      - *volume-cursor-auth
+      - *volume-orca-worktrees
+      - *volume-bash-history
       - type: volume
         source: root-orca-config
         target: ${ROOT_REMOTE_HOME}/.config/orca
