@@ -66,5 +66,8 @@ export const unicorn = defineConfig({
 
     /** @remarks reduceの使用を許可する */
     "unicorn/no-array-reduce": "off",
+
+    /** @remarks 命令的ループを禁止し、高階関数による処理を推奨するため無効化する */
+    "unicorn/no-array-for-each": "off",
   },
 });

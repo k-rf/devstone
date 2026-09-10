@@ -17,11 +17,11 @@ export const checkExportDeclarations = (
 ): void => {
   match(declaration)
     .with({ type: AST_NODE_TYPES.VariableDeclaration }, ({ declarations }) => {
-      for (const { id } of declarations) {
+      declarations.forEach(({ id }) => {
         if (id.type === AST_NODE_TYPES.Identifier) {
           reportMissingRoleSuffix(context, id, id.name, roleSuffix);
         }
-      }
+      });
     })
     .with(
       { type: AST_NODE_TYPES.FunctionDeclaration, id: P.nonNullable },
