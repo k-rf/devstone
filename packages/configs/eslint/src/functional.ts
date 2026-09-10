@@ -19,5 +19,10 @@ export const functional = defineConfig({
      * @remarks オブジェクト・配列への直接的な書き換えや追加を禁止する
      */
     "functional/immutable-data": "error",
+
+    /**
+     * @remarks 命令的なループ処理を排除し、高階関数による宣言的処理を強制する
+     */
+    "functional/no-loop-statements": "error",
   },
 });
