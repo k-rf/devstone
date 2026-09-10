@@ -83,10 +83,10 @@
       "dev": "./src/export-role-suffixes.ts",
       "default": "./dist/export-role-suffixes.js"
     },
-    "./hexagonal-boundary": {
-      "types": "./dist/hexagonal-boundary.d.ts",
-      "dev": "./src/hexagonal-boundary.ts",
-      "default": "./dist/hexagonal-boundary.js"
+    "./layer-boundary": {
+      "types": "./dist/layer-boundary.d.ts",
+      "dev": "./src/layer-boundary.ts",
+      "default": "./dist/layer-boundary.js"
     }
   },
   "scripts": {

@@ -3,7 +3,7 @@ import { defineConfig } from "eslint/config";
 /**
  * Core 層から Adapter 層への依存、および Core 内のレイヤー違反を禁止する境界設定。
  */
-export const hexagonalBoundary = defineConfig({
+export const layerBoundary = defineConfig({
   files: ["**/src/core/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   rules: {
     "import-x/no-restricted-paths": [
