@@ -15,12 +15,12 @@ export const checkExportSpecifiers = (
   specifiers: readonly TSESTree.ExportSpecifier[],
   roleSuffix: string,
 ): void => {
-  for (const specifier of specifiers) {
+  specifiers.forEach((specifier) => {
     match(specifier)
       .with({ exportKind: "type" }, noop)
       .with({ exported: { type: AST_NODE_TYPES.Identifier } }, ({ exported }) => {
         reportMissingRoleSuffix(context, exported, exported.name, roleSuffix);
       })
       .otherwise(noop);
-  }
+  });
 };
