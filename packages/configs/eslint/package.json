@@ -82,6 +82,11 @@
       "types": "./dist/export-role-suffixes.d.ts",
       "dev": "./src/export-role-suffixes.ts",
       "default": "./dist/export-role-suffixes.js"
+    },
+    "./layer-boundary": {
+      "types": "./dist/layer-boundary.d.ts",
+      "dev": "./src/layer-boundary.ts",
+      "default": "./dist/layer-boundary.js"
     }
   },
   "scripts": {

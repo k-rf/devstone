@@ -18,7 +18,7 @@
 
 | ルール名 / 識別子                        | カテゴリ                       | 定義元ドキュメント                                              | 実装方針                                                                    |
 | :--------------------------------------- | :----------------------------- | :-------------------------------------------------------------- | :-------------------------------------------------------------------------- |
-| `devstone/hexagonal-boundary`            | Architecture & Boundary        | [architecture.md][arch_doc], [design-principles.md][design_doc] | `import/no-restricted-paths`                                                |
+| `devstone/layer-boundary`                | Architecture & Boundary        | [architecture.md][arch_doc], [design-principles.md][design_doc] | `import/no-restricted-paths`                                                |
 | `devstone/outbound-partitioning`         | Architecture & Boundary        | [architecture.md][arch_doc]                                     | カスタムASTルール (ファイルパス検証)                                        |
 | `devstone/no-core-side-effects`          | Architecture & Boundary        | [design-principles.md][design_doc]                              | `no-restricted-globals`/`no-restricted-syntax` (非決定論的処理の禁止を含む) |
 | `devstone/logic-free-inbound-adapters`   | Architecture & Boundary        | [design-principles.md][design_doc]                              | `no-restricted-syntax` (条件分岐の制限)                                     |
@@ -53,7 +53,7 @@
 
 ### Category 1: Architecture & Boundary Rules
 
-#### 3.1.1. `devstone/hexagonal-boundary`
+#### 3.1.1. `devstone/layer-boundary`
 
 - **カテゴリ**: Architecture & Boundary Rules
 - **目的 / 概要**: ビジネスロジックを保持する Core 層 (`core/domain`, `core/application`,
