@@ -13,7 +13,7 @@ import {
 } from "./src/index.js";
 
 const config = defineConfig(
-  { ignores: ["dist/"] },
+  { ignores: ["coverage/", "dist/"] },
   {
     languageOptions: {
       parserOptions: {

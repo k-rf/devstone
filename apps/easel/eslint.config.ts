@@ -1,5 +1,6 @@
 import {
   base,
+  exportRoleSuffixes,
   functional,
   importConfig,
   jsdoc,
@@ -23,6 +24,7 @@ const config = defineConfig(
     },
   },
   base,
+  exportRoleSuffixes,
   functional,
   importConfig,
   jsdoc,
