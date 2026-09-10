@@ -27,6 +27,7 @@ const config: KnipConfig = {
       project: ["src/**/*.ts"],
     },
     "packages/configs/eslint": {
+      entry: ["src/**/*.spec.ts"],
       project: ["src/**/*.ts"],
     },
     "packages/configs/*": {},
