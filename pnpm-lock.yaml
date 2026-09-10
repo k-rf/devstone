@@ -202,7 +202,7 @@ importers:
         version: 10.0.0(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       eslint-plugin-import-x:
         specifier: 4.16.2
-        version: 4.16.2(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
+        version: 4.16.2(@typescript-eslint/utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       eslint-plugin-jsdoc:
         specifier: 62.9.0
         version: 62.9.0(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
@@ -224,10 +224,16 @@ importers:
       globals:
         specifier: 17.5.0
         version: 17.5.0
+      ts-pattern:
+        specifier: 5.9.0
+        version: 5.9.0
       typescript-eslint:
         specifier: 8.59.1
         version: 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
     devDependencies:
+      '@typescript-eslint/utils':
+        specifier: 8.59.1
+        version: 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       '@typescript/native':
         specifier: npm:typescript@7.0.2
         version: typescript@7.0.2
@@ -5090,6 +5096,9 @@ packages:
     peerDependencies:
       typescript: '>=4.0.0'
 
+  ts-pattern@5.9.0:
+    resolution: {integrity: sha512-6s5V71mX8qBUmlgbrfL33xDUwO0fq48rxAu2LBE11WBeGdpCPOsXksQbZJHvHwhrd3QjUusd3mAOM5Gg0mFBLg==}
+
   tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
@@ -8147,7 +8156,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2):
+  eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2))(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       '@package-json/types': 0.0.12
       '@typescript-eslint/types': 8.65.0
@@ -8161,7 +8170,7 @@ snapshots:
       stable-hash-x: 0.2.0
       unrs-resolver: 1.12.2
     optionalDependencies:
-      '@typescript-eslint/utils': 8.65.0(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
+      '@typescript-eslint/utils': 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -10493,6 +10502,8 @@ snapshots:
     dependencies:
       picomatch: 4.0.7
       typescript: '@typescript/typescript6@6.0.2'
+
+  ts-pattern@5.9.0: {}
 
   tslib@1.14.1: {}
 
