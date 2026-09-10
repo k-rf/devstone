@@ -1,6 +1,7 @@
 import {
   base,
   functional,
+  hexagonalBoundary,
   importConfig,
   jsdoc,
   json,
@@ -22,6 +23,7 @@ const config = defineConfig(
   },
   base,
   functional,
+  hexagonalBoundary,
   importConfig,
   jsdoc,
   json,
@@ -29,33 +31,6 @@ const config = defineConfig(
   noCoreSideEffects,
   sonarjs,
   unicorn,
-  {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    rules: {
-      "import-x/no-restricted-paths": [
-        "error",
-        {
-          zones: [
-            {
-              target: "./src/core",
-              from: "./src/adapter",
-              message: "Core層はAdapter層に依存してはいけません。",
-            },
-            {
-              target: "./src/core/domain",
-              from: "./src/core/application",
-              message: "Domain層はApplication層に依存してはいけません。",
-            },
-            {
-              target: "./src/core/domain",
-              from: "./src/core/port",
-              message: "Domain層はPort層に依存してはいけません。",
-            },
-          ],
-        },
-      ],
-    },
-  },
 );
 
 export default config;
