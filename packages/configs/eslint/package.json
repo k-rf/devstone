@@ -87,6 +87,11 @@
       "types": "./dist/layer-boundary.d.ts",
       "dev": "./src/layer-boundary.ts",
       "default": "./dist/layer-boundary.js"
+    },
+    "./effect-assert-error-flip": {
+      "types": "./dist/effect-assert-error-flip.d.ts",
+      "dev": "./src/effect-assert-error-flip.ts",
+      "default": "./dist/effect-assert-error-flip.js"
     }
   },
   "scripts": {

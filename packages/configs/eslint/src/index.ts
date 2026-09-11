@@ -13,3 +13,4 @@ export { namingConvention } from "./naming-convention.js";
 export { noCoreSideEffects } from "./no-core-side-effects.js";
 export { exportRoleSuffixes } from "./export-role-suffixes.js";
 export { layerBoundary } from "./layer-boundary.js";
+export { effectAssertErrorFlip } from "./effect-assert-error-flip.js";

@@ -91,10 +91,9 @@ describe("異常系", () => {
       return yield* port.get("test-key");
     }).pipe(Effect.provide(layer));
 
-    const result = Effect.runPromiseExit(program);
-    await expect(result).resolves.toMatchObject({
-      _tag: "Failure",
-    });
+    const error = await Effect.runPromise(Effect.flip(program));
+
+    expect(error._tag).toBe("CacheError");
   });
 
   it("put: エラーが発生した場合、CacheError を返すこと", async () => {
@@ -108,9 +107,8 @@ describe("異常系", () => {
       yield* port.put("test-key", "test-value");
     }).pipe(Effect.provide(layer));
 
-    const result = Effect.runPromiseExit(program);
-    await expect(result).resolves.toMatchObject({
-      _tag: "Failure",
-    });
+    const error = await Effect.runPromise(Effect.flip(program));
+
+    expect(error._tag).toBe("CacheError");
   });
 });
