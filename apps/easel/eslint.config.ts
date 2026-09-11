@@ -1,5 +1,6 @@
 import {
   base,
+  effectAssertErrorFlip,
   exportRoleSuffixes,
   functional,
   importConfig,
@@ -25,6 +26,7 @@ const config = defineConfig(
     },
   },
   base,
+  effectAssertErrorFlip,
   exportRoleSuffixes,
   functional,
   importConfig,

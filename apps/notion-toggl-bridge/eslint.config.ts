@@ -1,5 +1,6 @@
 import {
   base,
+  effectAssertErrorFlip,
   functional,
   importConfig,
   jsdoc,
@@ -22,6 +23,7 @@ const config = defineConfig(
     },
   },
   base,
+  effectAssertErrorFlip,
   functional,
   importConfig,
   jsdoc,
