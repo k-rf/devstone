@@ -26,12 +26,9 @@
       "type": "bind"
     },
     {
-      "source": "${localEnv:SSH_AUTH_SOCK}",
-      "target": "/home/devstone/.ssh/ssh-agent",
+      "source": "${localEnv:HOME}/.ssh/agent",
+      "target": "/home/devstone/.ssh/agent",
       "type": "bind"
     }
-  ],
-  "containerEnv": {
-    "SSH_AUTH_SOCK": "/home/devstone/.ssh/ssh-agent"
-  }
+  ]
 }

@@ -12,6 +12,25 @@ chmod 700 "${HOME}/.ssh"
 echo "${SSH_PUB_KEY}" >> "${HOME}/.ssh/authorized_keys"
 chmod 600 "${HOME}/.ssh/authorized_keys"
 
+# REMARKS: ~/.bashrc の先頭（非対話ガードの前）に SSH Agent ソケット自動検出スクリプトを挿入する
+if ! grep -q "SSH Agent Socket Auto-Discovery" "${HOME}/.bashrc"; then
+  TEMP_RC=$(mktemp)
+  cat <<'EOF' > "${TEMP_RC}"
+# === SSH Agent Socket Auto-Discovery ===
+# ホストからマウントされた agent ディレクトリから最新の有効ソケットを検出して設定する
+AGENT_DIR="/home/devstone/.ssh/agent"
+if [ -d "$AGENT_DIR" ]; then
+  LATEST_SOCK=$(find "$AGENT_DIR" -maxdepth 2 -type s -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -f2- -d" ")
+  if [ -n "$LATEST_SOCK" ]; then
+    export SSH_AUTH_SOCK="$LATEST_SOCK"
+  fi
+fi
+
+EOF
+  cat "${HOME}/.bashrc" >> "${TEMP_RC}"
+  mv "${TEMP_RC}" "${HOME}/.bashrc"
+fi
+
 # REMARKS: ホームディレクトリにホストコンピューターと同等のパスで `.claude` を配置するためのシンボリックリンクを作成する。
 sudo mkdir -p "${LOCAL_HOME}"
 sudo ln -sf "${HOME}/.claude" "${LOCAL_HOME}/.claude"
