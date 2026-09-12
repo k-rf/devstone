@@ -92,6 +92,11 @@
       "types": "./dist/effect-assert-error-flip.d.ts",
       "dev": "./src/effect-assert-error-flip.ts",
       "default": "./dist/effect-assert-error-flip.js"
+    },
+    "./no-throw-in-production": {
+      "types": "./dist/no-throw-in-production.d.ts",
+      "dev": "./src/no-throw-in-production.ts",
+      "default": "./dist/no-throw-in-production.js"
     }
   },
   "scripts": {

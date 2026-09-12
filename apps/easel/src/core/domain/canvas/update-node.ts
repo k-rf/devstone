@@ -54,11 +54,10 @@ if (import.meta.vitest) {
       const result = Effect.runSync(program);
       const foundNode = result.nodes?.find((n) => n.id === "node-1");
       expect(foundNode).toBeDefined();
-      if (foundNode?.type === "text") {
-        expect(foundNode.text).toBe("Updated");
-      } else {
-        throw new Error("expected text node");
-      }
+      expect(foundNode).toMatchObject({
+        type: "text",
+        text: "Updated",
+      });
     });
   });
 
