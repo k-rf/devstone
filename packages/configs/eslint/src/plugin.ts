@@ -1,6 +1,7 @@
 import { type ESLint } from "eslint";
 
 import { exportRoleSuffixesRule } from "./rules/export-role-suffixes/index.js";
+import { pathNamingConventionsRule } from "./rules/path-naming-conventions/index.js";
 
 /**
  * Devstone 固有のカスタム ESLint ルールを提供するプラグイン。
@@ -13,5 +14,7 @@ export const plugin: ESLint.Plugin = {
   rules: {
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
     "export-role-suffixes": exportRoleSuffixesRule,
+    // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
+    "path-naming-conventions": pathNamingConventionsRule,
   },
 };
