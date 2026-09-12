@@ -10,6 +10,7 @@ import {
   namingConvention,
   noCoreSideEffects,
   noThrowInProduction,
+  outboundPartitioning,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -35,6 +36,7 @@ const config = defineConfig(
   namingConvention,
   noCoreSideEffects,
   noThrowInProduction,
+  outboundPartitioning,
   sonarjs,
   unicorn,
 );
