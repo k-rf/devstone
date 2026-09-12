@@ -8,6 +8,7 @@ import {
   layerBoundary,
   namingConvention,
   noCoreSideEffects,
+  outboundPartitioning,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -31,6 +32,7 @@ const config = defineConfig(
   layerBoundary,
   namingConvention,
   noCoreSideEffects,
+  outboundPartitioning,
   sonarjs,
   unicorn,
 );
