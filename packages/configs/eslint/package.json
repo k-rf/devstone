@@ -83,6 +83,11 @@
       "dev": "./src/export-role-suffixes.ts",
       "default": "./dist/export-role-suffixes.js"
     },
+    "./path-naming-conventions": {
+      "types": "./dist/path-naming-conventions.d.ts",
+      "dev": "./src/path-naming-conventions.ts",
+      "default": "./dist/path-naming-conventions.js"
+    },
     "./layer-boundary": {
       "types": "./dist/layer-boundary.d.ts",
       "dev": "./src/layer-boundary.ts",
