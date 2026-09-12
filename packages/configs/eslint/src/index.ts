@@ -12,5 +12,6 @@ export { functional } from "./functional.js";
 export { namingConvention } from "./naming-convention.js";
 export { noCoreSideEffects } from "./no-core-side-effects.js";
 export { exportRoleSuffixes } from "./export-role-suffixes.js";
+export { pathNamingConventions } from "./path-naming-conventions.js";
 export { layerBoundary } from "./layer-boundary.js";
 export { effectAssertErrorFlip } from "./effect-assert-error-flip.js";
