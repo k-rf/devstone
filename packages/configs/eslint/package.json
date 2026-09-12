@@ -92,6 +92,11 @@
       "types": "./dist/effect-assert-error-flip.d.ts",
       "dev": "./src/effect-assert-error-flip.ts",
       "default": "./dist/effect-assert-error-flip.js"
+    },
+    "./outbound-partitioning": {
+      "types": "./dist/outbound-partitioning.d.ts",
+      "dev": "./src/outbound-partitioning.ts",
+      "default": "./dist/outbound-partitioning.js"
     }
   },
   "scripts": {
