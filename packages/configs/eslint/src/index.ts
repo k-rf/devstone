@@ -10,6 +10,7 @@ export { layerBoundary } from "./layer-boundary.js";
 export { markdown } from "./markdown.js";
 export { namingConvention } from "./naming-convention.js";
 export { noCoreSideEffects } from "./no-core-side-effects.js";
+export { logicFreeInboundAdapters } from "./logic-free-inbound-adapters.js";
 export { noThrowInProduction } from "./no-throw-in-production.js";
 export { node } from "./node.js";
 export { react } from "./react.js";
