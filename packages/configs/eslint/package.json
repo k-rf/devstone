@@ -97,6 +97,11 @@
       "types": "./dist/logic-free-inbound-adapters.d.ts",
       "dev": "./src/logic-free-inbound-adapters.ts",
       "default": "./dist/logic-free-inbound-adapters.js"
+    },
+    "./no-throw-in-production": {
+      "types": "./dist/no-throw-in-production.d.ts",
+      "dev": "./src/no-throw-in-production.ts",
+      "default": "./dist/no-throw-in-production.js"
     }
   },
   "scripts": {

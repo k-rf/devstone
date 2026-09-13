@@ -9,6 +9,7 @@ import {
   logicFreeInboundAdapters,
   namingConvention,
   noCoreSideEffects,
+  noThrowInProduction,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -33,6 +34,7 @@ const config = defineConfig(
   logicFreeInboundAdapters,
   namingConvention,
   noCoreSideEffects,
+  noThrowInProduction,
   sonarjs,
   unicorn,
 );
