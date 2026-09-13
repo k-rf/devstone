@@ -1,5 +1,7 @@
 import { defineConfig } from "eslint/config";
 
+import { logicFreeInboundAdapters as logicFreeInboundAdaptersRestrictedSyntax } from "./no-restricted-syntax/presets/logic-free-inbound-adapters.js";
+
 /**
  * Inbound Adapter 層での命令的な条件分岐を禁止する設定。
  *
@@ -10,18 +12,6 @@ export const logicFreeInboundAdapters = defineConfig({
   files: ["**/src/adapter/inbound/**/*.ts"],
   ignores: ["**/*.{spec,test}.ts", "**/*.middleware.ts"],
   rules: {
-    "no-restricted-syntax": [
-      "error",
-      {
-        selector: "IfStatement",
-        message:
-          "Inbound Adapter で if 文を使わないでください。検証は middleware、制御フローは Effect パイプラインまたは Workflow に委譲してください。",
-      },
-      {
-        selector: "SwitchStatement",
-        message:
-          "Inbound Adapter で switch 文を使わないでください。検証は middleware、制御フローは Effect パイプラインまたは Workflow に委譲してください。",
-      },
-    ],
+    "no-restricted-syntax": ["error", ...logicFreeInboundAdaptersRestrictedSyntax],
   },
 });

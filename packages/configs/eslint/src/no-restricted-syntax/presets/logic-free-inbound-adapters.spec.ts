@@ -2,7 +2,7 @@ import { Linter } from "eslint";
 import { parser } from "typescript-eslint";
 import { describe, expect, it } from "vitest";
 
-import { logicFreeInboundAdapters } from "./logic-free-inbound-adapters.js";
+import { logicFreeInboundAdapters } from "../../logic-free-inbound-adapters.js";
 
 const linter = new Linter();
 
