@@ -13,6 +13,7 @@ import {
   noCoreSideEffects,
   noThrowInProduction,
   node,
+  outboundPartitioning,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -41,6 +42,7 @@ const config = defineConfig(
   noCoreSideEffects,
   noThrowInProduction,
   node,
+  outboundPartitioning,
   sonarjs,
   unicorn,
 );
