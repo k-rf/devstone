@@ -14,6 +14,7 @@ export { noCoreSideEffects } from "./no-core-side-effects.js";
 export { noThrowInProduction } from "./no-throw-in-production.js";
 export { node } from "./node.js";
 export { outboundPartitioning } from "./outbound-partitioning.js";
+export { pathNamingConventions } from "./path-naming-conventions.js";
 export { react } from "./react.js";
 export { sonarjs } from "./sonarjs.js";
 export { unicorn } from "./unicorn.js";
