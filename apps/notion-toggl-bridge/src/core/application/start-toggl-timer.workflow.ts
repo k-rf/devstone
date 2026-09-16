@@ -12,7 +12,7 @@ import { TimeTrackerPort } from "../port/outbound/toggl/time-tracker.port";
  * @param timeBlockId - ボタンが押下されたタイムブロックのページ ID
  * @returns 処理結果を示す Effect
  */
-export const startTogglTimerService = (todoPageId: TaskBoardItemId, timeBlockId: string) =>
+export const startTogglTimerWorkflow = (todoPageId: TaskBoardItemId, timeBlockId: string) =>
   Effect.gen(function* () {
     const taskBoard = yield* TaskBoardPort;
     const timeTracker = yield* TimeTrackerPort;

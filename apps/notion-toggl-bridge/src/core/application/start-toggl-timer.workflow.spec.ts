@@ -6,7 +6,7 @@ import { TaskBoardPort } from "../port/outbound/notion/task-board.port";
 import { NotificationPort } from "../port/outbound/slack/notification.port";
 import { TimeTrackerPort } from "../port/outbound/toggl/time-tracker.port";
 
-import { startTogglTimerService } from "./start-toggl-timer.service";
+import { startTogglTimerWorkflow } from "./start-toggl-timer.workflow";
 
 describe("正常系", () => {
   it("タスクが見つかった場合、タイマーを開始すること", async () => {
@@ -39,7 +39,7 @@ describe("正常系", () => {
 
     // Act
     await Effect.runPromise(
-      startTogglTimerService(mockItem.id, "block-123").pipe(Effect.provide(layer)),
+      startTogglTimerWorkflow(mockItem.id, "block-123").pipe(Effect.provide(layer)),
     );
 
     // Assert
@@ -77,7 +77,7 @@ describe("異常系", () => {
 
     // Act
     const action = Effect.runPromise(
-      startTogglTimerService(TaskBoardItemId.make("page-123"), "block-123").pipe(
+      startTogglTimerWorkflow(TaskBoardItemId.make("page-123"), "block-123").pipe(
         Effect.provide(layer),
       ),
     );

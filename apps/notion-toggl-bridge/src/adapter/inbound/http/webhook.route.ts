@@ -2,7 +2,7 @@ import { effectValidator } from "@hono/effect-validator";
 import { Effect, Layer, Schema } from "effect";
 import { Hono } from "hono";
 
-import { startTogglTimerService } from "../../../core/application/start-toggl-timer.service";
+import { startTogglTimerWorkflow } from "../../../core/application/start-toggl-timer.workflow";
 import { TaskBoardItemId } from "../../../core/domain/task-board-item-id";
 import { KvAdapterLive } from "../../outbound/cloudflare/kv.adapter";
 import { NotionAdapterLive } from "../../outbound/notion/notion.adapter";
@@ -50,7 +50,7 @@ webhookRoute.post(
       // バックグラウンド実行
       c.executionCtx.waitUntil(
         Effect.runPromise(
-          startTogglTimerService(todoPageId, payload.data.id).pipe(
+          startTogglTimerWorkflow(todoPageId, payload.data.id).pipe(
             Effect.provide(mainLayer),
             Effect.catchAllCause((cause) => {
               console.error("Background task failed:", cause);
