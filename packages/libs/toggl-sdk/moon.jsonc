@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "libs-toggl-sdk",
+  "layer": "library",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "tags": ["testable"],
+
+  "project": {
+    "title": "libs/toggl-sdk",
+    "description": "Toggl Track API の SDK パッケージです。"
+  },
+
+  "tasks": {
+    "test": {
+      "command": "pnpm run test",
+      "outputs": ["coverage/**"]
+    }
+  }
+}
