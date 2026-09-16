@@ -29,17 +29,23 @@ describe("許可する", () => {
   it.each([
     "apps/example/src/core/port/outbound/example.port.ts",
     "apps/example/src/core/port/repository/example.port.tsx",
+    "apps/example/src/core/port/repository/example.repository.ts",
     "apps/example/src/core/application/example.workflow.ts",
     "apps/example/src/core/application/example.activity.ts",
     "apps/example/src/core/application/example.input.ts",
     "apps/example/src/core/application/example.output.ts",
     "apps/example/src/adapter/outbound/example.adapter.ts",
     "apps/example/src/adapter/outbound/example.payload.ts",
+    "apps/example/src/adapter/outbound/example.mapper.ts",
     "apps/example/src/adapter/repository/example.repository.ts",
     "apps/example/src/adapter/repository/example.record.ts",
     "apps/example/src/adapter/inbound/example.handler.ts",
     "apps/example/src/adapter/inbound/example.payload.ts",
     "apps/example/src/adapter/inbound/example.route.ts",
+    "apps/example/src/adapter/inbound/example.middleware.ts",
+    "apps/example/src/adapter/inbound/example.command.ts",
+    "apps/example/src/adapter/inbound/example.option.ts",
+    "apps/example/src/adapter/inbound/example.options.ts",
   ])("%s を許可すること", (filename) => {
     expect(lint(filename)).toEqual([]);
   });
@@ -52,6 +58,8 @@ describe("除外する", () => {
     "apps/example/src/core/application/index.ts",
     "apps/example/src/core/application/preview.tsx",
     "apps/example/src/core/application/types.ts",
+    "apps/example/src/adapter/inbound/cli/options.ts",
+    "apps/example/src/adapter/inbound/cli/commands.ts",
   ])("%s を検査しないこと", (filename) => {
     expect(lint(filename)).toEqual([]);
   });
@@ -69,19 +77,20 @@ describe("報告する", () => {
     },
     {
       filename: "apps/example/src/adapter/outbound/example.client.ts",
-      suffixes: ".adapter.ts, .payload.ts",
+      suffixes: ".adapter.ts, .payload.ts, .mapper.ts",
     },
     {
       filename: "apps/example/src/adapter/repository/example.adapter.ts",
       suffixes: ".repository.ts, .record.ts",
     },
     {
-      filename: "apps/example/src/adapter/inbound/example.middleware.ts",
-      suffixes: ".handler.ts, .payload.ts, .route.ts",
+      filename: "apps/example/src/adapter/inbound/example.controller.ts",
+      suffixes:
+        ".handler.ts, .payload.ts, .route.ts, .middleware.ts, .command.ts, .option.ts, .options.ts",
     },
     {
       filename: String.raw`apps\example\src\core\port\repository\example.ts`,
-      suffixes: ".port.ts",
+      suffixes: ".port.ts, .repository.ts",
     },
   ])("%s を報告すること", ({ filename, suffixes }) => {
     expect(lint(filename)).toMatchObject([

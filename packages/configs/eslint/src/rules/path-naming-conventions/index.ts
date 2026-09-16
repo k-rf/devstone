@@ -9,6 +9,10 @@ const createRule = ESLintUtils.RuleCreator(
 
 const roleSuffixesByDirectory = [
   {
+    directory: "/core/port/repository/",
+    suffixes: ["port", "repository"],
+  },
+  {
     directory: "/core/port/",
     suffixes: ["port"],
   },
@@ -18,7 +22,7 @@ const roleSuffixesByDirectory = [
   },
   {
     directory: "/adapter/outbound/",
-    suffixes: ["adapter", "payload"],
+    suffixes: ["adapter", "payload", "mapper"],
   },
   {
     directory: "/adapter/repository/",
@@ -26,11 +30,12 @@ const roleSuffixesByDirectory = [
   },
   {
     directory: "/adapter/inbound/",
-    suffixes: ["handler", "payload", "route"],
+    suffixes: ["handler", "payload", "route", "middleware", "command", "option", "options"],
   },
 ] as const;
 
-const excludedFilenamePattern = /(?:\.(?:spec|test)|\/(?:index|preview|types))\.[cm]?[jt]sx?$/u;
+const excludedFilenamePattern =
+  /(?:\.(?:spec|test)|\/(?:index|preview|types|options|commands))\.[cm]?[jt]sx?$/u;
 
 const getExpectedSuffixes = (filename: string): readonly string[] | undefined => {
   const normalizedFilename = filename.replaceAll("\\", "/");
@@ -72,7 +77,7 @@ export const pathNamingConventionsRule = createRule<Options, MessageIds>({
     }
 
     return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention -- ESLint AST ノード名に従う
+      // eslint-disable-next-line @typescript-eslint/naming-convention -- 型定義に従う
       Program: (node) => {
         context.report({
           node: node,
