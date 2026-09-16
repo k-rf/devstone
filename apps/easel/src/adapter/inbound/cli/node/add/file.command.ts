@@ -3,7 +3,7 @@ import { Console, Effect, Option } from "effect";
 
 import { addNodeWorkflow } from "../../../../../core/application/add-node.workflow.js";
 import { generateId } from "../../../../../utils/generate-id.js";
-import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
 
 import {
   colorOption,
@@ -15,12 +15,14 @@ import {
   yOption,
 } from "./options.js";
 
-const urlOption = Options.text("url").pipe(Options.withDescription("URL for the link node"));
+const fileRefOption = Options.text("file-ref").pipe(
+  Options.withDescription("File path for the file node"),
+);
 
 /**
- * Link タイプのノードをキャンバスに追加または更新するコマンド。
+ * File タイプのノードをキャンバスに追加または更新するコマンド。
  */
-export const addLinkNodeCommand = Command.make("link", {
+export const addFileNodeCommand = Command.make("file", {
   file: fileOption,
   id: nodeIdOption,
   x: xOption,
@@ -28,29 +30,29 @@ export const addLinkNodeCommand = Command.make("link", {
   width: widthOption,
   height: heightOption,
   color: colorOption,
-  url: urlOption,
+  fileRef: fileRefOption,
   label: labelOption,
 }).pipe(
-  Command.withDescription("Add or update a link node"),
-  Command.withHandler(({ file, id, x, y, width, height, color, url, label }) => {
+  Command.withDescription("Add or update a file node"),
+  Command.withHandler(({ file, id, x, y, width, height, color, fileRef, label }) => {
     const nodeId = Option.getOrElse(id, () => generateId());
     const colorValue = Option.getOrUndefined(color);
     const labelValue = Option.getOrUndefined(label);
     const nodeData = {
       id: nodeId,
-      type: "link",
+      type: "file",
       x: x,
       y: y,
       width: width,
       height: height,
       color: colorValue,
-      url: url,
+      file: fileRef,
       label: labelValue,
     };
 
     return addNodeWorkflow(nodeData).pipe(
       provideCanvasRepository(file),
-      Effect.tap(() => Console.log(`Successfully added or updated link node: ${nodeId}`)),
+      Effect.tap(() => Console.log(`Successfully added or updated file node: ${nodeId}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
       ),

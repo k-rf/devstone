@@ -2,7 +2,7 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateNodeWorkflow } from "../../../../../core/application/update-node.workflow.js";
-import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
 
 import {
   colorOption,
@@ -13,15 +13,15 @@ import {
   yOption,
 } from "./options.js";
 
-const fileRefOption = Options.text("file-ref").pipe(
+const textOption = Options.text("text").pipe(
   Options.optional,
-  Options.withDescription("New file path for the file node"),
+  Options.withDescription("New text content for the node"),
 );
 
 /**
- * File タイプのノードを更新するコマンド。
+ * Text タイプのノードを更新するコマンド。
  */
-export const updateFileNodeCommand = Command.make("file", {
+export const updateTextNodeCommand = Command.make("text", {
   file: fileOption,
   id: nodeIdOption,
   x: xOption,
@@ -29,22 +29,22 @@ export const updateFileNodeCommand = Command.make("file", {
   width: widthOption,
   height: heightOption,
   color: colorOption,
-  fileRef: fileRefOption,
+  text: textOption,
 }).pipe(
-  Command.withDescription("Update a file node"),
-  Command.withHandler(({ file, id, x, y, width, height, color, fileRef }) =>
+  Command.withDescription("Update a text node"),
+  Command.withHandler(({ file, id, x, y, width, height, color, text }) =>
     updateNodeWorkflow({
       id: id,
-      type: "file",
+      type: "text",
       x: x,
       y: y,
       width: width,
       height: height,
       color: color,
-      fileRef: fileRef,
+      text: text,
     }).pipe(
       provideCanvasRepository(file),
-      Effect.tap(() => Console.log(`Successfully updated file node: ${id}`)),
+      Effect.tap(() => Console.log(`Successfully updated text node: ${id}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
       ),

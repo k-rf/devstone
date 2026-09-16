@@ -1,9 +1,9 @@
 import { Command } from "@effect/cli";
 
-import { addFileNodeCommand } from "./file.js";
-import { addGroupNodeCommand } from "./group.js";
-import { addLinkNodeCommand } from "./link.js";
-import { addTextNodeCommand } from "./text.js";
+import { addFileNodeCommand } from "./file.command.js";
+import { addGroupNodeCommand } from "./group.command.js";
+import { addLinkNodeCommand } from "./link.command.js";
+import { addTextNodeCommand } from "./text.command.js";
 
 /**
  * node add コマンド定義。

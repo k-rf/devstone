@@ -1,23 +1,27 @@
-import { Command } from "@effect/cli";
+import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateNodeWorkflow } from "../../../../../core/application/update-node.workflow.js";
-import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
 
 import {
   colorOption,
   heightOption,
-  labelOption,
   nodeIdOption,
   widthOption,
   xOption,
   yOption,
 } from "./options.js";
 
+const fileRefOption = Options.text("file-ref").pipe(
+  Options.optional,
+  Options.withDescription("New file path for the file node"),
+);
+
 /**
- * Group タイプのノードを更新するコマンド。
+ * File タイプのノードを更新するコマンド。
  */
-export const updateGroupNodeCommand = Command.make("group", {
+export const updateFileNodeCommand = Command.make("file", {
   file: fileOption,
   id: nodeIdOption,
   x: xOption,
@@ -25,22 +29,22 @@ export const updateGroupNodeCommand = Command.make("group", {
   width: widthOption,
   height: heightOption,
   color: colorOption,
-  label: labelOption,
+  fileRef: fileRefOption,
 }).pipe(
-  Command.withDescription("Update a group node"),
-  Command.withHandler(({ file, id, x, y, width, height, color, label }) =>
+  Command.withDescription("Update a file node"),
+  Command.withHandler(({ file, id, x, y, width, height, color, fileRef }) =>
     updateNodeWorkflow({
       id: id,
-      type: "group",
+      type: "file",
       x: x,
       y: y,
       width: width,
       height: height,
       color: color,
-      label: label,
+      fileRef: fileRef,
     }).pipe(
       provideCanvasRepository(file),
-      Effect.tap(() => Console.log(`Successfully updated group node: ${id}`)),
+      Effect.tap(() => Console.log(`Successfully updated file node: ${id}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
       ),

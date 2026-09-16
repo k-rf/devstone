@@ -2,7 +2,7 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateEdgeWorkflow } from "../../../../core/application/update-edge.workflow.js";
-import { fileOption, provideCanvasRepository } from "../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../options/file.option.js";
 
 const edgeIdOption = Options.text("id").pipe(
   Options.withDescription("Unique identifier of the edge to update"),

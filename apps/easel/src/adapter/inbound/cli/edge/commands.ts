@@ -1,8 +1,8 @@
 import { Command } from "@effect/cli";
 
-import { addEdgeCommand } from "./add.js";
-import { rmEdgeCommand } from "./rm.js";
-import { updateEdgeCommand } from "./update.js";
+import { addEdgeCommand } from "./add.command.js";
+import { rmEdgeCommand } from "./rm.command.js";
+import { updateEdgeCommand } from "./update.command.js";
 
 /**
  * easel の edge コマンド定義。

@@ -14,6 +14,7 @@ import {
   noThrowInProduction,
   node,
   outboundPartitioning,
+  pathNamingConventions,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -43,6 +44,7 @@ const config = defineConfig(
   noThrowInProduction,
   node,
   outboundPartitioning,
+  pathNamingConventions,
   sonarjs,
   unicorn,
 );

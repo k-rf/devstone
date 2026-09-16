@@ -1,7 +1,7 @@
 import { Command } from "@effect/cli";
 import { Console } from "effect";
 
-import { fileOption } from "./options/file-option.js";
+import { fileOption } from "./options/file.option.js";
 
 /**
  * サーバー起動コマンド（実装予定）。

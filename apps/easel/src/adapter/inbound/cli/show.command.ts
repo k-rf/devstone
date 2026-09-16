@@ -3,7 +3,7 @@ import { Console, Effect } from "effect";
 
 import { showCanvasWorkflow } from "../../../core/application/show-canvas.workflow.js";
 
-import { fileOption, provideCanvasRepository } from "./options/file-option.js";
+import { fileOption, provideCanvasRepository } from "./options/file.option.js";
 
 /**
  * 指定された .canvas ファイルの全データを標準出力にJSON形式でダンプします。

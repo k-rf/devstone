@@ -3,7 +3,7 @@ import { Console, Effect, Option } from "effect";
 
 import { addEdgeWorkflow } from "../../../../core/application/add-edge.workflow.js";
 import { generateId } from "../../../../utils/generate-id.js";
-import { fileOption, provideCanvasRepository } from "../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../options/file.option.js";
 
 const fromNodeOption = Options.text("from-node").pipe(Options.withDescription("Source Node ID"));
 const toNodeOption = Options.text("to-node").pipe(Options.withDescription("Target Node ID"));

@@ -2,7 +2,7 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { rearrangeNodesWorkflow } from "../../../../core/application/rearrange-nodes.workflow.js";
-import { fileOption, provideCanvasRepository } from "../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../options/file.option.js";
 
 const paddingOption = Options.integer("padding").pipe(
   Options.optional,

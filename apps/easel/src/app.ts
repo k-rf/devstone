@@ -1,11 +1,11 @@
 import { Command } from "@effect/cli";
 
-import { edgeCommand } from "./adapter/inbound/cli/edge/command.js";
-import { getCommand } from "./adapter/inbound/cli/get.js";
-import { listCommand } from "./adapter/inbound/cli/list.js";
-import { nodeCommand } from "./adapter/inbound/cli/node/command.js";
-import { serveCommand } from "./adapter/inbound/cli/serve.js";
-import { showCommand } from "./adapter/inbound/cli/show.js";
+import { edgeCommand } from "./adapter/inbound/cli/edge/commands.js";
+import { getCommand } from "./adapter/inbound/cli/get.command.js";
+import { listCommand } from "./adapter/inbound/cli/list.command.js";
+import { nodeCommand } from "./adapter/inbound/cli/node/commands.js";
+import { serveCommand } from "./adapter/inbound/cli/serve.command.js";
+import { showCommand } from "./adapter/inbound/cli/show.command.js";
 
 /**
  * easel のルートコマンド定義。

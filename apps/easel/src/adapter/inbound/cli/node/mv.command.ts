@@ -2,7 +2,7 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { moveNodeWorkflow } from "../../../../core/application/move-node.workflow.js";
-import { fileOption, provideCanvasRepository } from "../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../options/file.option.js";
 
 const nodeIdOption = Options.text("id").pipe(
   Options.withDescription("Unique identifier of the node to move"),

@@ -3,7 +3,7 @@ import { Console, Effect } from "effect";
 
 import { getCanvasItemWorkflow } from "../../../core/application/get-canvas-item.workflow.js";
 
-import { fileOption, provideCanvasRepository } from "./options/file-option.js";
+import { fileOption, provideCanvasRepository } from "./options/file.option.js";
 
 const getTargetIdOption = Options.text("id").pipe(
   Options.withDescription("ID of the node or edge to retrieve"),

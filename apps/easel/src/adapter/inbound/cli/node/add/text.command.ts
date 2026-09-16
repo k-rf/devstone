@@ -3,7 +3,7 @@ import { Console, Effect, Option } from "effect";
 
 import { addNodeWorkflow } from "../../../../../core/application/add-node.workflow.js";
 import { generateId } from "../../../../../utils/generate-id.js";
-import { fileOption, provideCanvasRepository } from "../../options/file-option.js";
+import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
 
 import {
   colorOption,
