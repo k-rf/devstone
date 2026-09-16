@@ -16,6 +16,9 @@
     },
     {
       "path": "../../packages/configs/vitest"
+    },
+    {
+      "path": "../../packages/libs/toggl-sdk"
     }
   ]
 }

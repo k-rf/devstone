@@ -1,3 +1,5 @@
+import type * as TogglSdk from "@devstone/libs-toggl-sdk";
+import { TogglApiError, makeTogglApiClient, type TogglApiClient } from "@devstone/libs-toggl-sdk";
 import { Effect, Layer, Option, type Context } from "effect";
 import { describe, expect, it, vi } from "vitest";
 
@@ -5,10 +7,15 @@ import { type TrackingEntry } from "../../../core/domain/tracking-entry";
 import { CacheError, CachePort } from "../../../core/port/outbound/cloudflare/cache.port";
 import { TimeTrackerPort } from "../../../core/port/outbound/toggl/time-tracker.port";
 
-import { makeTogglApiClient, type TogglApiClient } from "./toggl-api.client";
 import { TogglTrackAdapterLive } from "./toggl-track.adapter";
 
-vi.mock("./toggl-api.client");
+vi.mock("@devstone/libs-toggl-sdk", async (importOriginal) => {
+  const actual = await importOriginal<typeof TogglSdk>();
+  return {
+    ...actual,
+    makeTogglApiClient: vi.fn(),
+  };
+});
 
 const entry: TrackingEntry = {
   description: "Test Task",
@@ -45,6 +52,9 @@ describe("正常系", () => {
       }).pipe(Effect.provide(layer)),
     );
 
+    expect(makeTogglApiClient).toHaveBeenCalledWith("token", 1, {
+      createdWith: "notion-toggl-bridge",
+    });
     expect(mockCache.get).toHaveBeenCalledWith("Project");
     expect(mockClient.startTimer).toHaveBeenCalledWith({
       title: entry.description,
@@ -185,5 +195,35 @@ describe("正常系", () => {
       projectId: Option.none(),
       tags: entry.tags,
     });
+  });
+});
+
+describe("異常系", () => {
+  it("Toggl クライアントがエラーを返した場合、TimeTrackerError に変換すること", async () => {
+    const togglError = new TogglApiError({ message: "API failure" });
+    const mockClient: TogglApiClient = {
+      startTimer: vi.fn(() => Effect.fail(togglError)),
+      getClients: vi.fn(() => Effect.succeed([])),
+      getProjects: vi.fn(() => Effect.succeed([])),
+    };
+    vi.mocked(makeTogglApiClient).mockReturnValue(Effect.succeed(mockClient));
+
+    const mockCache: Context.Tag.Service<CachePort> = {
+      get: vi.fn(() => Effect.succeed(undefined)),
+      put: vi.fn(() => Effect.void),
+    };
+
+    const layer = TogglTrackAdapterLive("token", 1).pipe(
+      Layer.provide(Layer.succeed(CachePort, mockCache)),
+    );
+
+    const program = Effect.gen(function* () {
+      const port = yield* TimeTrackerPort;
+      yield* port.startTimer(entry);
+    }).pipe(Effect.provide(layer));
+
+    const error = await Effect.runPromise(Effect.flip(program));
+    expect(error._tag).toBe("TimeTrackerError");
+    expect(error.message).toBe("API failure");
   });
 });

@@ -114,6 +114,9 @@ importers:
 
   apps/notion-toggl-bridge:
     dependencies:
+      '@devstone/libs-toggl-sdk':
+        specifier: workspace:*
+        version: link:../../packages/libs/toggl-sdk
       '@hono/effect-validator':
         specifier: 1.2.0
         version: 1.2.0(effect@3.21.2)(hono@4.12.16)
