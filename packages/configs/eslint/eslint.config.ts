@@ -33,7 +33,7 @@ const config = defineConfig(
   {
     files: ["src/rules/**/*.ts"],
     rules: {
-      /** @remarks ESLint ルールのセレクタ（Program 等）が RuleListener の型定義に従い大文字開始（PascalCase）となるため */
+      /** @remarks ESLint ルールのセレクタ（Program 等）が RuleListener の型定義に従いパスカルケースとなるため */
       "@typescript-eslint/naming-convention": "off",
     },
   },
