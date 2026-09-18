@@ -34,7 +34,6 @@ export const exportRoleSuffixesRule = createRule<Options, MessageIds>({
     if (roleSuffix === undefined) return {};
 
     return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention -- 型定義に従う
       ExportNamedDeclaration: (node) => {
         if (node.exportKind === "type") return;
 
