@@ -39,7 +39,8 @@ trigger: always_on
 
 ディレクトリの役割がファイル名からも推測できるようにします。
 
-- **Port**: `core/port/{inbound,outbound,repository}/xyz.port.ts` (リポジトリ抽象は `core/port/repository/xyz.repository.ts`)
+- **Port**: `core/port/{inbound,outbound}/xyz.port.ts`
+- **Repository (Port)**: `core/port/repository/xyz.repository.ts`
 - **Workflow**: `core/application/xyz.workflow.ts` (ユースケースの全体フローを定義)
 - **Activity**: `core/application/xyz.activity.ts` (Workflow を構成する個別の処理アクティビティ)
 - **Input**: `core/application/xyz.input.ts` (アプリケーションサービスの入力スキーマ)
@@ -52,7 +53,6 @@ trigger: always_on
 - **Middleware**: `adapter/inbound/xyz.middleware.ts`
 - **Command**: `adapter/inbound/xyz.command.ts`
 - **Option**: `adapter/inbound/xyz.option.ts`
-- **Options**: `adapter/inbound/xyz.options.ts`
 - **Schema (Communication)**: `adapter/{inbound,outbound}/xyz.payload.ts`
 - **Schema (Persistence)**: `adapter/repository/xyz.record.ts`
 

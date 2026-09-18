@@ -10,7 +10,7 @@ const createRule = ESLintUtils.RuleCreator(
 const roleSuffixesByDirectory = [
   {
     directory: "/core/port/repository/",
-    suffixes: ["port", "repository"],
+    suffixes: ["repository"],
   },
   {
     directory: "/core/port/",
@@ -30,7 +30,7 @@ const roleSuffixesByDirectory = [
   },
   {
     directory: "/adapter/inbound/",
-    suffixes: ["handler", "payload", "route", "middleware", "command", "option", "options"],
+    suffixes: ["handler", "payload", "route", "middleware", "command", "option"],
   },
 ] as const;
 
@@ -77,7 +77,6 @@ export const pathNamingConventionsRule = createRule<Options, MessageIds>({
     }
 
     return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention -- 型定義に従う
       Program: (node) => {
         context.report({
           node: node,

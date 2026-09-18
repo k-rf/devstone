@@ -28,7 +28,6 @@ const lint = (filename: string): readonly Linter.LintMessage[] => {
 describe("許可する", () => {
   it.each([
     "apps/example/src/core/port/outbound/example.port.ts",
-    "apps/example/src/core/port/repository/example.port.tsx",
     "apps/example/src/core/port/repository/example.repository.ts",
     "apps/example/src/core/application/example.workflow.ts",
     "apps/example/src/core/application/example.activity.ts",
@@ -45,7 +44,6 @@ describe("許可する", () => {
     "apps/example/src/adapter/inbound/example.middleware.ts",
     "apps/example/src/adapter/inbound/example.command.ts",
     "apps/example/src/adapter/inbound/example.option.ts",
-    "apps/example/src/adapter/inbound/example.options.ts",
   ])("%s を許可すること", (filename) => {
     expect(lint(filename)).toEqual([]);
   });
@@ -85,12 +83,19 @@ describe("報告する", () => {
     },
     {
       filename: "apps/example/src/adapter/inbound/example.controller.ts",
-      suffixes:
-        ".handler.ts, .payload.ts, .route.ts, .middleware.ts, .command.ts, .option.ts, .options.ts",
+      suffixes: ".handler.ts, .payload.ts, .route.ts, .middleware.ts, .command.ts, .option.ts",
+    },
+    {
+      filename: "apps/example/src/adapter/inbound/example.options.ts",
+      suffixes: ".handler.ts, .payload.ts, .route.ts, .middleware.ts, .command.ts, .option.ts",
     },
     {
       filename: String.raw`apps\example\src\core\port\repository\example.ts`,
-      suffixes: ".port.ts, .repository.ts",
+      suffixes: ".repository.ts",
+    },
+    {
+      filename: "apps/example/src/core/port/repository/example.port.ts",
+      suffixes: ".repository.ts",
     },
   ])("%s を報告すること", ({ filename, suffixes }) => {
     expect(lint(filename)).toMatchObject([
