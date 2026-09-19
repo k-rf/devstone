@@ -52,7 +52,6 @@ export const outboundPartitioningRule = createRule({
     if (outboundDirectory === undefined) return {};
 
     return {
-      // eslint-disable-next-line @typescript-eslint/naming-convention -- 型定義に従う
       Program: (node) => {
         if (outboundDirectory.includes(".")) {
           context.report({

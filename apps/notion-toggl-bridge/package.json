@@ -13,6 +13,7 @@
     "wrangler": "op run --no-masking -- wrangler"
   },
   "dependencies": {
+    "@devstone/libs-toggl-sdk": "workspace:*",
     "@hono/effect-validator": "1.2.0",
     "effect": "3.21.2",
     "hono": "4.12.16"

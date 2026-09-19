@@ -3,13 +3,13 @@ import { Effect, Layer, Schema } from "effect";
 import { TaskBoardItem } from "../../../core/domain/task-board-item";
 import { TaskBoardError, TaskBoardPort } from "../../../core/port/outbound/notion/task-board.port";
 
+import { normalizeRichText } from "./notion.mapper";
 import {
   NotionMultiSelectProperty,
   NotionPagePayload,
   NotionSelectProperty,
   NotionTitleProperty,
 } from "./notion.payload";
-import { normalizeRichText } from "./notion.util";
 
 /**
  * Notion Adapter の実装

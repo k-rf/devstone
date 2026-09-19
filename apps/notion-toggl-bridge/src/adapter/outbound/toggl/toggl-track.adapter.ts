@@ -1,11 +1,13 @@
+import { makeTogglApiClient, type TogglApiClient } from "@devstone/libs-toggl-sdk";
 import { Effect, Layer, Option } from "effect";
 
 import { type TrackingEntry } from "../../../core/domain/tracking-entry";
 import { CachePort } from "../../../core/port/outbound/cloudflare/cache.port";
-import { TimeTrackerPort } from "../../../core/port/outbound/toggl/time-tracker.port";
-
-import { makeTogglApiClient, type TogglApiClient } from "./toggl-api.client";
-import { splitCategory } from "./toggl.util";
+import {
+  TimeTrackerError,
+  TimeTrackerPort,
+} from "../../../core/port/outbound/toggl/time-tracker.port";
+import { splitCategory } from "../../../utils/split-category";
 
 type Cache = Effect.Effect.Success<typeof CachePort>;
 
@@ -19,7 +21,9 @@ export const TogglTrackAdapterLive = (apiToken: string, workspaceId: number) =>
   Layer.effect(
     TimeTrackerPort,
     Effect.gen(function* () {
-      const client = yield* makeTogglApiClient(apiToken, workspaceId);
+      const client = yield* makeTogglApiClient(apiToken, workspaceId, {
+        createdWith: "notion-toggl-bridge",
+      });
       const cache = yield* CachePort;
 
       return {
@@ -43,11 +47,21 @@ const startTimerImpl = (client: TogglApiClient, cache: Cache, entry: TrackingEnt
 
     const projectId = yield* resolveProjectId(cache)(lookupKey);
 
-    yield* client.startTimer({
-      title: entry.description,
-      projectId: projectId,
-      tags: entry.tags,
-    });
+    yield* client
+      .startTimer({
+        title: entry.description,
+        projectId: projectId,
+        tags: entry.tags,
+      })
+      .pipe(
+        Effect.mapError(
+          (e) =>
+            new TimeTrackerError({
+              message: e.message,
+              cause: e.cause,
+            }),
+        ),
+      );
   }).pipe(Effect.asVoid);
 
 /**

@@ -30,6 +30,13 @@ const config = defineConfig(
   node,
   sonarjs,
   unicorn,
+  {
+    files: ["src/rules/**/*.ts"],
+    rules: {
+      /** @remarks ESLint ルールのセレクタ（Program 等）が RuleListener の型定義に従いパスカルケースとなるため */
+      "@typescript-eslint/naming-convention": "off",
+    },
+  },
 );
 
 export default config;

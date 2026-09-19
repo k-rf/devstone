@@ -114,6 +114,9 @@ importers:
 
   apps/notion-toggl-bridge:
     dependencies:
+      '@devstone/libs-toggl-sdk':
+        specifier: workspace:*
+        version: link:../../packages/libs/toggl-sdk
       '@hono/effect-validator':
         specifier: 1.2.0
         version: 1.2.0(effect@3.21.2)(hono@4.12.16)
@@ -321,6 +324,45 @@ importers:
       eslint:
         specifier: 10.2.1
         version: 10.2.1(jiti@2.7.0)(supports-color@10.2.2)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      vitest:
+        specifier: 4.1.5
+        version: 4.1.5(@types/node@25.9.1)(@vitest/coverage-istanbul@4.1.5)(msw@2.14.2(@types/node@25.9.1)(typescript@7.0.2))(vite@8.0.10(@types/node@25.9.1)(esbuild@0.27.3)(jiti@2.7.0)(yaml@2.9.0))
+
+  packages/libs/toggl-sdk:
+    devDependencies:
+      '@devstone/configs-eslint':
+        specifier: workspace:*
+        version: link:../../configs/eslint
+      '@devstone/configs-typescript':
+        specifier: workspace:*
+        version: link:../../configs/typescript
+      '@devstone/configs-vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
+      '@faker-js/faker':
+        specifier: 10.4.0
+        version: 10.4.0
+      '@types/bun':
+        specifier: 1.3.14
+        version: 1.3.14
+      '@types/node':
+        specifier: 25.9.1
+        version: 25.9.1
+      '@vitest/coverage-istanbul':
+        specifier: 4.1.5
+        version: 4.1.5(supports-color@10.2.2)(vitest@4.1.5)
+      effect:
+        specifier: 3.21.2
+        version: 3.21.2
+      eslint:
+        specifier: 10.2.1
+        version: 10.2.1(jiti@2.7.0)(supports-color@10.2.2)
+      msw:
+        specifier: 2.14.2
+        version: 2.14.2(@types/node@25.9.1)(typescript@7.0.2)
       typescript:
         specifier: 7.0.2
         version: 7.0.2
