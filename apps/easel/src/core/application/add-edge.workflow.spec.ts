@@ -2,11 +2,9 @@ import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec"
 import { Effect, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
-import {
-  getCanvas,
-  makeCanvasRef,
-  makeTestCanvasRepository,
-} from "../../test-utils/make-test-canvas-repository.js";
+import { getCanvas } from "../../test-utils/get-canvas.js";
+import { makeCanvasRef } from "../../test-utils/make-canvas-ref.js";
+import { makeTestCanvasRepository } from "../../test-utils/make-test-canvas-repository.js";
 
 import { addEdgeWorkflow } from "./add-edge.workflow.js";
 
