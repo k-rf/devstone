@@ -10,6 +10,7 @@
   "gitignore": true,
   "ignores": [
     ".git/**",
+    ".github/pull_request_template.md",
     "**/.claude/skills/**/FORMS.md",
     "**/build/**",
     "**/dist/**",
