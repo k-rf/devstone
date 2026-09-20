@@ -8,6 +8,7 @@ import {
   markdown,
   namingConvention,
   node,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 } from "./src/index.js";
@@ -28,6 +29,7 @@ const config = defineConfig(
   markdown,
   namingConvention,
   node,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
   {
