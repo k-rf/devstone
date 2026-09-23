@@ -8,6 +8,7 @@ import {
   namingConvention,
   node,
   noCoreSideEffects,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -31,6 +32,7 @@ const config = defineConfig(
   namingConvention,
   node,
   noCoreSideEffects,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 );

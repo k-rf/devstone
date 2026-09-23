@@ -3,11 +3,9 @@ import { Effect, Option, Schema } from "effect";
 import { describe, expect, it } from "vitest";
 
 import { assertTextNode } from "../../test-utils/assert-node/assert-text-node.js";
-import {
-  getCanvas,
-  makeCanvasRef,
-  makeTestCanvasRepository,
-} from "../../test-utils/make-test-canvas-repository.js";
+import { getCanvas } from "../../test-utils/get-canvas.js";
+import { makeCanvasRef } from "../../test-utils/make-canvas-ref.js";
+import { makeTestCanvasRepository } from "../../test-utils/make-test-canvas-repository.js";
 
 import { updateNodeWorkflow } from "./update-node.workflow.js";
 

@@ -6,6 +6,7 @@ import {
   markdown,
   namingConvention,
   node,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -27,6 +28,7 @@ const config = defineConfig(
   markdown,
   namingConvention,
   node,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 );

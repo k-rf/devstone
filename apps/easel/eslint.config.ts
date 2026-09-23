@@ -15,6 +15,7 @@ import {
   node,
   outboundPartitioning,
   pathNamingConventions,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -45,6 +46,7 @@ const config = defineConfig(
   node,
   outboundPartitioning,
   pathNamingConventions,
+  singleFunctionPerFile,
   sonarjs,
   unicorn,
 );

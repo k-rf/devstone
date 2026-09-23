@@ -112,6 +112,11 @@
       "types": "./dist/outbound-partitioning.d.ts",
       "dev": "./src/outbound-partitioning.ts",
       "default": "./dist/outbound-partitioning.js"
+    },
+    "./single-function-per-file": {
+      "types": "./dist/single-function-per-file.d.ts",
+      "dev": "./src/single-function-per-file.ts",
+      "default": "./dist/single-function-per-file.js"
     }
   },
   "scripts": {
