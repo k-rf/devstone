@@ -12,7 +12,7 @@ description: UIコンポーネントおよびStorybookの作成と記述に関�
 UIコンポーネントの単体テストやインタラクションテストは、個別のテストファイル（例: `*.spec.tsx`）を作らず、**Storybookのplay関数内で完結させます**。
 
 - `vitest` 等を用いた個別の `*.spec.tsx` の作成は原則禁止します。
-- `@storybook/test` から `within`, `userEvent`, `expect` などをインポートして、Storyの `play` 関数内でインタラクションとアサーションを記述します。
+- `@storybook/test` から `within`, `userEvent`, `expect` などをインポートして、`play` 関数内でインタラクションとアサーションを記述します。
 
 ### play関数の記述例
 
@@ -63,7 +63,8 @@ export const InteractionTest = {
 ### 2.3. `satisfies` キーワードの徹底
 
 - 型安全性を向上させ、Story定義側でのプロパティ漏れや過不足を検出するため、明示的な型アノテーションではなく TypeScript の `satisfies` を使用します。
-- `const MyStory: Story = ...` のようにアノテーションすると、型が `StoryObj` に固定されて過剰に広い型になってしまいますが、`satisfies` を使うことで、Storyオブジェクトの具体的な値の型を保持したまま検証できるため、argsの過不足やプロパティの補完が正しく機能します。
+- `const MyStory: Story = ...` のようにアノテーションすると、型が `StoryObj` に固定されて過剰に広い型になってしまいますが、
+  `satisfies` を使うことで、Storyオブジェクトの具体的な値の型を保持したまま検証できるため、argsの過不足やプロパティの補完が正しく機能します。
 - **Metaオブジェクトの定義**:
 
   ```typescript

@@ -1,6 +1,8 @@
 ---
 name: dependency-management
-description: ワークスペースで依存パッケージの追加、更新、削除を行う際にこのスキルを使用します。package.json の直接編集を禁止し、代わりに pnpm コマンドの使用を義務付けるルールを強制します。
+description: >-
+  ワークスペースで依存パッケージの追加、更新、削除を行う際にこのスキルを使用します。
+  package.json の直接編集を禁止し、代わりに pnpm コマンドの使用を義務付けるルールを強制します。
 ---
 
 # pnpm 依存パッケージ管理ルール
@@ -10,7 +12,8 @@ description: ワークスペースで依存パッケージの追加、更新、�
 ## ルール
 
 1. **`package.json` の直接編集の禁止**:
-   `dependencies` や `devDependencies` に新しいパッケージを追加したり、バージョンを書き換えたりする際に、`package.json` をエディタやファイル操作ツールで直接編集してはなりません。
+   `dependencies` や `devDependencies` に新しいパッケージを追加したり、バージョンを書き換えたりする際に、
+   `package.json` をエディタやファイル操作ツールで直接編集してはなりません。
 
 2. **`pnpm` コマンドによる操作の義務付け**:
    パッケージの追加・更新・削除は、必ず `pnpm` コマンドを使用して行ってください。
@@ -19,4 +22,5 @@ description: ワークスペースで依存パッケージの追加、更新、�
    - 例（特定の workspace パッケージへの追加）: `pnpm --filter <workspace-package-name> add <package-name>`
 
 3. **`saveExact` 設定の考慮**:
-   pnpm workspace 内で `saveExact: true` が有効な場合、`pnpm add` は自動的に厳密なバージョンでインストールします。手動で `^` を追加するなどの編集は行わないでください。
+   pnpm workspace 内で `saveExact: true` が有効な場合、`pnpm add` は自動的に厳密なバージョンでインストールします。
+   手動で `^` を追加するなどの編集は行わないでください。

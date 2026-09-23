@@ -14,7 +14,8 @@ trigger: always_on
   - `PascalCase`: クラス、インターフェース、`Context.Tag`、`Schema`、型定義。
   - `camelCase`: 変数、関数、プロパティ、`Effect` インスタンス。
   - `kebab-case`: ファイル名、ディレクトリ名、ブランチ名の説明部分。
-- **Git ブランチ**: 作業ブランチは [branch-naming.md](./branch-naming.md) に従う（例: `feature/DEV-29/short-description`）。
+- **Git ブランチ**: 作業ブランチは [branch-naming.md](./branch-naming.md) に従う。
+  - 例: `feature/DEV-29/short-description`。
 
 ## 2. Effect-TS 固有の命名
 
@@ -66,12 +67,19 @@ trigger: always_on
 
 ## 5. 真実を語る名前
 
-- **Boolean**: 以下の文法パターンを用いて、英語として自然で意図が明確に伝わる命名を行います。単に `is` や `can` などのプレフィックスを強制するのではなく、状況に応じて適切な品詞や助動詞を使い分けてください。
-  1. **`be` 動詞 + 形容詞**: 今その状態にあるかどうか（例: `isActive`, `isEmpty`）
-  2. **動詞の三人称単数現在形（三単現）**: その動作・状態に該当するか（例: `exists`, `contains`）
-  3. **サ変動詞の過去分詞形**: すでにその状態にされているか。受動態であることを明確にしたい場合は `be` 動詞を伴うこともある（例: `checked`, `selected`, `isLocked`）
-  4. **助動詞 + 動詞**: 助動詞（`can`, `should`, `will` など）の表すニュアンスを利用する（例: `canPlay`, `shouldNotify`, `willFetch`）
-  5. **現在分詞**: 現時点でその動作・処理が継続しているかどうかを表す（例: `running`, `downloading`）
-  6. **`has` / `have` + 過去分詞**: 処理がすでに完了しているかどうかを表す（例: `hasFinished`, `done`）
+- **Boolean**: 以下の文法パターンを用いて、英語として自然で意図が明確に伝わる命名を行います。単に `is` や `can` などのプレフィックスを強制するのではなく、
+  状況に応じて適切な品詞や助動詞を使い分けてください。
+  1. **`be` 動詞 + 形容詞**: 今その状態にあるかどうか
+     （例: `isActive`, `isEmpty`）
+  2. **動詞の三人称単数現在形（三単現）**: その動作・状態に該当するか
+     （例: `exists`, `contains`）
+  3. **サ変動詞の過去分詞形**: すでにその状態にされているか。受動態であることを明確にしたい場合は `be` 動詞を伴うこともある
+     （例: `checked`, `selected`, `isLocked`）
+  4. **助動詞 + 動詞**: 助動詞（`can`, `should`, `will` など）の表すニュアンスを利用する
+     （例: `canPlay`, `shouldNotify`, `willFetch`）
+  5. **現在分詞**: 現時点でその動作・処理が継続しているかどうかを表す
+     （例: `running`, `downloading`）
+  6. **`has` / `have` + 過去分詞**: 処理がすでに完了しているかどうかを表す
+     （例: `hasFinished`, `done`）
 - **Collection**: `items`, `records` などの複数形、あるいは `List` サフィックスを検討してください。
 - **Effect**: 副作用を伴う場合は、その振る舞いを明示する動詞を選んでください。
