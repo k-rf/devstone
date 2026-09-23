@@ -51,7 +51,7 @@ RUN mkdir -p /opt/orca \
 
 # difftastic（構文木ベースの横並び diff ツール）
 # ------------------------------------------------------------------------------
-RUN curl -sSL https://github.com/Wilfred/difftastic/releases/latest/download/difft-x86_64-unknown-linux-gnu.tar.gz \
+RUN curl -sSL https://github.com/Wilfred/difftastic/releases/download/0.71.0/difft-0.71.0-x86_64-unknown-linux-gnu.tar.gz \
   | tar -xz -C /usr/local/bin \
   && chmod +x /usr/local/bin/difft
 
