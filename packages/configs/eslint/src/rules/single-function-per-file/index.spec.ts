@@ -69,133 +69,64 @@ describe("検査しない", () => {
     },
     {
       name: "type-only export は検査しないこと",
-      filename: standardFilename,
       code: "export type { Add, Subtract };",
     },
     {
       name: "type 宣言および interface 宣言は検査しないこと",
-      filename: standardFilename,
       code: "export type Add = () => void;\nexport interface Subtract { (): void }",
     },
     {
       name: "再エクスポート（export * from '...'）は検査しないこと",
-      filename: standardFilename,
       code: 'export * from "./add.js"; export * from "./subtract.js";',
     },
     {
       name: "外部モジュールからの named re-export は検査しないこと",
-      filename: standardFilename,
       code: 'export { add, subtract } from "./math.js";',
     },
     {
+      name: "インポートされたシンボルの re-export は検査しないこと",
+      code: 'import { external } from "./ext.js";\nexport { external };',
+    },
+    {
       name: "定数のみが複数エクスポートされているファイルは検査しないこと",
-      filename: standardFilename,
       code: "export const A = 1;\nexport const B = 2;\nexport const C = 'three';",
     },
     {
+      name: "ローカル定義された定数の export { ... } は検査しないこと",
+      code: "const constantValue = 100;\nexport { constantValue };",
+    },
+    {
       name: "エラー定義クラス同士のエクスポートは検査しないこと",
-      filename: standardFilename,
       code: `
         export class FirstError extends Error {}
         export class SecondError extends Data.TaggedError("SecondError")<{}> {}
       `,
     },
     {
-      name: "superClass がない通常のクラス宣言が単一の場合は検査しないこと",
-      filename: standardFilename,
-      code: "export class StandaloneService {}",
+      name: "ローカル定義されたエラークラスの export { ... } は検査しないこと",
+      code: "class LocalError extends Error {}\nexport { LocalError };",
+    },
+    {
+      name: "エラークラスの default export は検査しないこと",
+      code: "export default class MyError extends Error {}",
     },
     {
       name: "関数でもクラスでもない default export は検査しないこと",
-      filename: standardFilename,
       code: "export default 123;",
     },
     {
       name: "enum 宣言は検査しないこと",
-      filename: standardFilename,
       code: "export enum Status { Active, Inactive }",
     },
     {
-      name: "未初期化の変数宣言（let）と単一関数は検査しないこと",
-      filename: standardFilename,
-      code: "export let uninitializedValue;\nexport const calculate = () => 1;",
-    },
-    {
-      name: "ローカル定義された定数の export { ... } は検査しないこと",
-      filename: standardFilename,
-      code: "const constantValue = 100;\nexport { constantValue };",
-    },
-    {
-      name: "ローカル定義された非エラークラスの export { ... } を許可すること",
-      filename: standardFilename,
-      code: "class LocalService {}\nexport { LocalService };",
-    },
-    {
-      name: "ローカル定義された関数宣言の export { ... } を許可すること",
-      filename: standardFilename,
-      code: "function localFunc() {}\nexport { localFunc };",
-    },
-    {
-      name: "ローカル定義されたエラークラスの export { ... } は検査しないこと",
-      filename: standardFilename,
-      code: "class LocalError extends Error {}\nexport { LocalError };",
-    },
-    {
-      name: "インポートされたシンボルの re-export は検査しないこと",
-      filename: standardFilename,
-      code: 'import { external } from "./ext.js";\nexport { external };',
-    },
-    {
-      name: "エラークラスの default export は検査しないこと",
-      filename: standardFilename,
-      code: "export default class MyError extends Error {}",
-    },
-    {
-      name: "名前付きクラスの default export を許可すること",
-      filename: standardFilename,
-      code: "export default class NamedService {}",
-    },
-    {
-      name: "名前付き関数の default export を許可すること",
-      filename: standardFilename,
-      code: "export default function namedMain() {}",
-    },
-    {
-      name: "文字列リテラル名の export specifier を許可すること",
-      filename: standardFilename,
-      code: 'const add = () => 1;\nexport { add as "add" };',
-    },
-    {
-      name: "無名関数の default export を許可すること",
-      filename: standardFilename,
-      code: "export default function() {}",
-    },
-    {
-      name: "無名クラスの default export を許可すること",
-      filename: standardFilename,
-      code: "export default class {}",
-    },
-    {
       name: "ローカル定義された型エイリアスの export { ... } は検査しないこと",
-      filename: standardFilename,
       code: "type MyType = string;\nexport { MyType };",
     },
     {
-      name: "配列分割代入のアロー関数 export を許可すること",
-      filename: standardFilename,
-      code: "export const [destructuredFn] = [() => 1];",
-    },
-    {
       name: "未宣言の識別子の export specifier は検査しないこと",
-      filename: standardFilename,
       code: "export { undeclaredValue };",
     },
-    {
-      name: "同一の変数宣言内で定数と単一関数が混在する場合を許可すること",
-      filename: standardFilename,
-      code: "export const CONSTANT_VAL = 100, calculate = () => 1;",
-    },
-  ])("$name", ({ filename, code }) => {
+  ])("$name", ({ filename = standardFilename, code }) => {
     expect(lint(code, filename)).toEqual([]);
   });
 });
@@ -219,6 +150,10 @@ describe("許可する", () => {
       code: "export class OrderProcessor {}",
     },
     {
+      name: "単一の通常のクラス宣言（superClass なし）を許可すること",
+      code: "export class StandaloneService {}",
+    },
+    {
       name: "単一の default export 関数を許可すること",
       code: "export default function calculate() {}",
     },
@@ -231,6 +166,45 @@ describe("許可する", () => {
       code: "export default () => 0;",
     },
     {
+      name: "名前付きクラスの default export を許可すること",
+      code: "export default class NamedService {}",
+    },
+    {
+      name: "名前付き関数の default export を許可すること",
+      code: "export default function namedMain() {}",
+    },
+    {
+      name: "無名関数の default export を許可すること",
+      code: "export default function() {}",
+    },
+    {
+      name: "無名クラスの default export を許可すること",
+      code: "export default class {}",
+    },
+    {
+      name: "ローカル定義された単一関数の export { foo } を許可すること",
+      code: `
+        const add = () => 1;
+        export { add };
+      `,
+    },
+    {
+      name: "ローカル定義された関数宣言の export { ... } を許可すること",
+      code: "function localFunc() {}\nexport { localFunc };",
+    },
+    {
+      name: "ローカル定義された非エラークラスの export { ... } を許可すること",
+      code: "class LocalService {}\nexport { LocalService };",
+    },
+    {
+      name: "文字列リテラル名の export specifier を許可すること",
+      code: 'const add = () => 1;\nexport { add as "add" };',
+    },
+    {
+      name: "配列分割代入のアロー関数 export を許可すること",
+      code: "export const [destructuredFn] = [() => 1];",
+    },
+    {
       name: "単一の関数と付随する単純な定数のエクスポートを許可すること",
       code: `
         export const DEFAULT_TIMEOUT = 1000;
@@ -238,17 +212,18 @@ describe("許可する", () => {
       `,
     },
     {
+      name: "単一の関数と未初期化変数（let）のエクスポートを許可すること",
+      code: "export let uninitializedValue;\nexport const calculate = () => 1;",
+    },
+    {
+      name: "同一の変数宣言内で定数と単一関数が混在する場合を許可すること",
+      code: "export const CONSTANT_VAL = 100, calculate = () => 1;",
+    },
+    {
       name: "単一のクラスと付随するエラークラスのエクスポートを許可すること",
       code: `
         export class TaskBoardError extends Data.TaggedError("TaskBoardError")<{}> {}
         export class TaskBoardPort extends Context.Tag("TaskBoardPort")<TaskBoardPort, {}>() {}
-      `,
-    },
-    {
-      name: "ローカル定義された単一関数の export { foo } を許可すること",
-      code: `
-        const add = () => 1;
-        export { add };
       `,
     },
     {

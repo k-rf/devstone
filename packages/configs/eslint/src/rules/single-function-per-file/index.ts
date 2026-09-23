@@ -1,4 +1,5 @@
 import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import { match } from "ts-pattern";
 
 import { collectDefaultExportEntry } from "./collect-default-export-entry.js";
 import { collectNamedExportEntries } from "./collect-named-export-entries.js";
@@ -32,16 +33,16 @@ export const singleFunctionPerFileRule = createRule<Options, MessageIds>({
 
     return {
       "Program:exit": (program) => {
-        const exportedEntries = program.body.flatMap((statement) => {
-          if (statement.type === AST_NODE_TYPES.ExportNamedDeclaration) {
-            return collectNamedExportEntries(context, statement);
-          }
-          if (statement.type === AST_NODE_TYPES.ExportDefaultDeclaration) {
-            const entry = collectDefaultExportEntry(statement);
-            return entry === undefined ? [] : [entry];
-          }
-          return [];
-        });
+        const { ExportNamedDeclaration, ExportDefaultDeclaration } = AST_NODE_TYPES;
+
+        const exportedEntries = program.body.flatMap((statement) =>
+          match(statement)
+            .with({ type: ExportNamedDeclaration }, (node) =>
+              collectNamedExportEntries(context, node),
+            )
+            .with({ type: ExportDefaultDeclaration }, (node) => collectDefaultExportEntry(node))
+            .otherwise(() => []),
+        );
 
         if (exportedEntries.length <= 1) return;
 

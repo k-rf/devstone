@@ -1,5 +1,6 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { type RuleContext } from "@typescript-eslint/utils/ts-eslint";
+import { match } from "ts-pattern";
 
 import { isErrorClass } from "./is-error-class.js";
 import { isFunctionNode } from "./is-function-node.js";
@@ -32,14 +33,13 @@ export const isSpecifierReferencingFunction = (
   const variable = findVariableInScope(context.sourceCode.getScope(specifier), localName);
   if (variable === undefined) return false;
 
-  return variable.defs.some((definition: { readonly node: TSESTree.Node }) => {
-    if (definition.node.type === AST_NODE_TYPES.FunctionDeclaration) return true;
-    if (definition.node.type === AST_NODE_TYPES.ClassDeclaration) {
-      return !isErrorClass(definition.node);
-    }
-    if (definition.node.type === AST_NODE_TYPES.VariableDeclarator) {
-      return isFunctionNode(definition.node.init);
-    }
-    return false;
-  });
+  const { FunctionDeclaration, ClassDeclaration, VariableDeclarator } = AST_NODE_TYPES;
+
+  return variable.defs.some((definition: { readonly node: TSESTree.Node }) =>
+    match(definition.node)
+      .with({ type: FunctionDeclaration }, () => true)
+      .with({ type: ClassDeclaration }, (node) => !isErrorClass(node))
+      .with({ type: VariableDeclarator }, (node) => isFunctionNode(node.init))
+      .otherwise(() => false),
+  );
 };

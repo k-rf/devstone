@@ -16,18 +16,20 @@ export const collectNamedExportEntries = (
 ): readonly ExportedEntry[] => {
   if (node.exportKind === "type") return [];
 
+  const { FunctionDeclaration, ClassDeclaration, VariableDeclaration, Identifier } = AST_NODE_TYPES;
+
   if (node.declaration !== null) {
     return match(node.declaration)
-      .with({ type: AST_NODE_TYPES.FunctionDeclaration, id: P.nonNullable }, ({ id, ...decl }) => [
+      .with({ type: FunctionDeclaration, id: P.nonNullable }, ({ id, ...decl }) => [
         { node: decl as TSESTree.Node, name: id.name },
       ])
-      .with({ type: AST_NODE_TYPES.ClassDeclaration, id: P.nonNullable }, (decl) => {
+      .with({ type: ClassDeclaration, id: P.nonNullable }, (decl) => {
         if (isErrorClass(decl)) return [];
         return [{ node: decl, name: decl.id.name }];
       })
-      .with({ type: AST_NODE_TYPES.VariableDeclaration }, ({ declarations }) =>
+      .with({ type: VariableDeclaration }, ({ declarations }) =>
         declarations.flatMap((declarator) => {
-          if (declarator.id.type === AST_NODE_TYPES.Identifier && isFunctionNode(declarator.init)) {
+          if (declarator.id.type === Identifier && isFunctionNode(declarator.init)) {
             return [{ node: declarator, name: declarator.id.name }];
           }
           return [];
@@ -42,9 +44,7 @@ export const collectNamedExportEntries = (
   return node.specifiers.flatMap((specifier) => {
     if (isSpecifierReferencingFunction(context, specifier)) {
       const name =
-        specifier.exported.type === AST_NODE_TYPES.Identifier
-          ? specifier.exported.name
-          : specifier.local.name;
+        specifier.exported.type === Identifier ? specifier.exported.name : specifier.local.name;
       return [{ node: specifier, name: name }];
     }
     return [];
