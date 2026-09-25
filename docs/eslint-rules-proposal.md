@@ -37,15 +37,15 @@
 | `no-restricted-syntax` (as any)          | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `no-restricted-syntax` (`any`キャスト禁止)                                  |
 | `devstone/no-throw-in-production`        | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | `no-restricted-syntax` (本番コードでの例外throw禁止)                        |
 | `devstone/single-function-per-file`      | Quality, Immutability & Values | [code-quality.md][quality_doc]                                  | カスタムASTルール (エクスポート数検証)                                      |
-| `devstone/no-ui-spec-files`              | Testing & Storybook Quality    | [devstone-ui-storybook-standard/SKILL.md][storybook_skill]      | カスタムASTルール (UIテスト記述場所制限)                                    |
-| `devstone/storybook-no-title`            | Testing & Storybook Quality    | [devstone-ui-storybook-standard/SKILL.md][storybook_skill]      | `no-restricted-syntax` (satisfies考慮title制限)                             |
-| `devstone/storybook-no-autodocs-tag`     | Testing & Storybook Quality    | [devstone-ui-storybook-standard/SKILL.md][storybook_skill]      | `no-restricted-syntax` (satisfies考慮tags制限)                              |
-| `devstone/storybook-require-satisfies`   | Testing & Storybook Quality    | [devstone-ui-storybook-standard/SKILL.md][storybook_skill]      | カスタムASTルール (satisfies強制)                                           |
-| `devstone/require-in-source-tests`       | Testing & Storybook Quality    | [devstone-testing-standard/SKILL.md][testing_skill]             | カスタムASTルール (インソーステストの強制と例外ルール)                      |
-| `devstone/test-descriptions-japanese`    | Testing & Storybook Quality    | [devstone-testing-standard/SKILL.md][testing_skill]             | カスタムASTルール (テスト名の日本語検証)                                    |
-| `devstone/no-single-describe`            | Testing & Storybook Quality    | [devstone-testing-standard/SKILL.md][testing_skill]             | カスタムASTルール (describeフラット化)                                      |
-| `devstone/schema-error-no-cast`          | Testing & Storybook Quality    | [devstone-testing-standard/SKILL.md][testing_skill]             | カスタムASTルール (デコードキャスト制限)                                    |
-| `devstone/effect-assert-error-flip`      | Testing & Storybook Quality    | [devstone-testing-standard/SKILL.md][testing_skill]             | `no-restricted-syntax` (例外的なExitチェック緩和)                           |
+| `devstone/no-ui-spec-files`              | Testing & Storybook Quality    | [ui-storybook-standard.md][storybook_doc]                       | カスタムASTルール (UIテスト記述場所制限)                                    |
+| `devstone/storybook-no-title`            | Testing & Storybook Quality    | [ui-storybook-standard.md][storybook_doc]                       | `no-restricted-syntax` (satisfies考慮title制限)                             |
+| `devstone/storybook-no-autodocs-tag`     | Testing & Storybook Quality    | [ui-storybook-standard.md][storybook_doc]                       | `no-restricted-syntax` (satisfies考慮tags制限)                              |
+| `devstone/storybook-require-satisfies`   | Testing & Storybook Quality    | [ui-storybook-standard.md][storybook_doc]                       | カスタムASTルール (satisfies強制)                                           |
+| `devstone/require-in-source-tests`       | Testing & Storybook Quality    | [testing-standard.md][testing_doc]                              | カスタムASTルール (インソーステストの強制と例外ルール)                      |
+| `devstone/test-descriptions-japanese`    | Testing & Storybook Quality    | [testing-standard.md][testing_doc]                              | カスタムASTルール (テスト名の日本語検証)                                    |
+| `devstone/no-single-describe`            | Testing & Storybook Quality    | [testing-standard.md][testing_doc]                              | カスタムASTルール (describeフラット化)                                      |
+| `devstone/schema-error-no-cast`          | Testing & Storybook Quality    | [testing-standard.md][testing_doc]                              | カスタムASTルール (デコードキャスト制限)                                    |
+| `devstone/effect-assert-error-flip`      | Testing & Storybook Quality    | [testing-standard.md][testing_doc]                              | `no-restricted-syntax` (例外的なExitチェック緩和)                           |
 
 ---
 
@@ -1063,7 +1063,7 @@
   Storybookの `play` 関数に記述し一元管理する。
   ただし、`packages/design-system/` 配下のブラウザベースのテストや、統合テスト/E2Eテストディレクトリ内のテストファイルは本ルールの対象外とする。
 - **定義元ドキュメント**:
-  [devstone-ui-storybook-standard/SKILL.md][storybook_skill] (Section 1)
+  [ui-storybook-standard.md][storybook_doc] (Section 1)
 - **コード例**:
   - **OK**:
     - `button.stories.tsx` 内の `play` 関数
@@ -1086,7 +1086,7 @@
   `meta` 変数のオブジェクト定義において `title` プロパティの明示を禁止する。
   Storybook上のツリー表示は、実際の物理ディレクトリ構造に自動一致させるため。
 - **定義元ドキュメント**:
-  [devstone-ui-storybook-standard/SKILL.md][storybook_skill] (Section 2.1)
+  [ui-storybook-standard.md][storybook_doc] (Section 2.1)
 - **コード例**:
   - **OK**:
 
@@ -1135,7 +1135,7 @@
 - **目的 / 概要**: 各Storyの `meta` オブジェクトにおいて `tags: ["autodocs"]` を定義することを
   禁止する。ドキュメント化は、共通設定 `.storybook/preview.ts` にてグローバルに一元管理する。
 - **定義元ドキュメント**:
-  [devstone-ui-storybook-standard/SKILL.md][storybook_skill] (Section 2.2)
+  [ui-storybook-standard.md][storybook_doc] (Section 2.2)
 - **コード例**:
   - **OK**: `.storybook/preview.ts` 側で `tags: ["autodocs"]` を定義する。
   - **NG**: 各Storyファイルの `meta` 内で `tags: ["autodocs"]` を指定する。
@@ -1170,7 +1170,7 @@
   型を極力細かく維持し補完を効かせるため、明示的な型注釈を禁止し、
   TypeScriptの `satisfies` キーワードの使用を強制する。
 - **定義元ドキュメント**:
-  [devstone-ui-storybook-standard/SKILL.md][storybook_skill] (Section 2.3)
+  [ui-storybook-standard.md][storybook_doc] (Section 2.3)
 - **コード例**:
   - **OK**:
 
@@ -1231,7 +1231,7 @@
   **例外**: 膨大なモックや `Layer` のセットアップが必要、あるいは `faker` に
   よるテストデータの自動生成が必要で、ソースの可読性を著しく損なう場合は
   `.spec.ts` ファイルに分離する。
-- **定義元ドキュメント**: [devstone-testing-standard/SKILL.md][testing_skill]
+- **定義元ドキュメント**: [testing-standard.md][testing_doc]
 - **コード例**:
   - **OK**:
     - `src/utils/math.ts` (純粋なロジックを含み、ソース内に `if (import.meta.vitest)`
@@ -1288,7 +1288,7 @@
   型テストも含む）は、ビジネス要件とのマッピングを明らかにするため、
   英語ではなく日本語で記述することを強制する。
 - **定義元ドキュメント**:
-  [devstone-testing-standard/SKILL.md][testing_skill] (Section 2.2)
+  [testing-standard.md][testing_doc] (Section 2.2)
 - **コード例**:
   - **OK**:
 
@@ -1316,7 +1316,7 @@
 - **目的 / 概要**: テストファイル内において、
   テストケース群が単一のコンテキストしか存在しない場合、冗長な `describe` グループ化を
   省略し、直接 `it` / `test` を平坦（フラット）に記述することを強制する。
-- **定義元ドキュメント**: [devstone-testing-standard/SKILL.md][testing_skill] (Section 2.2)
+- **定義元ドキュメント**: [testing-standard.md][testing_doc] (Section 2.2)
 - **コード例**:
   - **OK**:
 
@@ -1348,7 +1348,7 @@
   `Schema.decodeSync` を呼び出すことを禁止する。
   キャストが不要な `Schema.decodeUnknownSync` の使用を強制する。
 - **定義元ドキュメント**:
-  [devstone-testing-standard/SKILL.md][testing_skill] (Section 2.5)
+  [testing-standard.md][testing_doc] (Section 2.5)
 - **コード例**:
   - **OK**:
 
@@ -1381,10 +1381,10 @@
 - **目的 / 概要**: Effect-TSにおける失敗系のアサーション検証において、
   `Exit.match` や `runPromiseExit` / `runSyncExit` などの冗長なハンドリングを禁止し、
   `Effect.flip` と `Effect.runPromise` を組み合わせた簡潔なアサーション方法を強制する。
-  テスト標準（`devstone-testing-standard/SKILL.md`）に基づき、
+  テスト標準（`testing-standard.md`）に基づき、
   `Exit.match` などの例外的な Exit チェック手法は一律で冗長・禁止とする。
 - **定義元ドキュメント**:
-  [devstone-testing-standard/SKILL.md][testing_skill] (Section 2.5)
+  [testing-standard.md][testing_doc] (Section 2.5)
 - **コード例**:
   - **OK**:
 
@@ -1416,5 +1416,5 @@
 [design_doc]: ../.agents/rules/design-principles.md
 [naming_doc]: ../.agents/rules/naming-conventions.md
 [quality_doc]: ../.agents/rules/code-quality.md
-[testing_skill]: ../.agents/skills/devstone-testing-standard/SKILL.md
-[storybook_skill]: ../.agents/skills/devstone-ui-storybook-standard/SKILL.md
+[testing_doc]: ../.agents/rules/testing-standard.md
+[storybook_doc]: ../.agents/rules/ui-storybook-standard.md
