@@ -15,7 +15,7 @@ LAST_CONTENT=$(tail -n 30 "$TRANSCRIPT_PATH" | jq -s -r 'map(select(.type == "PL
 TRIMMED_CONTENT=$(echo "$LAST_CONTENT" | tr -d '[:space:]')
 
 if [ -z "$TRIMMED_CONTENT" ]; then
-  echo '{"decision": "deny", "reason": "【規律違反】ツールを実行する前に、必ずユーザー向けの可視メッセージで目的（Why）と変更内容（What）を説明してください。"}'
+  echo '{"decision": "deny", "reason": "【規律違反】ツールを実行する前に、必ずユーザー向けの可視メッセージで目的と変更内容を説明してください。"}'
   exit 0
 fi
 

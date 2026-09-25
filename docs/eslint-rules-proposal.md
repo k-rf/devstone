@@ -507,7 +507,8 @@
   （Effect-TSのデバッグおよび実行時エラー検証の整合性のため）。
   本ルールは `ClassDeclaration` と `ClassExpression` の双方を監視し、無名クラスやクラス式におけるクラス名も以下のように解決する：
   1. `node.id` が存在する場合は、その名前（`node.id.name`）を使用する。
-  2. `node.id` が `null` であり、かつ `VariableDeclarator` 内の `ClassExpression` である場合は、変数名（`node.parent.id.name`）をクラス名として解決する。
+  2. `node.id` が `null` であり、かつ `VariableDeclarator` 内の `ClassExpression` である場合は、
+     変数名（`node.parent.id.name`）をクラス名として解決する。
   3. その他の無名クラス宣言（例：`export default class extends ...`）は、
      クラス名が特定できずタグの整合性を検証できないため、`Context.Tag` または
      `Data.TaggedError` を継承することを禁止（エラー報告）する。
@@ -645,7 +646,7 @@
   - `Effect.Schema` などのスキーマや hexagonal 境界モデル（`Schema`, `Payload`, `Input`, `Output`, `Record`
     サフィックス）で定義された `const` 変数については、型と値の双方を表現する役割を持つため例外的に `PascalCase`
     での記述を許容する。
-  - 本番用のアダプター実装クラス（`/adapter/` 以下に配置され、テスト/モック用ファイル以外）については `Live` サフィックス（例：`NotionTaskBoardLive`）を強制する。
+  - 本番用のアダプター実装クラスについては `Live` サフィックス（例：`NotionTaskBoardLive`）を強制する。
   - テスト・モック用のアダプタークラス（`*.mock.ts` や `mocks` ディレクトリ配下）については、`Mock` サフィックス（例：`TaskBoardMock`）を強制する。
 - **定義元ドキュメント**: [naming-conventions.md][naming_doc] (line 54)
 - **コード例**:
@@ -950,7 +951,10 @@
 - **実装詳細**:
   `no-restricted-syntax` ルールで `any` キャスト用のASTパターンを対象にする。
   - ASTセレクター:
-    `"TSAsExpression[typeAnnotation.type='TSAnyKeyword'], TSTypeAssertion[typeAnnotation.type='TSAnyKeyword']"`
+
+    ```text
+    "TSAsExpression[typeAnnotation.type='TSAnyKeyword'], TSTypeAssertion[typeAnnotation.type='TSAnyKeyword']"
+    ```
 
 ---
 
@@ -958,7 +962,7 @@
 
 - **カテゴリ**: Code Quality, Immutability & Value Handling
 - **目的 / 概要**: 全域関数（Total Functions）および Effect-TS のエラーチャネルの規律を保つため、本番コードでの `throw` 文の使用は原則禁止とする。
-  ただし、テストファイル（`*.spec.ts`, `*.test.ts`）や Storybookファイル（`*.stories.tsx`、`play`関数内）においてはアサーションフレームワークが内部的に例外を使用するため、これらは除外されなければならない。
+  ただし、テストファイルや Storybookファイルにおいてはアサーションフレームワークが内部的に例外を使用するため、これらは除外されなければならない。
 - **定義元ドキュメント**: [code-quality.md][quality_doc] (line 31)
 - **コード例**:
   - **OK**:
@@ -976,7 +980,8 @@
     ```
 
 - **実装詳細**:
-  `no-restricted-syntax` を用い、`ThrowStatement` を指定する。本番ソースコードのみをターゲットとし、テストファイルや Storybook ファイルを対象外に設定する。
+  `no-restricted-syntax` を用い、`ThrowStatement` を指定する。
+  本番ソースコードのみをターゲットとし、テストファイルや Storybook ファイルを対象外に設定する。
 
   ```typescript
   // eslint.config.ts
@@ -1011,7 +1016,7 @@
 #### 3.3.8. `devstone/single-function-per-file`
 
 - **カテゴリ**: Code Quality, Immutability & Value Handling
-- **目的 / 概要**: 1つのファイルに複数の主要な関数が定義されるのを防ぎ、単一責任の原則を徹底するため、原則として1つのファイルには1つの主要な関数（あるいは主要なエクスポート）のみを定義する。
+- **目的 / 概要**: 1つのファイルに複数の主要な関数が定義されるのを防ぎ、単一責任の原則を徹底するため、原則として1つのファイルには1つの主要な関数のみを定義する。
 - **定義元ドキュメント**: [code-quality.md][quality_doc] (line 42)
 - **コード例**:
   - **OK**:
@@ -1056,7 +1061,7 @@
 - **目的 / 概要**: UIコンポーネントに対する個別テストファイル（`*.spec.tsx` または
   `*.spec.jsx`）の作成を禁止する。UIテストおよびユーザーインタラクションの検証は、
   Storybookの `play` 関数に記述し一元管理する。
-  ただし、`packages/design-system/` 配下のブラウザベースのテストや、統合テスト/E2Eテストディレクトリ（例: `**/integration/**`, `**/e2e/**`）内のテストファイルは本ルールの対象外とする。
+  ただし、`packages/design-system/` 配下のブラウザベースのテストや、統合テスト/E2Eテストディレクトリ内のテストファイルは本ルールの対象外とする。
 - **定義元ドキュメント**:
   [devstone-ui-storybook-standard/SKILL.md][storybook_skill] (Section 1)
 - **コード例**:
@@ -1269,7 +1274,10 @@
   また、純粋なロジックファイルであるにもかかわらず、対応する `*.spec.ts` などの
   別テストファイルが存在する場合も警告・エラーを報告する。
   - ASTセレクター（`if (import.meta.vitest)` の検出）:
-    `IfStatement[test.type='MemberExpression'][test.object.type='MetaProperty'][test.object.meta.name='import'][test.property.name='vitest']`
+
+    ```text
+    IfStatement[test.type='MemberExpression'][test.object.type='MetaProperty'][test.object.meta.name='import'][test.property.name='vitest']
+    ```
 
 ---
 
@@ -1396,7 +1404,7 @@
     ```
 
 - **実装詳細**:
-  テストコード内（`*.spec.ts`, `*.spec.tsx`）での `runPromiseExit` / `runSyncExit` または `Exit.match` の呼び出しを一律で禁止する。
+  テストコード内での `runPromiseExit` / `runSyncExit` または `Exit.match` の呼び出しを一律で禁止する。
   `no-restricted-syntax` を用いて、これらの呼び出し式を検出してエラーとする。
   - ASTセレクター:
     - `CallExpression[callee.name=/^run(Promise|Sync)Exit$/]`

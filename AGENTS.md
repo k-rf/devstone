@@ -81,6 +81,7 @@
 - ブランチ命名規則: `.agents/rules/branch-naming.md`
 - コマンド一覧（moon / pnpm scripts）: `.agents/rules/commands.md`
 - 各アプリの起動・環境変数: `.agents/rules/applications.md`
+- 外部サービス（Notion / GitHub 等の役割・参照先）: `.agents/rules/external-services.md`
 - スキルとルールの定義方針: `.agents/rules/agent-guidelines.md`
 
 テスト基準は `devstone-testing-standard`、UI / Storybook は `devstone-ui-storybook-standard` スキルを参照してください。

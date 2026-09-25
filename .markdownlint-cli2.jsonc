@@ -4,7 +4,7 @@
       "line_length": 100,
       "tables": false,
       "code_blocks": false,
-      "strict": false
+      "strict": true
     }
   },
   "gitignore": true,

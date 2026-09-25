@@ -7,4 +7,15 @@ src/core/port/outbound/notion/task-board.port.ts
 src/adapter/outbound/toggl/toggl-http.adapter.ts
 ```
 
-`outbound` 直下へのファイル配置、および `http`、`kv`、`db`、`database`、`fetch`、`rest`、`graphql`、`api`、`r2`、`d1` を直下ディレクトリに使用することは禁止します。
+`outbound` 直下へのファイル配置、および下記ディレクトリを直下ディレクトリに使用することは禁止します。
+
+- `http`
+- `kv`
+- `db`
+- `database`
+- `fetch`
+- `rest`
+- `graphql`
+- `api`
+- `r2`
+- `d1`
