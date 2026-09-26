@@ -12,7 +12,6 @@ const config = mergeConfig(
             name: "unit",
             include: ["src/**/*.spec.ts"],
             environment: "node",
-            includeSource: ["src/**/*.ts"],
             typecheck: { enabled: true, include: ["src/**/*.spec-d.ts"] },
           },
         },

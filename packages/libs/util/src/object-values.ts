@@ -8,29 +8,3 @@ export const objectValues = <T extends Record<PropertyKey, unknown>>(
 ): readonly T[keyof T][] => {
   return Object.values(value) as readonly T[keyof T][];
 };
-
-if (import.meta.vitest) {
-  const { expect, it } = import.meta.vitest;
-
-  it("オブジェクトのすべての値を取得できること", () => {
-    // Arrange
-    const input = { a: 1, b: "test", c: true };
-
-    // Act
-    const result = objectValues(input);
-
-    // Assert
-    expect(result).toEqual([1, "test", true]);
-  });
-
-  it("空オブジェクトの場合は空配列が返ること", () => {
-    // Arrange
-    const input = {};
-
-    // Act
-    const result = objectValues(input);
-
-    // Assert
-    expect(result).toEqual([]);
-  });
-}

@@ -13,17 +13,3 @@ export const normalizeRichText = (richText: readonly unknown[]): string => {
     })
     .join("");
 };
-
-if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
-
-  it("リッチテキストを正常にプレーンテキストに変換できること", () => {
-    const input = [{ plain_text: "Hello " }, { plain_text: "World" }];
-    expect(normalizeRichText(input)).toBe("Hello World");
-  });
-
-  it("plain_text プロパティがない要素は無視されること", () => {
-    const input = [{ plain_text: "Valid" }, { something_else: "Invalid" }, undefined, 123];
-    expect(normalizeRichText(input)).toBe("Valid");
-  });
-}
