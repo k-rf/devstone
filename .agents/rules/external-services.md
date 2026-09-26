@@ -1,11 +1,11 @@
 ---
+description: >-
+  プロジェクトで利用する外部サービス（Notion, GitHub）の役割分担と、
+  各情報の管理場所・参照先を定義します。
 trigger: always_on
 ---
 
 # External Services
-
-> [!NOTE] このファイルの役割
-> プロジェクトで利用する外部サービス（Notion, GitHub）の役割分担と、各情報の管理場所・参照先を定義します。
 
 ## 1. 外部サービスの役割と管理場所
 

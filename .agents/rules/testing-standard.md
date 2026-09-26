@@ -1,7 +1,12 @@
-# Testing Standard
+---
+description: >-
+  プロジェクトにおけるテスト基準（テストピラミッド、インソーステスト、
+  モック方針、Effect-TS の検証方法など）を定義します。
+trigger: glob
+globs: "*.spec.ts,*.spec-d.ts"
+---
 
-> [!NOTE] このファイルの役割
-> プロジェクトにおけるテスト基準（テストピラミッド、インソーステスト、モック方針、Effect-TS の検証方法など）を定義しています。
+# Testing Standard
 
 ## 核心となる哲学
 

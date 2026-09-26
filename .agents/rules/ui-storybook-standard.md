@@ -1,8 +1,12 @@
-# UI Storybook Standard
+---
+description: >-
+  UI コンポーネントおよび Storybook の作成と記述に関する標準を定義します。
+  Storybook のメタ情報、satisfies の使用、play 関数内でのテスト実装規律などを定めます。
+trigger: glob
+globs: "*.stories.tsx"
+---
 
-> [!NOTE] このファイルの役割
-> UI コンポーネントおよび Storybook の作成と記述に関する標準を定義しています。
-> Storybook のメタ情報、satisfies の使用、play 関数内でのテスト実装規律などを定めます。
+# UI Storybook Standard
 
 このルールは、UI コンポーネントの Story 作成および Storybook を用いた検証における
 記述ルールを定義し、一貫したフロントエンド開発を維持するためのものです。

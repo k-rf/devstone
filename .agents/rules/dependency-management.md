@@ -1,8 +1,11 @@
-# Dependency Management
+---
+description: >-
+  ワークスペースで依存パッケージの追加、更新、削除を行う際のルールを定義します。
+  package.json の直接編集を禁止し、pnpm コマンドの使用を義務付けます。
+trigger: always_on
+---
 
-> [!NOTE] このファイルの役割
-> ワークスペースで依存パッケージの追加、更新、削除を行う際のルールを定義しています。
-> `package.json` の直接編集を禁止し、`pnpm` コマンドの使用を義務付けます。
+# Dependency Management
 
 本プロジェクトでは、依存関係の一貫性を保ち、lockfile の不整合を防ぐため、
 以下のパッケージ追加・更新のルールを適用します。
