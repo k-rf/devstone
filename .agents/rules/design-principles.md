@@ -1,11 +1,10 @@
 ---
+description: >-
+  プロジェクトの根幹を成す設計哲学と、SOLID / DRY 原則の具体的な適用指針を定義します。
 trigger: always_on
 ---
 
 # Design Principles
-
-> [!NOTE] このファイルの役割
-> プロジェクトの根幹を成す設計哲学と、SOLID / DRY 原則の具体的な適用指針を記載しています。
 
 ## 1. Single Responsibility Principle (単一責任の原則)
 

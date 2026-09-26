@@ -1,11 +1,11 @@
 ---
+description: >-
+  プロジェクトにおける実装レベルの品質基準と、
+  TypeScript / Effect-TS の活用規約を定義します。
 trigger: always_on
 ---
 
 # Code Quality
-
-> [!NOTE] このファイルの役割
-> プロジェクトにおける実装レベルの品質基準と、TypeScript / Effect-TS の活用規約を記載しています。
 
 ## 核心となる哲学：制約による自由
 

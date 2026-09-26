@@ -79,17 +79,19 @@
 - コード品質・型システム規約（鉄の掟を含む）: `.agents/rules/code-quality.md`
 - 命名規則・用語の一貫性: `.agents/rules/naming-conventions.md`
 - ブランチ命名規則: `.agents/rules/branch-naming.md`
-- コマンド一覧（moon / pnpm scripts）: `.agents/rules/commands.md`
-- 各アプリの起動・環境変数: `.agents/rules/applications.md`
 - 外部サービス（Notion / GitHub 等の役割・参照先）: `.agents/rules/external-services.md`
 - スキルとルールの定義方針: `.agents/rules/agent-guidelines.md`
+- テスト基準: `.agents/rules/testing-standard.md`
+- UI / Storybook 規律: `.agents/rules/ui-storybook-standard.md`
+- 依存パッケージ管理: `.agents/rules/dependency-management.md`
 
-テスト基準は `devstone-testing-standard`、UI / Storybook は `devstone-ui-storybook-standard` スキルを参照してください。
+コマンド一覧（moon / pnpm scripts）はルートの `README.md`、各アプリの起動・環境変数は
+各アプリの `README.md`（`apps/*/README.md`）を参照してください。
 
 ## Cursor Cloud specific instructions
 
 - 依存は起動時の update script（`proto install` → `pnpm install`）で自動整備されます。
 - `proto` の shim が PATH に無くコマンドが見つからない場合は `source ~/.bashrc` してください。
-- ビルド前提・コマンドは `.agents/rules/commands.md`、各アプリの起動・環境変数は
-  `.agents/rules/applications.md` を参照してください。
+- ビルド前提・コマンドはルート `README.md`、各アプリの起動・環境変数は
+  各アプリの `README.md`（`apps/*/README.md`）を参照してください。
 - 作業ブランチは `.agents/rules/branch-naming.md` に従うこと。
