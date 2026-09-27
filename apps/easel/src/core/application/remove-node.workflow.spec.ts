@@ -1,6 +1,6 @@
 import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec";
 import { Effect, Schema } from "effect";
-import { describe, expect, it } from "vitest";
+import { expect, it } from "vitest";
 
 import { getCanvas } from "../../test-utils/get-canvas.js";
 import { makeCanvasRef } from "../../test-utils/make-canvas-ref.js";
@@ -16,18 +16,14 @@ const initialCanvas = Schema.decodeUnknownSync(JsonCanvasSchema)({
   edges: [{ id: "edge-1", fromNode: "node-1", toNode: "node-2", color: "1" }],
 });
 
-describe("キャンバスからのノード削除ワークフロー", () => {
-  describe("正常系", () => {
-    it("指定された ID のノードを削除したとき、そのノードと関連するすべてのエッジが削除されること", async () => {
-      const state = makeCanvasRef({ ...initialCanvas });
-      const program = removeNodeWorkflow("node-1").pipe(
-        Effect.provide(makeTestCanvasRepository(state)),
-      );
+it("指定された ID のノードを削除したとき、そのノードと関連するすべてのエッジが削除されること", async () => {
+  const state = makeCanvasRef({ ...initialCanvas });
+  const program = removeNodeWorkflow("node-1").pipe(
+    Effect.provide(makeTestCanvasRepository(state)),
+  );
 
-      await Effect.runPromise(program);
+  await Effect.runPromise(program);
 
-      expect(getCanvas(state).nodes?.length).toBe(1);
-      expect(getCanvas(state).edges?.length).toBe(0);
-    });
-  });
+  expect(getCanvas(state).nodes?.length).toBe(1);
+  expect(getCanvas(state).edges?.length).toBe(0);
 });

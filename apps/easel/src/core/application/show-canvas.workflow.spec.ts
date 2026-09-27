@@ -1,6 +1,6 @@
 import { JsonCanvas as JsonCanvasSchema } from "@devstone/libs-json-canvas-spec";
 import { Effect, Schema } from "effect";
-import { describe, expect, it } from "vitest";
+import { expect, it } from "vitest";
 
 import { makeCanvasRef } from "../../test-utils/make-canvas-ref.js";
 import { makeTestCanvasRepository } from "../../test-utils/make-test-canvas-repository.js";
@@ -12,15 +12,11 @@ const initialCanvas = Schema.decodeUnknownSync(JsonCanvasSchema)({
   edges: [],
 });
 
-describe("キャンバス生データ取得ワークフロー", () => {
-  describe("正常系", () => {
-    it("リポジトリに保存されているキャンバスの生データ全体をそのまま取得できること", async () => {
-      const state = makeCanvasRef({ ...initialCanvas });
-      const program = showCanvasWorkflow().pipe(Effect.provide(makeTestCanvasRepository(state)));
+it("リポジトリに保存されているキャンバスの生データ全体をそのまま取得できること", async () => {
+  const state = makeCanvasRef({ ...initialCanvas });
+  const program = showCanvasWorkflow().pipe(Effect.provide(makeTestCanvasRepository(state)));
 
-      const result = await Effect.runPromise(program);
+  const result = await Effect.runPromise(program);
 
-      expect(result).toEqual(initialCanvas);
-    });
-  });
+  expect(result).toEqual(initialCanvas);
 });
