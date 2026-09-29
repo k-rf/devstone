@@ -19,4 +19,5 @@ export { pathNamingConventions } from "./path-naming-conventions.js";
 export { react } from "./react.js";
 export { singleFunctionPerFile } from "./single-function-per-file.js";
 export { sonarjs } from "./sonarjs.js";
+export { testDescriptionsJapanese } from "./test-descriptions-japanese.js";
 export { unicorn } from "./unicorn.js";
