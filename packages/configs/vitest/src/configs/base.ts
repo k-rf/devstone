@@ -3,7 +3,6 @@ import { defineConfig } from "vitest/config";
 const config = defineConfig({
   test: {
     include: ["src/e2e/**/*.e2e.spec.ts", "src/**/*.spec.ts"],
-    includeSource: ["src/**/*.ts"],
     environment: "node",
     typecheck: { enabled: true, include: ["src/**/*.spec-d.ts"] },
     coverage: {
