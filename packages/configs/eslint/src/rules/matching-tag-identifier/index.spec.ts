@@ -88,6 +88,14 @@ describe("正常系（タグ識別子とクラス名が一致している場合�
       title: "式の無いテンプレートリテラルで指定されていても名前が一致していれば許可する",
       code: "export class TaskBoardPort extends Context.Tag(`TaskBoardPort`)<TaskBoardPort>() {}",
     },
+  ])("$title", ({ code }) => {
+    const messages = lint(code);
+    expect(messages).toEqual([]);
+  });
+});
+
+describe("検査対象外（Context.Tag または Data.TaggedError を継承していない場合）", () => {
+  it.each([
     {
       title: "通常のクラス定義は検査対象外とする",
       code: "export class NormalClass {}",
