@@ -1,4 +1,7 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { P, match } from "ts-pattern";
+
+const { Literal, TemplateLiteral } = AST_NODE_TYPES;
 
 export interface ExtractedTagIdentifier {
   readonly argumentNode: TSESTree.Node;
@@ -14,27 +17,24 @@ export const extractTagIdentifier = (
   const firstArgument = callExpression.arguments[0];
   if (!firstArgument) return undefined;
 
-  if (firstArgument.type === AST_NODE_TYPES.Literal && typeof firstArgument.value === "string") {
-    return {
+  return match(firstArgument)
+    .with({ type: Literal, value: P.string }, ({ value }) => ({
       argumentNode: firstArgument,
-      value: firstArgument.value,
-    };
-  }
-
-  if (
-    firstArgument.type === AST_NODE_TYPES.TemplateLiteral &&
-    firstArgument.expressions.length === 0 &&
-    firstArgument.quasis.length === 1
-  ) {
-    const rawValue = firstArgument.quasis[0]?.value.raw;
-    return {
+      value: value,
+    }))
+    .with(
+      {
+        type: TemplateLiteral,
+        expressions: [],
+        quasis: [{ value: { raw: P.select() } }],
+      },
+      (rawValue) => ({
+        argumentNode: firstArgument,
+        value: rawValue,
+      }),
+    )
+    .otherwise(() => ({
       argumentNode: firstArgument,
-      value: rawValue,
-    };
-  }
-
-  return {
-    argumentNode: firstArgument,
-    value: undefined,
-  };
+      value: undefined,
+    }));
 };
