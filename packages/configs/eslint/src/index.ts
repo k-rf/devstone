@@ -9,6 +9,7 @@ export { json } from "./json.js";
 export { layerBoundary } from "./layer-boundary.js";
 export { logicFreeInboundAdapters } from "./logic-free-inbound-adapters.js";
 export { markdown } from "./markdown.js";
+export { matchingTagIdentifier } from "./matching-tag-identifier.js";
 export { namingConvention } from "./naming-convention.js";
 export { noCoreSideEffects } from "./no-core-side-effects.js";
 export { noThrowInProduction } from "./no-throw-in-production.js";
