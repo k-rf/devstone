@@ -36,12 +36,10 @@ export const moveNode = (
       relative: number | undefined,
       current: number,
     ): number => {
-      if (absolute !== undefined) {
-        return absolute;
-      }
-      if (relative !== undefined) {
-        return current + relative;
-      }
+      if (absolute !== undefined) return absolute;
+
+      if (relative !== undefined) return current + relative;
+
       return current;
     };
 

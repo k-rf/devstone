@@ -19,15 +19,11 @@ export const getCanvasItem = (
   Effect.gen(function* () {
     const nodes = canvas.nodes ?? [];
     const foundNode = nodes.find((n) => n.id === id);
-    if (foundNode !== undefined) {
-      return { type: "node" as const, data: foundNode };
-    }
+    if (foundNode !== undefined) return { type: "node" as const, data: foundNode };
 
     const edges = canvas.edges ?? [];
     const foundEdge = edges.find((e) => e.id === id);
-    if (foundEdge !== undefined) {
-      return { type: "edge" as const, data: foundEdge };
-    }
+    if (foundEdge !== undefined) return { type: "edge" as const, data: foundEdge };
 
     return yield* Effect.fail(
       new CanvasError({ message: `ID '${id}' を持つノードまたはエッジが見つかりませんでした` }),

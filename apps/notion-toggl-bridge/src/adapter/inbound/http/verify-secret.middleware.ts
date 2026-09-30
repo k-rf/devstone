@@ -15,8 +15,9 @@ export const verifySecretMiddleware = createMiddleware<{
   const receivedSecret = c.req.header("X-Shared-Secret");
   const expectedSecret = c.env.NOTION_WEBHOOK_SECRET;
 
-  if (receivedSecret === undefined || !(await timingSafeEqual(receivedSecret, expectedSecret)))
+  if (receivedSecret === undefined || !(await timingSafeEqual(receivedSecret, expectedSecret))) {
     return c.json({ message: "Unauthorized" }, 401);
+  }
 
   return next();
 });

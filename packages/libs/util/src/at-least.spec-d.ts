@@ -36,8 +36,6 @@ describe("異常系", () => {
 describe("atLeast 関数の検証", () => {
   it("型ガードとして正しく型を絞り込めるべき", () => {
     const arr: readonly number[] = [1, 2, 3];
-    if (atLeast(arr, 2)) {
-      expectTypeOf(arr).toExtend<AtLeast<number, 2>>();
-    }
+    if (atLeast(arr, 2)) expectTypeOf(arr).toExtend<AtLeast<number, 2>>();
   });
 });

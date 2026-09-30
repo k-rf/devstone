@@ -144,9 +144,7 @@ describe("正常系", () => {
     const program = Effect.gen(function* () {
       const fs = yield* FileSystem.FileSystem;
 
-      if (yield* fs.exists(testFile)) {
-        yield* fs.remove(testFile);
-      }
+      if (yield* fs.exists(testFile)) yield* fs.remove(testFile);
 
       // 重なった2つのノードを含むキャンバスを作成
       const initialCanvas = {
@@ -182,9 +180,8 @@ describe("正常系", () => {
       const fs = yield* FileSystem.FileSystem;
 
       // キャンバス初期化 (空オブジェクトで書き込み、nodes/edges が undefined の状態を作る)
-      if (yield* fs.exists(testFile)) {
-        yield* fs.remove(testFile);
-      }
+      if (yield* fs.exists(testFile)) yield* fs.remove(testFile);
+
       yield* fs.writeFileString(testFile, "{}");
 
       // serve コマンド (プレースホルダー検証)
