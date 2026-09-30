@@ -38,6 +38,7 @@
     "miniflare",
     "moonrepo",
     "msgpackr",
+    "nonblock",
     "oneline",
     "oxfmt",
     "pandacss",
