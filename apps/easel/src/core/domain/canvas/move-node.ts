@@ -37,7 +37,6 @@ export const moveNode = (
       current: number,
     ): number => {
       if (absolute !== undefined) return absolute;
-
       if (relative !== undefined) return current + relative;
 
       return current;
