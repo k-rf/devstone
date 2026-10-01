@@ -8,9 +8,8 @@ export const splitCategory = (
   category: string,
 ): { readonly parent: string; readonly child: string } | undefined => {
   const parts = category.split("/").map((p) => p.trim());
-  if (parts.length < 2 || !parts[0] || !parts[1]) {
-    return undefined;
-  }
+  if (parts.length < 2 || !parts[0] || !parts[1]) return undefined;
+
   // 3階層以上ある場合は、最初の / で分ける (デザインドック準拠)
   return {
     parent: parts[0],

@@ -68,9 +68,7 @@ export const CanvasFileRepository = Layer.effect(
             ),
           );
 
-          if (!exists) {
-            return { nodes: [], edges: [] };
-          }
+          if (!exists) return { nodes: [], edges: [] };
 
           const data = yield* fs.readFileString(config.filePath).pipe(
             Effect.mapError(

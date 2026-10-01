@@ -29,6 +29,9 @@ export const base = defineConfig(
 
       /** @remarks ワークスペース共通の構文制限を適用する */
       "no-restricted-syntax": ["error", ...baseRestrictedSyntax],
+
+      /** @remarks 複数行にまたがるブロックには波括弧を強制し、1行のブロックでは波括弧の省略を許可する */
+      curly: ["error", "multi-line"],
     },
   },
   {
