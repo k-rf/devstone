@@ -1,24 +1,17 @@
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { match } from "ts-pattern";
+
+import { noop } from "../libs/noop.js";
+
+const { CallExpression, Identifier, MemberExpression, TaggedTemplateExpression } = AST_NODE_TYPES;
 
 /**
  * 呼び出しチェーンまたは式の根本となる識別子名を取得する。
  */
-export const getRootIdentifierName = (node: TSESTree.Node): string | undefined => {
-  switch (node.type) {
-    case AST_NODE_TYPES.Identifier: {
-      return node.name;
-    }
-    case AST_NODE_TYPES.MemberExpression: {
-      return getRootIdentifierName(node.object);
-    }
-    case AST_NODE_TYPES.CallExpression: {
-      return getRootIdentifierName(node.callee);
-    }
-    case AST_NODE_TYPES.TaggedTemplateExpression: {
-      return getRootIdentifierName(node.tag);
-    }
-    default: {
-      return undefined;
-    }
-  }
-};
+export const getRootIdentifierName = (node: TSESTree.Node): string | undefined =>
+  match(node)
+    .with({ type: Identifier }, ({ name }) => name)
+    .with({ type: MemberExpression }, ({ object }) => getRootIdentifierName(object))
+    .with({ type: CallExpression }, ({ callee }) => getRootIdentifierName(callee))
+    .with({ type: TaggedTemplateExpression }, ({ tag }) => getRootIdentifierName(tag))
+    .otherwise(noop);
