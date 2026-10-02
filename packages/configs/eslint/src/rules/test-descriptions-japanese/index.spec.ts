@@ -27,6 +27,41 @@ const lint = (code: string): readonly Linter.LintMessage[] => {
   return linter.verify(code, config, { filename: testFilename });
 };
 
+describe("検査しない", () => {
+  it.each([
+    {
+      name: "即時関数実行の呼び出しは検査しないこと",
+      code: '(function() {})("test");',
+    },
+    {
+      name: "describe の呼び出しは検査しないこと",
+      code: 'describe("English test suite", () => {});',
+    },
+    {
+      name: "一般の関数呼び出しは検査しないこと",
+      code: 'customAssert("English message");',
+    },
+    {
+      name: "変数で渡された説明文は静的に検証できないため検査しないこと",
+      code: 'const testName = "should pass"; it(testName, () => {});',
+    },
+    {
+      name: "it.each のテーブルが変数で渡されている場合は静的解析不能として検査しないこと",
+      code: 'const cases = [{ name: "foo" }]; it.each(cases)("$name", () => {});',
+    },
+    {
+      name: "it.each のテーブルが空配列の場合は検査しないこと",
+      code: 'it.each([])("$name", () => {});',
+    },
+    {
+      name: "it.each のプロパティ値が変数で渡されている場合は静的解析不能として検査しないこと",
+      code: 'const dynamicName = "foo"; it.each([{ name: dynamicName }])("$name", () => {});',
+    },
+  ])("$name", ({ code }) => {
+    expect(lint(code)).toEqual([]);
+  });
+});
+
 describe("許可する", () => {
   it.each([
     {
@@ -78,40 +113,12 @@ describe("許可する", () => {
       code: 'it.each([{ "name": "日本語のテスト" }])("$name", () => {});',
     },
     {
-      name: "it.each のテーブルが変数で渡されている場合は静的解析不能として許可すること",
-      code: 'const cases = [{ name: "foo" }]; it.each(cases)("$name", () => {});',
-    },
-    {
-      name: "it.each のテーブルが空配列の場合は許可すること",
-      code: 'it.each([])("$name", () => {});',
-    },
-    {
-      name: "it.each のプロパティ値が変数で渡されている場合は静的解析不能として許可すること",
-      code: 'const dynamicName = "foo"; it.each([{ name: dynamicName }])("$name", () => {});',
-    },
-    {
       name: "テンプレートリテラルに日本語が含まれていること",
       code: "it(`ID: ${id} が正常に更新されること`, () => {});",
     },
     {
-      name: "変数で渡された説明文は静的に検証できないため無視すること",
-      code: 'const testName = "should pass"; it(testName, () => {});',
-    },
-    {
       name: "computed member expression（it['skip']）で日本語の説明文があること",
       code: 'it["skip"]("日本語テスト", () => {});',
-    },
-    {
-      name: "即時関数実行の呼び出しは検査対象外であること",
-      code: '(function() {})("test");',
-    },
-    {
-      name: "describe の説明文は検査対象外であること",
-      code: 'describe("English test suite", () => {});',
-    },
-    {
-      name: "一般の関数呼び出しは検査対象外であること",
-      code: 'customAssert("English message");',
     },
   ])("$name を許可すること", ({ code }) => {
     expect(lint(code)).toEqual([]);
