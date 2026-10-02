@@ -30,9 +30,7 @@ export const testDescriptionsJapaneseRule = createRule<Options, MessageIds>({
   create: (context) => {
     return {
       CallExpression: (node) => {
-        if (!isTestCaseCall(node)) {
-          return;
-        }
+        if (!isTestCaseCall(node)) return;
 
         const firstArgument = node.arguments[0];
         if (firstArgument === undefined) {

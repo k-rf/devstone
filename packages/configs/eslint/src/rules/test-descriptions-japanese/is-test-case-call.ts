@@ -7,9 +7,7 @@ import { isTestGeneratorCall } from "./is-test-generator-call.js";
  * CallExpression がテストケース定義（it または test）の呼び出しであるかを判定する。
  */
 export const isTestCaseCall = (node: TSESTree.CallExpression): boolean => {
-  if (isTestGeneratorCall(node)) {
-    return false;
-  }
+  if (isTestGeneratorCall(node)) return false;
 
   const rootName = getRootIdentifierName(node.callee);
 

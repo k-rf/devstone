@@ -9,9 +9,7 @@ const isTargetProperty = (
   property: TSESTree.ObjectLiteralElement,
   propertyName: string,
 ): property is TSESTree.Property => {
-  if (property.type !== AST_NODE_TYPES.Property) {
-    return false;
-  }
+  if (property.type !== AST_NODE_TYPES.Property) return false;
 
   if (property.key.type === AST_NODE_TYPES.Identifier && property.key.name === propertyName) {
     return true;
@@ -30,44 +28,25 @@ export const hasJapaneseInEachTable = (
 ): boolean => {
   const match = placeholderPattern.exec(description);
   const propertyName = match?.[1];
-  if (propertyName === undefined) {
-    return false;
-  }
-
-  if (callNode.callee.type !== AST_NODE_TYPES.CallExpression) {
-    return false;
-  }
+  if (propertyName === undefined) return false;
+  if (callNode.callee.type !== AST_NODE_TYPES.CallExpression) return false;
 
   const tableNode = callNode.callee.arguments[0];
-  if (tableNode === undefined) {
-    return false;
-  }
-
-  if (tableNode.type !== AST_NODE_TYPES.ArrayExpression) {
-    return true;
-  }
-
-  if (tableNode.elements.length === 0) {
-    return true;
-  }
+  if (tableNode === undefined) return false;
+  if (tableNode.type !== AST_NODE_TYPES.ArrayExpression) return true;
+  if (tableNode.elements.length === 0) return true;
 
   return tableNode.elements.every((element) => {
-    if (element?.type !== AST_NODE_TYPES.ObjectExpression) {
-      return false;
-    }
+    if (element?.type !== AST_NODE_TYPES.ObjectExpression) return false;
 
     const targetProperty = element.properties.find((property) =>
       isTargetProperty(property, propertyName),
     );
 
-    if (targetProperty === undefined) {
-      return false;
-    }
+    if (targetProperty === undefined) return false;
 
     const valueText = extractDescriptionText(targetProperty.value);
-    if (valueText === undefined) {
-      return true;
-    }
+    if (valueText === undefined) return true;
 
     return hasJapaneseCharacter(valueText);
   });
