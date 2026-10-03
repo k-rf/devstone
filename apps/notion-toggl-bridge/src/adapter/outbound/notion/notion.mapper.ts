@@ -9,6 +9,7 @@ export const normalizeRichText = (richText: readonly unknown[]): string => {
       if (t && typeof t === "object" && "plain_text" in t && typeof t.plain_text === "string") {
         return t.plain_text;
       }
+
       return "";
     })
     .join("");

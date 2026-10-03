@@ -15,6 +15,7 @@ import {
   pathNamingConventions,
   singleFunctionPerFile,
   sonarjs,
+  testDescriptionsJapanese,
   unicorn,
 } from "@devstone/configs-eslint";
 import { defineConfig } from "eslint/config";
@@ -44,6 +45,7 @@ const config = defineConfig(
   pathNamingConventions,
   singleFunctionPerFile,
   sonarjs,
+  testDescriptionsJapanese,
   unicorn,
 );
 

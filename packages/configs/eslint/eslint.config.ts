@@ -11,6 +11,7 @@ import {
   node,
   singleFunctionPerFile,
   sonarjs,
+  testDescriptionsJapanese,
   unicorn,
 } from "./src/index.js";
 
@@ -33,6 +34,7 @@ const config = defineConfig(
   node,
   singleFunctionPerFile,
   sonarjs,
+  testDescriptionsJapanese,
   unicorn,
   {
     files: ["src/rules/**/*.ts"],

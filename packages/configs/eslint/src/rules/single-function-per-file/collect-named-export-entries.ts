@@ -32,6 +32,7 @@ export const collectNamedExportEntries = (
           if (declarator.id.type === Identifier && isFunctionNode(declarator.init)) {
             return [{ node: declarator, name: declarator.id.name }];
           }
+
           return [];
         }),
       )

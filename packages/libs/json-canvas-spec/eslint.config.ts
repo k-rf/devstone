@@ -9,6 +9,7 @@ import {
   node,
   singleFunctionPerFile,
   sonarjs,
+  testDescriptionsJapanese,
   unicorn,
 } from "@devstone/configs-eslint";
 import { defineConfig } from "eslint/config";
@@ -32,6 +33,7 @@ const config = defineConfig(
   node,
   singleFunctionPerFile,
   sonarjs,
+  testDescriptionsJapanese,
   unicorn,
 );
 
