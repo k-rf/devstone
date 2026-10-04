@@ -8,12 +8,10 @@ const isAstNode = (value: unknown): value is TSESTree.Node =>
 
 const collectChildNodes = (node: TSESTree.Node): readonly TSESTree.Node[] => {
   return Object.entries(node).flatMap(([key, value]) => {
-    if (key === "parent") {
-      return [];
-    }
-    if (Array.isArray(value)) {
-      return value.filter(isAstNode);
-    }
+    if (key === "parent") return [];
+
+    if (Array.isArray(value)) return value.filter(isAstNode);
+
     return isAstNode(value) ? [value] : [];
   });
 };

@@ -31,30 +31,22 @@ export const noSingleDescribeRule = createRule<Options, MessageIds>({
     },
   },
   create: (context) => {
-    if (!isTestFile(context.filename)) {
-      return {};
-    }
+    if (!isTestFile(context.filename)) return {};
 
     return {
       "Program:exit": (program: TSESTree.Program) => {
         const fileCallExpressions = collectDescendantCallExpressions(program);
         const describeCalls = fileCallExpressions.filter(isDescribeCall);
 
-        if (describeCalls.length !== 1) {
-          return;
-        }
+        if (describeCalls.length !== 1) return;
 
         const singleDescribe = describeCalls.find(
           (call) => !collectDescendantCallExpressions(call).some(isHookCall),
         );
-        if (singleDescribe === undefined) {
-          return;
-        }
+        if (singleDescribe === undefined) return;
 
         const hasTest = collectDescendantCallExpressions(singleDescribe).some(isTestCaseCall);
-        if (!hasTest) {
-          return;
-        }
+        if (!hasTest) return;
 
         context.report({
           node: singleDescribe,

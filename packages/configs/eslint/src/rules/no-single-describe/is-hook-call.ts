@@ -9,9 +9,7 @@ const hookNames = new Set(["beforeEach", "afterEach", "beforeAll", "afterAll"]);
  * 指定されたノードがテストフック（beforeEach, afterEach 等）の呼び出し式であるかを判定する。
  */
 export const isHookCall = (node: TSESTree.CallExpression): boolean => {
-  if (isCalleeOfParentCall(node)) {
-    return false;
-  }
+  if (isCalleeOfParentCall(node)) return false;
 
   const root = getCalleeRootIdentifier(node.callee);
   return root !== undefined && hookNames.has(root.name);
