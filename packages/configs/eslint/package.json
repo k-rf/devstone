@@ -117,6 +117,11 @@
       "types": "./dist/single-function-per-file.d.ts",
       "dev": "./src/single-function-per-file.ts",
       "default": "./dist/single-function-per-file.js"
+    },
+    "./storybook": {
+      "types": "./dist/storybook.d.ts",
+      "dev": "./src/storybook.ts",
+      "default": "./dist/storybook.js"
     }
   },
   "scripts": {
