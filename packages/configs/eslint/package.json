@@ -138,6 +138,7 @@
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-sonarjs": "4.2.0",
+    "eslint-plugin-storybook": "10.6.1",
     "eslint-plugin-unicorn": "64.0.0",
     "globals": "17.5.0",
     "ts-pattern": "5.9.0",
