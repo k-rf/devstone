@@ -7,9 +7,7 @@ const createRule = ESLintUtils.RuleCreator(
     `https://github.com/k-rf/devstone/blob/main/packages/configs/eslint/docs/rules/${name}.md`,
 );
 
-const excludedDirectoryPattern =
-  /(?:^|\/)(?:packages\/design-system|integration|e2e|end-to-end)\//u;
-const uiSpecFilenamePattern = /\.spec\.(?:tsx|jsx)$/u;
+const uiSpecFilenamePattern = /\.(?:spec|test)\.(?:tsx|jsx)$/u;
 
 /**
  * UI コンポーネントの個別テストファイルを禁止し、Storybook の play 関数への集約を強制する。
@@ -20,7 +18,7 @@ export const noUiSpecFilesRule = createRule<Options, MessageIds>({
     type: "problem",
     docs: {
       description:
-        "Disallow UI component spec files so UI tests and user interactions are centralized in Storybook play functions.",
+        "Disallow UI component spec and test files so UI tests and user interactions are centralized in Storybook play functions.",
     },
     schema: [],
     messages: {
@@ -31,12 +29,7 @@ export const noUiSpecFilesRule = createRule<Options, MessageIds>({
   create: (context) => {
     const normalizedFilename = context.filename.replaceAll("\\", "/");
 
-    if (
-      !uiSpecFilenamePattern.test(normalizedFilename) ||
-      excludedDirectoryPattern.test(normalizedFilename)
-    ) {
-      return {};
-    }
+    if (!uiSpecFilenamePattern.test(normalizedFilename)) return {};
 
     return {
       Program: (node) => {

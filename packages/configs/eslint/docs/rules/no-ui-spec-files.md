@@ -1,20 +1,13 @@
 # no-ui-spec-files
 
-UI コンポーネントに対する個別の `*.spec.tsx` / `*.spec.jsx` ファイルを禁止します。
+UI コンポーネントに対する個別の `*.spec.tsx` / `*.spec.jsx` / `*.test.tsx` / `*.test.jsx` ファイルを禁止します。
 UI テストおよびユーザーインタラクションの検証は、Storybook の `play` 関数に集約してください。
 
 ## Rule Details
 
-通常のアプリケーション配下に UI コンポーネントの個別テストを作成すると、
+UI コンポーネントの個別テストを作成すると、
 コンポーネントの振る舞いを検証する場所が Storybook とテストファイルに分散します。
-このルールは対象拡張子の spec ファイルを禁止し、検証を Storybook の `play` 関数へ一元化します。
-
-次のディレクトリ配下は対象外です。
-
-- `packages/design-system/`
-- `integration/`
-- `e2e/`
-- `end-to-end/`
+このルールは対象拡張子のテストファイルを禁止し、検証を Storybook の `play` 関数へ一元化します。
 
 ### ❌ Incorrect
 
@@ -38,9 +31,9 @@ export const Default = {
 };
 ```
 
-```tsx
-// packages/design-system/src/button.spec.tsx
-it("ボタンを表示すること", () => {});
+```ts
+// apps/easel/src/utils.spec.ts
+it("ユーティリティをテストすること", () => {});
 ```
 
 ## Options
