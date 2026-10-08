@@ -5,6 +5,7 @@ export default mergeConfig(
   baseConfig,
   defineConfig({
     test: {
+      globals: true,
       coverage: {
         exclude: ["src/*.ts", "src/no-restricted-syntax/**/*.ts"],
       },

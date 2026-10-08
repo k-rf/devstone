@@ -240,6 +240,9 @@ importers:
       '@devstone/configs-vitest':
         specifier: workspace:*
         version: link:../vitest
+      '@typescript-eslint/rule-tester':
+        specifier: 8.59.1
+        version: 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
       '@typescript-eslint/utils':
         specifier: 8.59.1
         version: 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
@@ -497,6 +500,7 @@ packages:
 
   '@cloudflare/vitest-pool-workers@0.15.1':
     resolution: {integrity: sha512-KNcVvzEmjkTBnymgs0EZXSLKF7bSFMFYj8DID24J4c84SxI55hRUIdq6L1PG8midv+y7ep52Tr81u9Ou0a4bSQ==}
+    deprecated: '@cloudflare/vitest-pool-workers has been renamed to @cloudflare/vitest-plugin. This package will not receive future updates.'
     peerDependencies:
       '@vitest/runner': ^4.1.0
       '@vitest/snapshot': ^4.1.0
@@ -2284,6 +2288,12 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       typescript: '>=4.8.4 <6.1.0'
+
+  '@typescript-eslint/rule-tester@8.59.1':
+    resolution: {integrity: sha512-VAlTRylRP+zh2jepYylwEllQSI8yP0QWQqUKc3xcPbuSlnDeC0CjbpWAOp5CrqfGl9ZMGw74BjZnutb7mILOzA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
 
   '@typescript-eslint/scope-manager@8.59.1':
     resolution: {integrity: sha512-LwuHQI4pDOYVKvmH2dkaJo6YZCSgouVgnS/z7yBPKBMvgtBvyLqiLy9Z6b7+m/TRcX1NFYUqZetI5Y+aT4GEfg==}
@@ -7115,6 +7125,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
     optional: true
+
+  '@typescript-eslint/rule-tester@8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)':
+    dependencies:
+      '@typescript-eslint/parser': 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
+      '@typescript-eslint/typescript-estree': 8.59.1(@typescript/typescript6@6.0.2)(supports-color@10.2.2)
+      '@typescript-eslint/utils': 8.59.1(@typescript/typescript6@6.0.2)(eslint@10.2.1(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)
+      ajv: 6.15.0
+      eslint: 10.2.1(jiti@2.7.0)(supports-color@10.2.2)
+      json-stable-stringify-without-jsonify: 1.0.1
+      lodash.merge: 4.6.2
+      semver: 7.8.5
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   '@typescript-eslint/scope-manager@8.59.1':
     dependencies:

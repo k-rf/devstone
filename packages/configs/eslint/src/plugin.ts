@@ -3,6 +3,7 @@ import { type ESLint } from "eslint";
 import { exportRoleSuffixesRule } from "./rules/export-role-suffixes/index.js";
 import { matchingTagIdentifierRule } from "./rules/matching-tag-identifier/index.js";
 import { noSingleDescribeRule } from "./rules/no-single-describe/index.js";
+import { noUiSpecFilesRule } from "./rules/no-ui-spec-files/index.js";
 import { outboundPartitioningRule } from "./rules/outbound-partitioning/index.js";
 import { pathNamingConventionsRule } from "./rules/path-naming-conventions/index.js";
 import { singleFunctionPerFileRule } from "./rules/single-function-per-file/index.js";
@@ -23,6 +24,8 @@ export const plugin: ESLint.Plugin = {
     "matching-tag-identifier": matchingTagIdentifierRule,
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
     "no-single-describe": noSingleDescribeRule,
+    // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
+    "no-ui-spec-files": noUiSpecFilesRule,
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
     "outbound-partitioning": outboundPartitioningRule,
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
