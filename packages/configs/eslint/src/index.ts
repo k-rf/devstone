@@ -14,6 +14,7 @@ export { namingConvention } from "./naming-convention.js";
 export { noCoreSideEffects } from "./no-core-side-effects.js";
 export { noSingleDescribe } from "./no-single-describe.js";
 export { noThrowInProduction } from "./no-throw-in-production.js";
+export { noUiSpecFiles } from "./no-ui-spec-files.js";
 export { node } from "./node.js";
 export { outboundPartitioning } from "./outbound-partitioning.js";
 export { pathNamingConventions } from "./path-naming-conventions.js";

@@ -8,6 +8,9 @@ x-common: &common
       - REMOTE_HOME=${ROOT_REMOTE_HOME}
   group_add:
     - root
+  # Codex の Linux sandbox で bubblewrap が user namespace を作成できるようにする
+  security_opt:
+    - seccomp:unconfined
   env_file:
     - .env
     - .env.local
