@@ -2,8 +2,6 @@ import eslint from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import { configs } from "typescript-eslint";
 
-import { base as baseRestrictedSyntax } from "./no-restricted-syntax/presets/base.js";
-
 export const base = defineConfig(
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
@@ -26,9 +24,6 @@ export const base = defineConfig(
         "error",
         { fixStyle: "inline-type-imports", prefer: "type-imports" },
       ],
-
-      /** @remarks ワークスペース共通の構文制限を適用する */
-      "no-restricted-syntax": ["error", ...baseRestrictedSyntax],
 
       /** @remarks 複数行にまたがるブロックには波括弧を強制し、1行のブロックでは波括弧の省略を許可する */
       curly: ["error", "multi-line"],

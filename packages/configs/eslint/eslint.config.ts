@@ -2,18 +2,14 @@ import { defineConfig } from "eslint/config";
 
 import {
   base,
+  devstone,
   functional,
   importConfig,
   json,
   markdown,
-  matchingTagIdentifier,
   namingConvention,
-  noSingleDescribe,
-  noUiSpecFiles,
   node,
-  singleFunctionPerFile,
   sonarjs,
-  testDescriptionsJapanese,
   unicorn,
 } from "./src/index.js";
 
@@ -31,17 +27,13 @@ const config = defineConfig(
   importConfig,
   json,
   markdown,
-  matchingTagIdentifier,
   namingConvention,
-  noSingleDescribe,
-  noUiSpecFiles,
   node,
-  singleFunctionPerFile,
   sonarjs,
-  testDescriptionsJapanese,
   unicorn,
+  devstone,
   {
-    files: ["src/rules/**/*.ts"],
+    files: ["src/plugins/devstone/rules/**/*.ts"],
     rules: {
       /** @remarks ESLint ルールのセレクタ（Program 等）が RuleListener の型定義に従いパスカルケースとなるため */
       "@typescript-eslint/naming-convention": "off",

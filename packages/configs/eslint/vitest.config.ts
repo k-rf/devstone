@@ -7,7 +7,12 @@ export default mergeConfig(
     test: {
       globals: true,
       coverage: {
-        exclude: ["src/*.ts", "src/no-restricted-syntax/**/*.ts"],
+        exclude: [
+          "src/*.ts",
+          "src/selectors/**/*.ts",
+          "src/plugins/devstone/*.ts",
+          "src/plugins/devstone/configs/**/*.ts",
+        ],
       },
     },
   }),
