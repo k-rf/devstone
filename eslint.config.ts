@@ -2,18 +2,14 @@ import { defineConfig } from "eslint/config";
 
 import {
   base,
+  devstone,
   functional,
   importConfig,
   json,
   markdown,
-  matchingTagIdentifier,
   namingConvention,
-  noSingleDescribe,
-  noUiSpecFiles,
   node,
-  singleFunctionPerFile,
   sonarjs,
-  testDescriptionsJapanese,
   unicorn,
 } from "@devstone/configs-eslint";
 
@@ -37,18 +33,14 @@ const config = defineConfig(
     },
   },
   base,
+  devstone,
   functional,
   importConfig,
   json,
   markdown,
-  matchingTagIdentifier,
   namingConvention,
-  noSingleDescribe,
-  noUiSpecFiles,
   node,
-  singleFunctionPerFile,
   sonarjs,
-  testDescriptionsJapanese,
   unicorn,
 );
 

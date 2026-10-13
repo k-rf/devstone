@@ -73,25 +73,15 @@
       "dev": "./src/naming-convention.ts",
       "default": "./dist/naming-convention.js"
     },
+    "./devstone": {
+      "types": "./dist/devstone.d.ts",
+      "dev": "./src/devstone.ts",
+      "default": "./dist/devstone.js"
+    },
     "./no-core-side-effects": {
       "types": "./dist/no-core-side-effects.d.ts",
       "dev": "./src/no-core-side-effects.ts",
       "default": "./dist/no-core-side-effects.js"
-    },
-    "./no-ui-spec-files": {
-      "types": "./dist/no-ui-spec-files.d.ts",
-      "dev": "./src/no-ui-spec-files.ts",
-      "default": "./dist/no-ui-spec-files.js"
-    },
-    "./export-role-suffixes": {
-      "types": "./dist/export-role-suffixes.d.ts",
-      "dev": "./src/export-role-suffixes.ts",
-      "default": "./dist/export-role-suffixes.js"
-    },
-    "./path-naming-conventions": {
-      "types": "./dist/path-naming-conventions.d.ts",
-      "dev": "./src/path-naming-conventions.ts",
-      "default": "./dist/path-naming-conventions.js"
     },
     "./layer-boundary": {
       "types": "./dist/layer-boundary.d.ts",
@@ -112,16 +102,6 @@
       "types": "./dist/no-throw-in-production.d.ts",
       "dev": "./src/no-throw-in-production.ts",
       "default": "./dist/no-throw-in-production.js"
-    },
-    "./outbound-partitioning": {
-      "types": "./dist/outbound-partitioning.d.ts",
-      "dev": "./src/outbound-partitioning.ts",
-      "default": "./dist/outbound-partitioning.js"
-    },
-    "./single-function-per-file": {
-      "types": "./dist/single-function-per-file.d.ts",
-      "dev": "./src/single-function-per-file.ts",
-      "default": "./dist/single-function-per-file.js"
     },
     "./storybook": {
       "types": "./dist/storybook.d.ts",
