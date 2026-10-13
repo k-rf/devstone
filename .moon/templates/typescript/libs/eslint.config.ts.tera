@@ -1,5 +1,6 @@
 import {
   base,
+  devstone,
   functional,
   importConfig,
   jsdoc,
@@ -7,9 +8,7 @@ import {
   markdown,
   namingConvention,
   noCoreSideEffects,
-  noSingleDescribe,
   node,
-  singleFunctionPerFile,
   sonarjs,
   unicorn,
 } from "@devstone/configs-eslint";
@@ -25,6 +24,7 @@ const config = defineConfig(
     },
   },
   base,
+  devstone,
   functional,
   importConfig,
   jsdoc,
@@ -32,9 +32,7 @@ const config = defineConfig(
   markdown,
   namingConvention,
   noCoreSideEffects,
-  noSingleDescribe,
   node,
-  singleFunctionPerFile,
   sonarjs,
   unicorn,
 );
