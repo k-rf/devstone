@@ -9,7 +9,7 @@ export default mergeConfig(
       coverage: {
         exclude: [
           "src/*.ts",
-          "src/no-restricted-syntax/**/*.ts",
+          "src/selectors/**/*.ts",
           "src/plugins/devstone/*.ts",
           "src/plugins/devstone/configs/**/*.ts",
         ],
