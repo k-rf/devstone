@@ -1,34 +1,12 @@
-import { Linter } from "eslint";
-import { parser } from "typescript-eslint";
-import { describe, expect, it } from "vitest";
+import { RuleTester } from "@typescript-eslint/rule-tester";
 
-import { plugin } from "../../plugin.js";
+import { testDescriptionsJapaneseRule } from "./index.js";
 
-const ruleId = "devstone/test-descriptions-japanese";
 const testFilename = "src/example.spec.ts";
+const ruleTester = new RuleTester();
 
-const linter = new Linter();
-
-const config = {
-  files: ["**/*.{ts,tsx}"],
-  plugins: {
-    devstone: plugin,
-  },
-  languageOptions: {
-    parser: parser,
-    sourceType: "module",
-  },
-  rules: {
-    "devstone/test-descriptions-japanese": "error",
-  },
-} satisfies Linter.Config;
-
-const lint = (code: string): readonly Linter.LintMessage[] => {
-  return linter.verify(code, config, { filename: testFilename });
-};
-
-describe("検査しない", () => {
-  it.each([
+ruleTester.run("test-descriptions-japanese", testDescriptionsJapaneseRule, {
+  valid: [
     {
       name: "即時関数実行の呼び出しは検査しないこと",
       code: '(function() {})("test");',
@@ -57,13 +35,6 @@ describe("検査しない", () => {
       name: "it.each のプロパティ値が変数で渡されている場合は静的解析不能として検査しないこと",
       code: 'const dynamicName = "foo"; it.each([{ name: dynamicName }])("$name", () => {});',
     },
-  ])("$name", ({ code }) => {
-    expect(lint(code)).toEqual([]);
-  });
-});
-
-describe("許可する", () => {
-  it.each([
     {
       name: "it に日本語の説明文があること",
       code: 'it("正しいエッジデータを渡した場合、エッジが正常に追加され、そのIDが返されること", () => {});',
@@ -120,100 +91,94 @@ describe("許可する", () => {
       name: "computed member expression（it['skip']）で日本語の説明文があること",
       code: 'it["skip"]("日本語テスト", () => {});',
     },
-  ])("$name を許可すること", ({ code }) => {
-    expect(lint(code)).toEqual([]);
-  });
-});
-
-describe("報告する", () => {
-  it.each([
-    {
-      name: "it の説明文が英語のみの場合",
-      code: 'it("should return the added edge ID when valid data is provided", () => {});',
-    },
-    {
-      name: "test の説明文が英語のみの場合",
-      code: 'test("should return the added edge ID when valid data is provided", () => {});',
-    },
-    {
-      name: "it.skip の説明文が英語のみの場合",
-      code: 'it.skip("should skip this test", () => {});',
-    },
-    {
-      name: "it.only の説明文が英語のみの場合",
-      code: 'it.only("should run only this test", () => {});',
-    },
-    {
-      name: "it.todo の説明文が英語のみの場合",
-      code: 'it.todo("should implement later");',
-    },
-    {
-      name: "it.fails の説明文が英語のみの場合",
-      code: 'it.fails("should fail", () => {});',
-    },
-    {
-      name: "it.concurrent の説明文が英語のみの場合",
-      code: 'it.concurrent("should run concurrently", () => {});',
-    },
-    {
-      name: "it.concurrent.skip の説明文が英語のみの場合",
-      code: 'it.concurrent.skip("should skip concurrently", () => {});',
-    },
-    {
-      name: "it.each の説明文が英語のみの場合",
-      code: 'it.each([1, 2])("should test item %s", () => {});',
-    },
-    {
-      name: "it.each で $name 形式を使い、テーブル要素の name が英語のみの場合",
-      code: 'it.each([{ name: "English test only" }])("$name", () => {});',
-    },
-    {
-      name: "it.each で $name 形式を使い、テーブル要素がオブジェクトでない場合",
-      code: 'it.each(["invalid"])("$name", () => {});',
-    },
-    {
-      name: "it.each で $name 形式を使い、該当プロパティが存在しない場合",
-      code: 'it.each([{}])("$name", () => {});',
-    },
-    {
-      name: "it.each で $name 形式を使い、要素が SpreadElement のみで対象プロパティが存在しない場合",
-      code: 'const baseCase = {}; it.each([{ ...baseCase }])("$name", () => {});',
-    },
-    {
-      name: "it.each で引数なしで $name 形式を使った場合",
-      code: 'it.each()("$name", () => {});',
-    },
-    {
-      name: "it.skip で $name 形式を使った場合（テーブルが存在しないため報告）",
-      code: 'it.skip("$name", () => {});',
-    },
-    {
-      name: "テンプレートリテラルの説明文が英語のみの場合",
-      code: "it(`should test with ${id}`, () => {});",
-    },
-    {
-      name: "説明文が空文字の場合",
-      code: 'it("", () => {});',
-    },
-    {
-      name: "説明文が数字や記号のみの場合",
-      code: 'it("12345 !@#$", () => {});',
-    },
-    {
-      name: "第1引数が指定されていない場合",
-      code: "it();",
-    },
-    {
-      name: "第1引数が数値リテラルの場合",
-      code: "it(123, () => {});",
-    },
-  ])("$name を報告すること", ({ code }) => {
-    const messages = lint(code);
-    expect(messages).toHaveLength(1);
-    expect(messages[0]).toMatchObject({
-      ruleId: ruleId,
-      messageId: "requireJapaneseDescription",
-      message: "テスト名には日本語（ひらがな、カタカナ、漢字）を含める必要があります。",
-    });
-  });
+  ],
+  invalid: [
+    ...[
+      {
+        name: "it の説明文が英語のみの場合",
+        code: 'it("should return the added edge ID when valid data is provided", () => {});',
+      },
+      {
+        name: "test の説明文が英語のみの場合",
+        code: 'test("should return the added edge ID when valid data is provided", () => {});',
+      },
+      {
+        name: "it.skip の説明文が英語のみの場合",
+        code: 'it.skip("should skip this test", () => {});',
+      },
+      {
+        name: "it.only の説明文が英語のみの場合",
+        code: 'it.only("should run only this test", () => {});',
+      },
+      {
+        name: "it.todo の説明文が英語のみの場合",
+        code: 'it.todo("should implement later");',
+      },
+      {
+        name: "it.fails の説明文が英語のみの場合",
+        code: 'it.fails("should fail", () => {});',
+      },
+      {
+        name: "it.concurrent の説明文が英語のみの場合",
+        code: 'it.concurrent("should run concurrently", () => {});',
+      },
+      {
+        name: "it.concurrent.skip の説明文が英語のみの場合",
+        code: 'it.concurrent.skip("should skip concurrently", () => {});',
+      },
+      {
+        name: "it.each の説明文が英語のみの場合",
+        code: 'it.each([1, 2])("should test item %s", () => {});',
+      },
+      {
+        name: "it.each で $name 形式を使い、テーブル要素の name が英語のみの場合",
+        code: 'it.each([{ name: "English test only" }])("$name", () => {});',
+      },
+      {
+        name: "it.each で $name 形式を使い、テーブル要素がオブジェクトでない場合",
+        code: 'it.each(["invalid"])("$name", () => {});',
+      },
+      {
+        name: "it.each で $name 形式を使い、該当プロパティが存在しない場合",
+        code: 'it.each([{}])("$name", () => {});',
+      },
+      {
+        name: "it.each で $name 形式を使い、要素が SpreadElement のみで対象プロパティが存在しない場合",
+        code: 'const baseCase = {}; it.each([{ ...baseCase }])("$name", () => {});',
+      },
+      {
+        name: "it.each で引数なしで $name 形式を使った場合",
+        code: 'it.each()("$name", () => {});',
+      },
+      {
+        name: "it.skip で $name 形式を使った場合（テーブルが存在しないため報告）",
+        code: 'it.skip("$name", () => {});',
+      },
+      {
+        name: "テンプレートリテラルの説明文が英語のみの場合",
+        code: "it(`should test with ${id}`, () => {});",
+      },
+      {
+        name: "説明文が空文字の場合",
+        code: 'it("", () => {});',
+      },
+      {
+        name: "説明文が数字や記号のみの場合",
+        code: 'it("12345 !@#$", () => {});',
+      },
+      {
+        name: "第1引数が指定されていない場合",
+        code: "it();",
+      },
+      {
+        name: "第1引数が数値リテラルの場合",
+        code: "it(123, () => {});",
+      },
+    ].map(({ name, code }) => ({
+      name: `${name}を報告すること`,
+      code: code,
+      filename: testFilename,
+      errors: [{ messageId: "requireJapaneseDescription" as const }],
+    })),
+  ],
 });

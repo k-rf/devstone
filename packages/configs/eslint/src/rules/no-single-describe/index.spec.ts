@@ -1,228 +1,178 @@
-import { Linter } from "eslint";
-import { parser } from "typescript-eslint";
-import { describe, expect, it } from "vitest";
+import { RuleTester } from "@typescript-eslint/rule-tester";
 
-import { plugin } from "../../plugin.js";
+import { noSingleDescribeRule } from "./index.js";
 
-const ruleId = "devstone/no-single-describe";
+const ruleTester = new RuleTester();
 const defaultFilename = "src/example.spec.ts";
 
-const linter = new Linter();
-
-const config = {
-  files: ["**/*.{ts,tsx}"],
-  plugins: {
-    devstone: plugin,
-  },
-  languageOptions: {
-    parser: parser,
-    sourceType: "module",
-  },
-  rules: {
-    [ruleId]: "error",
-  },
-} satisfies Linter.Config;
-
-const lint = (code: string, filename: string = defaultFilename): readonly Linter.LintMessage[] => {
-  return linter.verify(code, config, { filename: filename });
-};
-
-const singleDescribeError = {
-  ruleId: ruleId,
-  messageId: "noSingleDescribe",
-  message:
-    "テストファイル内に単一の describe しか存在しない場合は、冗長なグループ化を省略し、テストケース（it / test）を直接記述してください。",
-};
-
-describe("検査しない", () => {
-  it("テストファイル以外のファイルは検査しないこと", () => {
-    const code = `
-      describe("正常系", () => {
-        it("テスト", () => {});
-      });
-    `;
-    expect(lint(code, "src/example.ts")).toEqual([]);
+const singleDescribeCode = `
+  describe("正常系", () => {
+    it("テスト", () => {});
   });
+`;
 
-  it("describe が存在せずフラットにテストケースが記述されている場合は報告しないこと", () => {
-    const code = `
-      it("テスト1", () => {});
-      test("テスト2", () => {});
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("describe が複数存在する場合は報告しないこと", () => {
-    const code = `
-      describe("正常系", () => {
+ruleTester.run("no-single-describe", noSingleDescribeRule, {
+  valid: [
+    {
+      name: "テストファイル以外のファイルは検査しないこと",
+      code: singleDescribeCode,
+      filename: "src/example.ts",
+    },
+    {
+      name: "describe が存在せずフラットにテストケースが記述されている場合は報告しないこと",
+      code: `
         it("テスト1", () => {});
-      });
-      describe("異常系", () => {
-        it("テスト2", () => {});
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("describe がネストしている場合は報告しないこと", () => {
-    const code = `
-      describe("親グループ", () => {
-        describe("子グループ", () => {
+        test("テスト2", () => {});
+      `,
+      filename: defaultFilename,
+    },
+    {
+      name: "describe が複数存在する場合は報告しないこと",
+      code: `
+        describe("正常系", () => {
+          it("テスト1", () => {});
+        });
+        describe("異常系", () => {
+          it("テスト2", () => {});
+        });
+      `,
+      filename: defaultFilename,
+    },
+    {
+      name: "describe がネストしている場合は報告しないこと",
+      code: `
+        describe("親グループ", () => {
+          describe("子グループ", () => {
+            it("テスト", () => {});
+          });
+        });
+      `,
+      filename: defaultFilename,
+    },
+    ...["beforeEach", "afterEach", "beforeAll", "afterAll"].map((hookName) => ({
+      name: `単一の describe 内に ${hookName} がある場合は報告しないこと`,
+      code: `
+        describe("グループ", () => {
+          ${hookName}(() => {});
           it("テスト", () => {});
         });
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("単一の describe 内に beforeEach がある場合は報告しないこと", () => {
-    const code = `
-      describe("グループ", () => {
+      `,
+      filename: defaultFilename,
+    })),
+    {
+      name: "describe の外側にフック関数がある場合もエラーなく処理されること",
+      code: `
         beforeEach(() => {});
         it("テスト", () => {});
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("単一の describe 内に afterEach がある場合は報告しないこと", () => {
-    const code = `
-      describe("グループ", () => {
-        afterEach(() => {});
-        it("テスト", () => {});
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("単一の describe 内に beforeAll がある場合は報告しないこと", () => {
-    const code = `
-      describe("グループ", () => {
-        beforeAll(() => {});
-        it("テスト", () => {});
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("単一の describe 内に afterAll がある場合は報告しないこと", () => {
-    const code = `
-      describe("グループ", () => {
-        afterAll(() => {});
-        it("テスト", () => {});
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("describe の外側にフック関数がある場合もエラーなく処理されること", () => {
-    const code = `
-      beforeEach(() => {});
-      it("テスト", () => {});
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("単一の describe 内にテストケースが存在しない場合は報告しないこと", () => {
-    const code = `
-      describe("空のグループ", () => {
-        const value = 1;
-      });
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-
-  it("ルートが識別子でない呼び出し式があってもクラッシュせず無視されること", () => {
-    const code = `
-      (() => {})()();
-      (1 + 1);
-    `;
-    expect(lint(code)).toEqual([]);
-  });
-});
-
-describe("報告する", () => {
-  it("単一の describe 直下に it がある場合に報告すること", () => {
-    const code = `
-      describe("正常系", () => {
-        it("正しい引数のとき正常に終了すること", () => {});
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it("単一の describe 直下に test がある場合に報告すること", () => {
-    const code = `
-      describe("正常系", () => {
-        test("正しい引数のとき正常に終了すること", () => {});
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it("単一の describe 内に複数のテストケースがある場合でも報告すること", () => {
-    const code = `
-      describe("正常系", () => {
-        it("テスト1", () => {});
-        it("テスト2", () => {});
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it("describe.skip や it.only などの修飾子がある場合でも検出すること", () => {
-    const code = `
-      describe.skip("スキップ対象", () => {
-        it.only("実行対象", () => {});
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it("describe.each を用いた単一の describe を報告すること", () => {
-    const code = `
-      describe.each([1, 2])("パラメータ化 %i", (val) => {
-        it("検証", () => {});
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it("TaggedTemplateExpression による describe.each を報告すること", () => {
-    const code = `
-      describe.each\`
-        a | b
-        \${1} | \${2}
-      \`("パラメータ化", ({ a, b }) => {
-        it("検証", () => {});
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it("ブロック内にネストされたテストケースがあっても単一 describe を報告すること", () => {
-    const code = `
-      describe("正常系", () => {
-        {
-          it("ネストブロック内のテスト", () => {});
-        }
-      });
-    `;
-    expect(lint(code)).toMatchObject([singleDescribeError]);
-  });
-
-  it.each([
-    "src/example.spec.ts",
-    "src/example.test.ts",
-    "src/example.spec-d.ts",
-    "src/example.test-d.ts",
-    String.raw`C:\workspace\src\example.spec.ts`,
-  ])("各種テストファイル形式で検出できること: %s", (filename) => {
-    const code = `
-      describe("正常系", () => {
-        it("テスト", () => {});
-      });
-    `;
-    expect(lint(code, filename)).toMatchObject([singleDescribeError]);
-  });
+      `,
+      filename: defaultFilename,
+    },
+    {
+      name: "単一の describe 内にテストケースが存在しない場合は報告しないこと",
+      code: `
+        describe("空のグループ", () => {
+          const value = 1;
+        });
+      `,
+      filename: defaultFilename,
+    },
+    {
+      name: "ルートが識別子でない呼び出し式があってもクラッシュせず無視されること",
+      code: `
+        (() => {})()();
+        (1 + 1);
+      `,
+      filename: defaultFilename,
+    },
+  ],
+  invalid: [
+    {
+      name: "単一の describe 直下に it がある場合に報告すること",
+      code: `
+        describe("正常系", () => {
+          it("正しい引数のとき正常に終了すること", () => {});
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    {
+      name: "単一の describe 直下に test がある場合に報告すること",
+      code: `
+        describe("正常系", () => {
+          test("正しい引数のとき正常に終了すること", () => {});
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    {
+      name: "単一の describe 内に複数のテストケースがある場合でも報告すること",
+      code: `
+        describe("正常系", () => {
+          it("テスト1", () => {});
+          it("テスト2", () => {});
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    {
+      name: "describe.skip や it.only などの修飾子がある場合でも検出すること",
+      code: `
+        describe.skip("スキップ対象", () => {
+          it.only("実行対象", () => {});
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    {
+      name: "describe.each を用いた単一の describe を報告すること",
+      code: `
+        describe.each([1, 2])("パラメータ化 %i", (val) => {
+          it("検証", () => {});
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    {
+      name: "TaggedTemplateExpression による describe.each を報告すること",
+      code: `
+        describe.each\`
+          a | b
+          \${1} | \${2}
+        \`("パラメータ化", ({ a, b }) => {
+          it("検証", () => {});
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    {
+      name: "ブロック内にネストされたテストケースがあっても単一 describe を報告すること",
+      code: `
+        describe("正常系", () => {
+          {
+            it("ネストブロック内のテスト", () => {});
+          }
+        });
+      `,
+      filename: defaultFilename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    },
+    ...[
+      "src/example.spec.ts",
+      "src/example.test.ts",
+      "src/example.spec-d.ts",
+      "src/example.test-d.ts",
+      String.raw`C:\workspace\src\example.spec.ts`,
+    ].map((filename) => ({
+      name: `各種テストファイル形式で検出できること: ${filename}`,
+      code: singleDescribeCode,
+      filename: filename,
+      errors: [{ messageId: "noSingleDescribe" as const }],
+    })),
+  ],
 });

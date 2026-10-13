@@ -1,81 +1,75 @@
-import { Linter } from "eslint";
-import { parser } from "typescript-eslint";
-import { describe, expect, it } from "vitest";
+import { RuleTester } from "@typescript-eslint/rule-tester";
 
-import { plugin } from "../../plugin.js";
+import { outboundPartitioningRule } from "./index.js";
 
-const ruleId = "devstone/outbound-partitioning";
-const linter = new Linter();
+const ruleTester = new RuleTester();
+const code = "export const value = 1;";
 
-const config = {
-  files: ["**/*.ts"],
-  plugins: {
-    devstone: plugin,
-  },
-  languageOptions: {
-    parser: parser,
-    sourceType: "module",
-  },
-  rules: {
-    [ruleId]: "error",
-  },
-} satisfies Linter.Config;
+const excludedFilenames = [
+  "src/core/port/inbound/http/request.port.ts",
+  "src/adapter/inbound/http/request.adapter.ts",
+  "src/core/port/repository/db/cache.port.ts",
+  "src/domain/outbound/notion/notion.ts",
+] as const;
 
-const lint = (filename: string): readonly Linter.LintMessage[] => {
-  return linter.verify("export const value = 1;", config, { filename: filename });
-};
+const validFilenames = [
+  "src/core/port/outbound/notion/task-board.port.ts",
+  "src/adapter/outbound/toggl/toggl-http.adapter.ts",
+  String.raw`C:\workspace\src\core\port\outbound\slack\notification.port.ts`,
+  String.raw`C:\workspace\src\adapter\outbound\cloudflare\kv.adapter.ts`,
+] as const;
 
-const missingServiceDirectory = {
-  ruleId: ruleId,
-  messageId: "missingServiceDirectory",
-  message:
-    "outbound 直下へのファイル配置はできません。外部サービス名のディレクトリに配置してください。",
-};
+const filesWithoutServiceDirectory = [
+  "src/core/port/outbound/task-board.port.ts",
+  "src/adapter/outbound/notion.adapter.ts",
+  String.raw`C:\workspace\src\core\port\outbound\task-board.port.ts`,
+  String.raw`C:\workspace\src\adapter\outbound\notion.adapter.ts`,
+] as const;
 
-const prohibitedTechnologyDirectory = (directoryName: string) => ({
-  ruleId: ruleId,
-  messageId: "prohibitedTechnologyDirectory",
-  message: `'${directoryName}' は技術名のため outbound の直下ディレクトリには使用できません。外部サービス名を使用してください。`,
-});
+const prohibitedDirectoryNames = [
+  "http",
+  "kv",
+  "db",
+  "database",
+  "fetch",
+  "rest",
+  "graphql",
+  "api",
+  "r2",
+  "d1",
+  "HTTP",
+] as const;
 
-describe("検査しない", () => {
-  it.each([
-    "src/core/port/inbound/http/request.port.ts",
-    "src/adapter/inbound/http/request.adapter.ts",
-    "src/core/port/repository/db/cache.port.ts",
-    "src/domain/outbound/notion/notion.ts",
-  ])("Outbound Port または Adapter 以外のパスは検査しないこと: %s", (filename) => {
-    expect(lint(filename)).toEqual([]);
-  });
-});
-
-describe("許可する", () => {
-  it.each([
-    "src/core/port/outbound/notion/task-board.port.ts",
-    "src/adapter/outbound/toggl/toggl-http.adapter.ts",
-    String.raw`C:\workspace\src\core\port\outbound\slack\notification.port.ts`,
-    String.raw`C:\workspace\src\adapter\outbound\cloudflare\kv.adapter.ts`,
-  ])("外部サービス名で分割されたパスを許可すること: %s", (filename) => {
-    expect(lint(filename)).toEqual([]);
-  });
-});
-
-describe("報告する", () => {
-  it.each([
-    "src/core/port/outbound/task-board.port.ts",
-    "src/adapter/outbound/notion.adapter.ts",
-    String.raw`C:\workspace\src\core\port\outbound\task-board.port.ts`,
-    String.raw`C:\workspace\src\adapter\outbound\notion.adapter.ts`,
-  ])("outbound 直下のファイルを報告すること: %s", (filename) => {
-    expect(lint(filename)).toMatchObject([missingServiceDirectory]);
-  });
-
-  it.each(["http", "kv", "db", "database", "fetch", "rest", "graphql", "api", "r2", "d1", "HTTP"])(
-    "技術名のディレクトリを報告すること: %s",
-    (directoryName) => {
-      const filename = `src/adapter/outbound/${directoryName}/service.adapter.ts`;
-
-      expect(lint(filename)).toMatchObject([prohibitedTechnologyDirectory(directoryName)]);
-    },
-  );
+ruleTester.run("outbound-partitioning", outboundPartitioningRule, {
+  valid: [
+    ...excludedFilenames.map((filename) => ({
+      name: `Outbound Port または Adapter 以外のパスは検査しないこと: ${filename}`,
+      code: code,
+      filename: filename,
+    })),
+    ...validFilenames.map((filename) => ({
+      name: `外部サービス名で分割されたパスを許可すること: ${filename}`,
+      code: code,
+      filename: filename,
+    })),
+  ],
+  invalid: [
+    ...filesWithoutServiceDirectory.map((filename) => ({
+      name: `outbound 直下のファイルを報告すること: ${filename}`,
+      code: code,
+      filename: filename,
+      errors: [{ messageId: "missingServiceDirectory" as const }],
+    })),
+    ...prohibitedDirectoryNames.map((directoryName) => ({
+      name: `技術名のディレクトリを報告すること: ${directoryName}`,
+      code: code,
+      filename: `src/adapter/outbound/${directoryName}/service.adapter.ts`,
+      errors: [
+        {
+          messageId: "prohibitedTechnologyDirectory" as const,
+          data: { directoryName: directoryName },
+        },
+      ],
+    })),
+  ],
 });
