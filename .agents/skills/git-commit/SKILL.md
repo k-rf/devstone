@@ -23,7 +23,8 @@ allowed-tools: Bash(git *), Read, Glob, Grep, Task, AskUserQuestion
 - **Warning** — 対処すべき
 - **Informational** — 参考情報
 
-続行前にユーザーの確認を得る。
+Critical または Warning が 1 件以上ある場合は、続行前にユーザーの確認を得る。
+両方 0 件の場合は、確認を待たずにそのまま Step 2 へ進む。
 
 ## Step 2: コミット計画
 
