@@ -7,6 +7,12 @@
       "skillPath": "skills/orca-cli/SKILL.md",
       "computedHash": "ccd717aed7b9866a059b0b31d9a009641a28f6db3201749943fbbb797af4a317"
     },
+    "orca-linear": {
+      "source": "stablyai/orca",
+      "sourceType": "github",
+      "skillPath": "skills/orca-linear/SKILL.md",
+      "computedHash": "644c276ccf2526b5cc7317bdc990242bbfac72b740db54be6da87ecdb76765e7"
+    },
     "orchestration": {
       "source": "stablyai/orca",
       "sourceType": "github",
