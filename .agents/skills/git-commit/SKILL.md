@@ -50,16 +50,11 @@ Critical または Warning が 1 件以上ある場合は、続行前にユー�
    - `git apply --cached --recount`（`-U0` の場合は `--unidiff-zero` も併用）でインデックスに適用する
    - `git diff --cached` で意図した変更だけがステージされていることを確認する
 4. `package.json` の変更時は `pnpm install` を実行して lockfile を再生成する
-5. HEREDOC 形式でコミットを作成する。
+5. 複数の `-m` オプションを使用してコミットを作成する。
    `<見出し>` は計画のコミット見出し（`<prefix> [customPrefix] <件名>`）、 `<本文>` は計画の「本文」フィールドに対応する：
 
    ```bash
-   git commit -m "$(cat <<'EOF'
-   <見出し>
-
-   <本文>
-   EOF
-   )"
+   git commit -m "<見出し>" -m "<本文>"
    ```
 
 6. 成功を報告し、次のコミットに進む
