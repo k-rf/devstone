@@ -1,0 +1,15 @@
+{
+  "name": "@devstone/automations-tasker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android の自動化ツール Tasker のレシピ（XML）を管理するパッケージです。",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.check.json",
+    "lint": "eslint --fix --max-warnings 0"
+  },
+  "devDependencies": {
+    "eslint": "10.2.1",
+    "typescript": "7.0.2"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "../../.moon/cache/schemas/project.json",
+
+  "id": "automations-tasker",
+  "layer": "automation",
+
+  "project": {
+    "title": "automations/tasker",
+    "description": "Android の自動化ツール Tasker のレシピ（XML）を管理するプロジェクトです。"
+  }
+}
