@@ -1,12 +1,14 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
+import { type BoundarySuffix } from "./types.js";
+
 import { portAndAdapterSuffixBoundariesRule } from "./index.js";
 
 const ruleTester = new RuleTester();
 
 const invalidSuffixBoundary = (
   name: string,
-  suffix: "Payload" | "Input" | "Output" | "Record",
+  suffix: BoundarySuffix,
   allowedPath: string,
 ): {
   readonly messageId: "invalidSuffixBoundary";
