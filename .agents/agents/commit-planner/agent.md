@@ -1,10 +1,10 @@
 ---
 name: commit-planner
 description: 差分を元にしてコミット計画、コミット分割、コミットの整理、コミットプランの作成をする際に使用する。
-model: gemini-3.5-flash
+subagent: true
 tools:
   - run_command
-  - view_file
+  - read_file
   - grep_search
   - list_dir
 skills:

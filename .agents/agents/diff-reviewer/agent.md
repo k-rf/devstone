@@ -1,12 +1,14 @@
 ---
 name: diff-reviewer
 description: 変更差分のレビューと妥当性を検証するスペシャリスト。
-model: gemini-3.5-flash
+subagent: true
 tools:
   - run_command
   - read_file
   - grep_search
   - list_dir
+skills:
+  - diff-review
 ---
 
 # Diff Reviewerエージェント
