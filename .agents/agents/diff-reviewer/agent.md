@@ -4,7 +4,7 @@ description: 変更差分のレビューと妥当性を検証するスペシャ�
 subagent: true
 tools:
   - run_command
-  - read_file
+  - view_file
   - grep_search
   - list_dir
 skills:

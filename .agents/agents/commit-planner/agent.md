@@ -4,7 +4,7 @@ description: 差分を元にしてコミット計画、コミット分割、コ�
 subagent: true
 tools:
   - run_command
-  - read_file
+  - view_file
   - grep_search
   - list_dir
 skills:
