@@ -14,7 +14,6 @@
 
 以下のケースは例外として検査対象外となります。
 
-- `/packages/design-system/` 配下のファイル
 - 末尾が `Props` である型エイリアス（`TSTypeAliasDeclaration`）
 - 末尾が `Input` または `Output` であるクラス宣言（`ClassDeclaration`）
 

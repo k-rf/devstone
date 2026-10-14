@@ -9,8 +9,6 @@ const createRule = ESLintUtils.RuleCreator(
     `https://github.com/k-rf/devstone/blob/main/packages/configs/eslint/docs/rules/${name}.md`,
 );
 
-const ignoredPathPattern = /(?:^|\/)packages\/design-system\//u;
-
 /**
  * ポート＆アダプターアーキテクチャの型構造を示すサフィックス（Payload, Input, Output, Record）を持つ識別子が、
  * それぞれ対応するディレクトリ内にのみ配置されることを強制する。
@@ -31,8 +29,6 @@ export const portAndAdapterSuffixBoundariesRule = createRule<Options, MessageIds
   },
   create: (context) => {
     const normalizedFilename = context.filename.replaceAll("\\", "/");
-
-    if (ignoredPathPattern.test(normalizedFilename)) return {};
 
     return {
       TSTypeAliasDeclaration: (node) => {

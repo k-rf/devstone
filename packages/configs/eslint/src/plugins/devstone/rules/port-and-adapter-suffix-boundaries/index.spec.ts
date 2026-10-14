@@ -66,16 +66,6 @@ ruleTester.run("port-and-adapter-suffix-boundaries", portAndAdapterSuffixBoundar
       `,
     },
     {
-      name: "packages/design-system 配下のファイルはチェック対象外とすること",
-      filename: "packages/design-system/src/components/text-input.tsx",
-      code: `
-        export type TextInput = { readonly value: string };
-        export interface FormPayload { readonly value: string }
-        export class ItemRecord {}
-        export const SelectOutput = Schema.Struct({ value: Schema.String });
-      `,
-    },
-    {
       name: "型エイリアスの末尾が Props である場合は除外すること",
       filename: "apps/example/src/core/domain/button.ts",
       code: "export type ButtonProps = { readonly label: string };",
@@ -195,12 +185,6 @@ ruleTester.run("port-and-adapter-suffix-boundaries", portAndAdapterSuffixBoundar
         invalidSuffixBoundary("StoredCanvasRecord", "Record", "/adapter/repository/"),
         invalidSuffixBoundary("CanvasSchemaRecord", "Record", "/adapter/repository/"),
       ],
-    },
-    {
-      name: "packages/design-system に似た別パッケージは除外しないこと",
-      filename: "packages/design-system-tools/src/item.ts",
-      code: "export interface ItemRecord { readonly id: string }",
-      errors: [invalidSuffixBoundary("ItemRecord", "Record", "/adapter/repository/")],
     },
     {
       name: "Windows パス形式で境界外のサフィックスを報告すること",
