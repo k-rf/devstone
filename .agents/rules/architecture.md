@@ -29,6 +29,8 @@ trigger: always_on
 root/
 ├── apps/               # アプリケーション本体
 │   └── notion-toggl-bridge/  # Cloudflare Workers アプリ
+├── automations/        # 外部ツール・端末等の自動化レシピ
+│   └── tasker/         # Android Tasker の自動化レシピ（XML）
 ├── packages/           # 共有パッケージ
 │   ├── configs/        # ESLint, TypeScript 等の設定
 │   ├── design-system/  # UI コンポーネント等（予定）
@@ -37,6 +39,14 @@ root/
 ├── .moon/              # moon 構成管理
 └── .agents/rules/      # 開発ルール・設計指針（法典）
 ```
+
+### ワークスペース領域の位置づけ
+
+- **`apps/`**: デプロイ可能なアプリケーションや CLI ツール本体を配置します。
+- **`packages/`**: ワークスペース内で共有・再利用されるライブラリ、設定、プラグイン群を配置します。
+- **`automations/`**: `apps/` や `packages/` とは異なり、Android の Tasker レシピ（XML）など、
+  外部ツールや端末向けの自動化レシピ・設定資産をコード管理する領域です。
+  本リポジトリの開発環境やエージェント基盤を活用し、自動化定義を一元管理します。
 
 ## 建築指針
 
