@@ -2,7 +2,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 
 const ignoredKeys = new Set(["parent", "loc", "range"]);
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
+const isRecord = (value: unknown): value is Record<PropertyKey, unknown> =>
   typeof value === "object" && value !== null;
 
 /**
