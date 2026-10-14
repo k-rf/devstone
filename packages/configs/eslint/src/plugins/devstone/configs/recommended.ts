@@ -111,9 +111,10 @@ export const recommended = defineConfig([
     },
   },
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["**/*.{ts,mts,cts,tsx}"],
     rules: {
       "devstone/path-naming-conventions": "error",
+      "devstone/port-and-adapter-suffix-boundaries": "error",
     },
   },
 ]);

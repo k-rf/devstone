@@ -8,6 +8,7 @@ import {
   noUiSpecFilesRule,
   outboundPartitioningRule,
   pathNamingConventionsRule,
+  portAndAdapterSuffixBoundariesRule,
   singleFunctionPerFileRule,
   testDescriptionsJapaneseRule,
 } from "./rules/index.js";
@@ -33,6 +34,8 @@ export const plugin = {
     "outbound-partitioning": outboundPartitioningRule,
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
     "path-naming-conventions": pathNamingConventionsRule,
+    // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
+    "port-and-adapter-suffix-boundaries": portAndAdapterSuffixBoundariesRule,
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収
     "single-function-per-file": singleFunctionPerFileRule,
     // @ts-expect-error ESLint 10 の Plugin 型と @typescript-eslint/utils の RuleModule 型の互換性吸収

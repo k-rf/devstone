@@ -1,4 +1,3 @@
-import type * as TogglSdk from "@devstone/libs-toggl-sdk";
 import { TogglApiError, makeTogglApiClient, type TogglApiClient } from "@devstone/libs-toggl-sdk";
 import { Effect, Layer, Option, type Context } from "effect";
 import { describe, expect, it, vi } from "vitest";
@@ -10,7 +9,7 @@ import { TimeTrackerPort } from "../../../core/port/outbound/toggl/time-tracker.
 import { TogglTrackAdapterLive } from "./toggl-track.adapter";
 
 vi.mock("@devstone/libs-toggl-sdk", async (importOriginal) => {
-  const actual = await importOriginal<typeof TogglSdk>();
+  const actual = await importOriginal<{ readonly TogglApiError: typeof TogglApiError }>();
   return {
     ...actual,
     makeTogglApiClient: vi.fn(),

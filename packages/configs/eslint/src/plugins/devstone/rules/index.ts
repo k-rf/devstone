@@ -4,5 +4,6 @@ export { noSingleDescribeRule } from "./no-single-describe/index.js";
 export { noUiSpecFilesRule } from "./no-ui-spec-files/index.js";
 export { outboundPartitioningRule } from "./outbound-partitioning/index.js";
 export { pathNamingConventionsRule } from "./path-naming-conventions/index.js";
+export { portAndAdapterSuffixBoundariesRule } from "./port-and-adapter-suffix-boundaries/index.js";
 export { singleFunctionPerFileRule } from "./single-function-per-file/index.js";
 export { testDescriptionsJapaneseRule } from "./test-descriptions-japanese/index.js";
