@@ -42,18 +42,13 @@ user-invocable: false
 
 ## コミットメッセージのフォーマット
 
-### Bash での HEREDOC 形式
+### Bash でのコミット実行形式
 
-Bash 経由でコミットを作成する際は、常に HEREDOC 形式を使用する。
-本文には変更の理由を記載する：
+Bash 経由でコミットを作成する際は、複数の `-m` オプションを使用する。
+2つ目の `-m` には変更の理由を記載する：
 
 ```bash
-git commit -m "$(cat <<'EOF'
-<prefix> [customPrefix] <件名>
-
-<この変更が行われた理由を説明する本文>
-EOF
-)"
+git commit -m "<prefix> [customPrefix] <件名>" -m "<この変更が行われた理由を説明する本文>"
 ```
 
 ## 追加リソース

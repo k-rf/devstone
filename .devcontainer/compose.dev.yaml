@@ -53,10 +53,10 @@ x-volume-cursor-auth: &volume-cursor-auth
   source: ${HOME}/.config/cursor/auth.json
   target: ${ROOT_REMOTE_HOME}/.config/cursor/auth.json
 
-x-volume-orca-worktrees: &volume-orca-worktrees
+x-volume-orca: &volume-orca
   type: bind
-  source: ${HOME}/.orca/worktrees
-  target: ${ROOT_REMOTE_HOME}/.orca/worktrees
+  source: ${HOME}/.orca
+  target: ${ROOT_REMOTE_HOME}/.orca
 
 x-volume-bash-history: &volume-bash-history
   type: volume
@@ -75,7 +75,7 @@ services:
       - *volume-gemini
       - *volume-claude-json
       - *volume-cursor-auth
-      - *volume-orca-worktrees
+      - *volume-orca
       - *volume-bash-history
       - type: volume
         source: root-vscode-extensions
@@ -95,7 +95,7 @@ services:
       - *volume-gemini
       - *volume-claude-json
       - *volume-cursor-auth
-      - *volume-orca-worktrees
+      - *volume-orca
       - *volume-bash-history
       - type: volume
         source: root-orca-config

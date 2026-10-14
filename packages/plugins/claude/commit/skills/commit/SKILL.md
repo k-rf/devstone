@@ -23,7 +23,8 @@ allowed-tools: Bash(git *), Read, Glob, Grep, Task, AskUserQuestion
 - **Warning** — 対処すべき
 - **Informational** — 参考情報
 
-続行前にユーザーの確認を得る。
+Critical または Warning が 1 件以上ある場合は、続行前にユーザーの確認を得る。
+両方 0 件の場合は、確認を待たずにそのまま Step 2 へ進む。
 
 ## Step 2: コミット計画
 
@@ -44,21 +45,16 @@ allowed-tools: Bash(git *), Read, Glob, Grep, Task, AskUserQuestion
 1. ステージ対象のファイルとコミットメッセージを表示する
 2. 特定のパスでファイルをステージする（`git add -A` は使わない）
 3. パーシャルステージングが必要な場合：
-   - ファイルの最終状態を一時的な場所に保存する
-   - HEAD から復元し、このコミットの変更のみを適用する
-   - 中間状態をステージする
-   - コミット後に最終状態を復元する
+   - `git diff <file>`（近接する変更を分離する場合は `git diff -U0 <file>`）で差分を取得する
+   - 差分出力から、このコミットに含めるハンク・行のみを抽出したパッチを作成する
+   - `git apply --cached --recount`（`-U0` の場合は `--unidiff-zero` も併用）でインデックスに適用する
+   - `git diff --cached` で意図した変更だけがステージされていることを確認する
 4. `package.json` の変更時は `pnpm install` を実行して lockfile を再生成する
-5. HEREDOC 形式でコミットを作成する。
+5. 複数の `-m` オプションを使用してコミットを作成する。
    `<件名>` は計画のコミット見出し、 `<本文>` は計画の「本文」フィールドに対応する：
 
    ```bash
-   git commit -m "$(cat <<'EOF'
-   <件名>
-
-   <本文>
-   EOF
-   )"
+   git commit -m "<件名>" -m "<本文>"
    ```
 
 6. 成功を報告し、次のコミットに進む

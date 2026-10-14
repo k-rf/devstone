@@ -5,13 +5,19 @@
       "source": "stablyai/orca",
       "sourceType": "github",
       "skillPath": "skills/orca-cli/SKILL.md",
-      "computedHash": "83ece910d035d0684195095bb9df5911a028002b2efba1ebbeb4ae66de5e0903"
+      "computedHash": "ccd717aed7b9866a059b0b31d9a009641a28f6db3201749943fbbb797af4a317"
+    },
+    "orca-linear": {
+      "source": "stablyai/orca",
+      "sourceType": "github",
+      "skillPath": "skills/orca-linear/SKILL.md",
+      "computedHash": "644c276ccf2526b5cc7317bdc990242bbfac72b740db54be6da87ecdb76765e7"
     },
     "orchestration": {
       "source": "stablyai/orca",
       "sourceType": "github",
       "skillPath": "skills/orchestration/SKILL.md",
-      "computedHash": "e611e8065f08f308823d063bb3cd8d4e283242202456b8a3e80058b2f59f0c3a"
+      "computedHash": "0dc04a0a354974eed5c15115fc6cb7461d7423e95a5b19ee995796cf1383e7ed"
     }
   }
 }
