@@ -1,0 +1,223 @@
+<TaskerData sr="" dvi="1" tv="6.6.20">
+  <Task sr="task100">
+    <cdate>1743500000000</cdate>
+    <edate>1743500000000</edate>
+    <id>100</id>
+    <nme>Start Toggl Timer</nme>
+    <pri>100</pri>
+    <Action sr="act0" ve="7">
+      <code>37</code>
+      <ConditionList sr="if">
+        <Condition sr="c0" ve="3">
+          <lhs>%TOGGL_API_TOKEN</lhs>
+          <op>13</op>
+        </Condition>
+        <bool0>Or</bool0>
+        <Condition sr="c1" ve="3">
+          <lhs>%TOGGL_API_TOKEN</lhs>
+          <op>0</op>
+          <rhs>YOUR_TOGGL_API_TOKEN</rhs>
+        </Condition>
+        <bool1>Or</bool1>
+        <Condition sr="c2" ve="3">
+          <lhs>%TOGGL_WORKSPACE_ID</lhs>
+          <op>13</op>
+        </Condition>
+        <bool2>Or</bool2>
+        <Condition sr="c3" ve="3">
+          <lhs>%TOGGL_WORKSPACE_ID</lhs>
+          <op>0</op>
+          <rhs>YOUR_TOGGL_WORKSPACE_ID</rhs>
+        </Condition>
+        <bool3>Or</bool3>
+        <Condition sr="c4" ve="3">
+          <lhs>%par1</lhs>
+          <op>13</op>
+        </Condition>
+        <bool4>Or</bool4>
+        <Condition sr="c5" ve="3">
+          <lhs>%par1</lhs>
+          <op>0</op>
+          <rhs>YOUR_PROJECT_ID</rhs>
+        </Condition>
+        <bool5>Or</bool5>
+        <Condition sr="c6" ve="3">
+          <lhs>%par2</lhs>
+          <op>13</op>
+        </Condition>
+        <bool6>Or</bool6>
+        <Condition sr="c7" ve="3">
+          <lhs>%par2</lhs>
+          <op>0</op>
+          <rhs>YOUR_DESCRIPTION</rhs>
+        </Condition>
+      </ConditionList>
+    </Action>
+    <Action sr="act1" ve="7">
+      <code>548</code>
+      <Str sr="arg0" ve="3">設定エラー: Toggl の必須変数（%TOGGL_API_TOKEN, %TOGGL_WORKSPACE_ID）または引数（%par1, %par2）が未設定かプレースホルダーのままです。</Str>
+      <Int sr="arg1" val="1"/>
+      <Int sr="arg2" val="1"/>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3"/>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3"/>
+      <Str sr="arg8" ve="3"/>
+      <Int sr="arg9" val="1"/>
+      <Str sr="arg10" ve="3"/>
+      <Int sr="arg11" val="1"/>
+      <Int sr="arg12" val="0"/>
+      <Str sr="arg13" ve="3"/>
+      <Int sr="arg14" val="0"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act2" ve="7">
+      <code>523</code>
+      <Str sr="arg0" ve="3">Toggl タイマー設定未完了</Str>
+      <Str sr="arg1" ve="3">必須変数（%TOGGL_API_TOKEN / %TOGGL_WORKSPACE_ID）または引数（%par1 / %par2）が未設定かプレースホルダーのままです。</Str>
+      <Img sr="arg2" ve="2">
+        <uri>android.resource://net.dinglisch.android.taskerm/drawable/mw_alert_error_outline</uri>
+      </Img>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+      <Int sr="arg5" val="5"/>
+      <Int sr="arg6" val="0"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+      <Str sr="arg9" ve="3"/>
+      <Str sr="arg10" ve="3">0,200,100,200</Str>
+      <Str sr="arg11" ve="3">AI Errors</Str>
+      <Str sr="arg12" ve="3"/>
+      <Int sr="arg13" val="0"/>
+      <Str sr="arg14" ve="3"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act3" ve="7">
+      <code>137</code>
+      <Int sr="arg0" val="1"/>
+      <Str sr="arg1" ve="3"/>
+    </Action>
+    <Action sr="act4" ve="7">
+      <code>38</code>
+    </Action>
+    <Action sr="act5" ve="7">
+      <code>389</code>
+      <Bundle sr="arg0">
+        <Vals sr="val"/>
+      </Bundle>
+      <Str sr="arg1" ve="3">%project_id=%par1
+%description=%par2
+%auth_raw=%TOGGL_API_TOKEN:api_token</Str>
+      <Str sr="arg2" ve="3"/>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3">=</Str>
+      <Int sr="arg5" val="0"/>
+      <Int sr="arg6" val="3"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+    </Action>
+    <Action sr="act6" ve="7">
+      <code>596</code>
+      <Str sr="arg0" ve="3">%auth_raw</Str>
+      <Int sr="arg1" val="24"/>
+      <Str sr="arg2" ve="3">%auth_base64</Str>
+      <Int sr="arg3" val="0"/>
+    </Action>
+    <Action sr="act7" ve="7">
+      <code>394</code>
+      <Bundle sr="arg0">
+        <Vals sr="val"/>
+      </Bundle>
+      <Int sr="arg1" val="3"/>
+      <Str sr="arg2" ve="3">%TIMES</Str>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3">yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;</Str>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3">%start_iso</Str>
+      <Int sr="arg8" val="0"/>
+      <Int sr="arg9" val="0"/>
+      <Int sr="arg10" val="0"/>
+      <Str sr="arg11" ve="3"/>
+      <Str sr="arg12" ve="3">UTC</Str>
+    </Action>
+    <Action sr="act8" ve="7">
+      <code>339</code>
+      <se>false</se>
+      <Bundle sr="arg0">
+        <Vals sr="val"/>
+      </Bundle>
+      <Int sr="arg1" val="1"/>
+      <Str sr="arg2" ve="3">https://api.track.toggl.com/api/v9/workspaces/%TOGGL_WORKSPACE_ID/time_entries</Str>
+      <Str sr="arg3" ve="3">Authorization:Basic %auth_base64
+Content-Type:application/json</Str>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3">{&quot;description&quot;:&quot;%description&quot;,&quot;project_id&quot;:%project_id,&quot;workspace_id&quot;:%TOGGL_WORKSPACE_ID,&quot;start&quot;:&quot;%start_iso&quot;,&quot;duration&quot;:-1,&quot;created_with&quot;:&quot;tasker&quot;}</Str>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3"/>
+      <Int sr="arg8" val="30"/>
+      <Int sr="arg9" val="0"/>
+      <Int sr="arg10" val="1"/>
+      <Int sr="arg11" val="0"/>
+      <Int sr="arg12" val="1"/>
+    </Action>
+    <Action sr="act9" ve="7">
+      <code>37</code>
+      <ConditionList sr="if">
+        <Condition sr="c0" ve="3">
+          <lhs>%err</lhs>
+          <op>12</op>
+        </Condition>
+      </ConditionList>
+    </Action>
+    <Action sr="act10" ve="7">
+      <code>523</code>
+      <Str sr="arg0" ve="3">Toggl Timer Error</Str>
+      <Str sr="arg1" ve="3">%errmsg</Str>
+      <Img sr="arg2" ve="2">
+        <uri>android.resource://net.dinglisch.android.taskerm/drawable/mw_alert_error_outline</uri>
+      </Img>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+      <Int sr="arg5" val="5"/>
+      <Int sr="arg6" val="0"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+      <Str sr="arg9" ve="3"/>
+      <Str sr="arg10" ve="3">0,200,100,200</Str>
+      <Str sr="arg11" ve="3">AI Errors</Str>
+      <Str sr="arg12" ve="3"/>
+      <Int sr="arg13" val="0"/>
+      <Str sr="arg14" ve="3"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act11" ve="7">
+      <code>137</code>
+      <Int sr="arg0" val="1"/>
+      <Str sr="arg1" ve="3"/>
+    </Action>
+    <Action sr="act12" ve="7">
+      <code>38</code>
+    </Action>
+    <Action sr="act13" ve="7">
+      <code>548</code>
+      <Str sr="arg0" ve="3">Toggl タイマーを開始しました: %description</Str>
+      <Int sr="arg1" val="0"/>
+      <Int sr="arg2" val="1"/>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3"/>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3"/>
+      <Str sr="arg8" ve="3"/>
+      <Int sr="arg9" val="1"/>
+      <Str sr="arg10" ve="3"/>
+      <Int sr="arg11" val="1"/>
+      <Int sr="arg12" val="0"/>
+      <Str sr="arg13" ve="3"/>
+      <Int sr="arg14" val="0"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+  </Task>
+</TaskerData>
