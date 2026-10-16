@@ -1,0 +1,329 @@
+<TaskerData sr="" dvi="1" tv="6.6.20">
+  <Task sr="task101">
+    <cdate>1743500000000</cdate>
+    <edate>1743500000000</edate>
+    <id>101</id>
+    <nme>Execute SwitchBot Scene</nme>
+    <pri>100</pri>
+    <Action sr="act0" ve="7">
+      <code>37</code>
+      <ConditionList sr="if">
+        <Condition sr="c0" ve="3">
+          <lhs>%SWITCHBOT_API_TOKEN</lhs>
+          <op>13</op>
+        </Condition>
+        <bool0>Or</bool0>
+        <Condition sr="c1" ve="3">
+          <lhs>%SWITCHBOT_API_TOKEN</lhs>
+          <op>0</op>
+          <rhs>YOUR_SWITCHBOT_API_TOKEN</rhs>
+        </Condition>
+        <bool1>Or</bool1>
+        <Condition sr="c2" ve="3">
+          <lhs>%SWITCHBOT_API_SECRET</lhs>
+          <op>13</op>
+        </Condition>
+        <bool2>Or</bool2>
+        <Condition sr="c3" ve="3">
+          <lhs>%SWITCHBOT_API_SECRET</lhs>
+          <op>0</op>
+          <rhs>YOUR_SWITCHBOT_API_SECRET</rhs>
+        </Condition>
+        <bool3>Or</bool3>
+        <Condition sr="c4" ve="3">
+          <lhs>%par1</lhs>
+          <op>13</op>
+        </Condition>
+        <bool4>Or</bool4>
+        <Condition sr="c5" ve="3">
+          <lhs>%par1</lhs>
+          <op>0</op>
+          <rhs>YOUR_SCENE_ID</rhs>
+        </Condition>
+      </ConditionList>
+    </Action>
+    <Action sr="act1" ve="7">
+      <code>548</code>
+      <Str sr="arg0" ve="3">設定エラー: SwitchBot の必須変数（%SWITCHBOT_API_TOKEN, %SWITCHBOT_API_SECRET）または引数（%par1）が未設定かプレースホルダーのままです。</Str>
+      <Int sr="arg1" val="1"/>
+      <Int sr="arg2" val="1"/>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3"/>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3"/>
+      <Str sr="arg8" ve="3"/>
+      <Int sr="arg9" val="1"/>
+      <Str sr="arg10" ve="3"/>
+      <Int sr="arg11" val="1"/>
+      <Int sr="arg12" val="0"/>
+      <Str sr="arg13" ve="3"/>
+      <Int sr="arg14" val="0"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act2" ve="7">
+      <code>523</code>
+      <Str sr="arg0" ve="3">SwitchBot シーン設定未完了</Str>
+      <Str sr="arg1" ve="3">必須変数（%SWITCHBOT_API_TOKEN / %SWITCHBOT_API_SECRET）または引数（%par1）が未設定かプレースホルダーのままです。</Str>
+      <Img sr="arg2" ve="2">
+        <uri>android.resource://net.dinglisch.android.taskerm/drawable/mw_alert_error_outline</uri>
+      </Img>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+      <Int sr="arg5" val="5"/>
+      <Int sr="arg6" val="0"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+      <Str sr="arg9" ve="3"/>
+      <Str sr="arg10" ve="3">0,200,100,200</Str>
+      <Str sr="arg11" ve="3">AI Errors</Str>
+      <Str sr="arg12" ve="3"/>
+      <Int sr="arg13" val="0"/>
+      <Str sr="arg14" ve="3"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act3" ve="7">
+      <code>137</code>
+      <Int sr="arg0" val="1"/>
+      <Str sr="arg1" ve="3"/>
+    </Action>
+    <Action sr="act4" ve="7">
+      <code>38</code>
+    </Action>
+    <Action sr="act5" ve="7">
+      <code>389</code>
+      <Bundle sr="arg0">
+        <Vals sr="val"/>
+      </Bundle>
+      <Str sr="arg1" ve="3">%scene_id=%par1
+%token=%SWITCHBOT_API_TOKEN
+%secret=%SWITCHBOT_API_SECRET
+%timestamp=%TIMEMS
+%nonce=%TIMEMS</Str>
+      <Str sr="arg2" ve="3"/>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3">=</Str>
+      <Int sr="arg5" val="0"/>
+      <Int sr="arg6" val="3"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+    </Action>
+    <Action sr="act6" ve="7">
+      <code>129</code>
+      <Str sr="arg0" ve="3">function toBytes(str) {
+  var utf8 = unescape(encodeURIComponent(str));
+  var arr = [];
+  for (var idx = 0; idx &lt; utf8.length; idx++) {
+    arr.push(utf8.charCodeAt(idx));
+  }
+  return arr;
+}
+function rotateRight(num, val) {
+  return (val &gt;&gt;&gt; num) | (val &lt;&lt; (32 - num));
+}
+function sha256(bytes) {
+  var k = [
+    1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221,
+    3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580,
+    3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986,
+    2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895,
+    666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037,
+    2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344,
+    430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779,
+    1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298
+  ];
+  var h = [
+    1779033703, 3144134277, 1013904242, 2773480762,
+    1359893119, 2600822924, 528734635, 1541459225
+  ];
+  var bitLen = bytes.length * 8;
+  var msg = bytes.slice();
+  msg.push(128);
+  while ((msg.length % 64) !== 56) {
+    msg.push(0);
+  }
+  var hi = Math.floor(bitLen / 4294967296);
+  var lo = bitLen &gt;&gt;&gt; 0;
+  msg.push((hi &gt;&gt;&gt; 24) &amp; 255, (hi &gt;&gt;&gt; 16) &amp; 255, (hi &gt;&gt;&gt; 8) &amp; 255, hi &amp; 255);
+  msg.push((lo &gt;&gt;&gt; 24) &amp; 255, (lo &gt;&gt;&gt; 16) &amp; 255, (lo &gt;&gt;&gt; 8) &amp; 255, lo &amp; 255);
+  for (var offset = 0; offset &lt; msg.length; offset += 64) {
+    var w = [];
+    for (var idx = 0; idx &lt; 16; idx++) {
+      var pos = offset + idx * 4;
+      w[idx] = ((msg[pos] &lt;&lt; 24) | (msg[pos + 1] &lt;&lt; 16) | (msg[pos + 2] &lt;&lt; 8) | msg[pos + 3]) &gt;&gt;&gt; 0;
+    }
+    for (var idx = 16; idx &lt; 64; idx++) {
+      var s0 = (rotateRight(7, w[idx - 15]) ^ rotateRight(18, w[idx - 15]) ^ (w[idx - 15] &gt;&gt;&gt; 3)) &gt;&gt;&gt; 0;
+      var s1 = (rotateRight(17, w[idx - 2]) ^ rotateRight(19, w[idx - 2]) ^ (w[idx - 2] &gt;&gt;&gt; 10)) &gt;&gt;&gt; 0;
+      w[idx] = (w[idx - 16] + s0 + w[idx - 7] + s1) &gt;&gt;&gt; 0;
+    }
+    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], hh = h[7];
+    for (var idx = 0; idx &lt; 64; idx++) {
+      var S1 = (rotateRight(6, e) ^ rotateRight(11, e) ^ rotateRight(25, e)) &gt;&gt;&gt; 0;
+      var ch = ((e &amp; f) ^ (~e &amp; g)) &gt;&gt;&gt; 0;
+      var temp1 = (hh + S1 + ch + k[idx] + w[idx]) &gt;&gt;&gt; 0;
+      var S0 = (rotateRight(2, a) ^ rotateRight(13, a) ^ rotateRight(22, a)) &gt;&gt;&gt; 0;
+      var maj = ((a &amp; b) ^ (a &amp; c) ^ (b &amp; c)) &gt;&gt;&gt; 0;
+      var temp2 = (S0 + maj) &gt;&gt;&gt; 0;
+      hh = g; g = f; f = e; e = (d + temp1) &gt;&gt;&gt; 0;
+      d = c; c = b; b = a; a = (temp1 + temp2) &gt;&gt;&gt; 0;
+    }
+    h[0] = (h[0] + a) &gt;&gt;&gt; 0; h[1] = (h[1] + b) &gt;&gt;&gt; 0;
+    h[2] = (h[2] + c) &gt;&gt;&gt; 0; h[3] = (h[3] + d) &gt;&gt;&gt; 0;
+    h[4] = (h[4] + e) &gt;&gt;&gt; 0; h[5] = (h[5] + f) &gt;&gt;&gt; 0;
+    h[6] = (h[6] + g) &gt;&gt;&gt; 0; h[7] = (h[7] + hh) &gt;&gt;&gt; 0;
+  }
+  var out = [];
+  for (var idx = 0; idx &lt; 8; idx++) {
+    out.push((h[idx] &gt;&gt;&gt; 24) &amp; 255, (h[idx] &gt;&gt;&gt; 16) &amp; 255, (h[idx] &gt;&gt;&gt; 8) &amp; 255, h[idx] &amp; 255);
+  }
+  return out;
+}
+var keyBytes = toBytes(secret);
+if (keyBytes.length &gt; 64) { keyBytes = sha256(keyBytes); }
+while (keyBytes.length &lt; 64) { keyBytes.push(0); }
+var innerPad = [], outerPad = [];
+for (var idx = 0; idx &lt; 64; idx++) {
+  innerPad.push(keyBytes[idx] ^ 54);
+  outerPad.push(keyBytes[idx] ^ 92);
+}
+var dataBytes = toBytes(token + timestamp + nonce);
+var digest = sha256(outerPad.concat(sha256(innerPad.concat(dataBytes))));
+var bin = &quot;&quot;;
+for (var idx = 0; idx &lt; digest.length; idx++) {
+  bin += String.fromCharCode(digest[idx]);
+}
+var sign = btoa(bin);</Str>
+      <Str sr="arg1" ve="3"/>
+      <Int sr="arg2" val="1"/>
+      <Int sr="arg3" val="45"/>
+    </Action>
+    <Action sr="act7" ve="7">
+      <code>339</code>
+      <se>false</se>
+      <Bundle sr="arg0">
+        <Vals sr="val"/>
+      </Bundle>
+      <Int sr="arg1" val="1"/>
+      <Str sr="arg2" ve="3">https://api.switch-bot.com/v1.1/scenes/%scene_id/execute</Str>
+      <Str sr="arg3" ve="3">Authorization:%SWITCHBOT_API_TOKEN
+sign:%sign
+t:%timestamp
+nonce:%nonce
+Content-Type:application/json; charset=utf8</Str>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3">{}</Str>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3"/>
+      <Int sr="arg8" val="30"/>
+      <Int sr="arg9" val="0"/>
+      <Int sr="arg10" val="1"/>
+      <Int sr="arg11" val="0"/>
+      <Int sr="arg12" val="1"/>
+    </Action>
+    <Action sr="act8" ve="7">
+      <code>37</code>
+      <ConditionList sr="if">
+        <Condition sr="c0" ve="3">
+          <lhs>%err</lhs>
+          <op>12</op>
+        </Condition>
+      </ConditionList>
+    </Action>
+    <Action sr="act9" ve="7">
+      <code>523</code>
+      <Str sr="arg0" ve="3">SwitchBot Scene Error</Str>
+      <Str sr="arg1" ve="3">%errmsg</Str>
+      <Img sr="arg2" ve="2">
+        <uri>android.resource://net.dinglisch.android.taskerm/drawable/mw_alert_error_outline</uri>
+      </Img>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+      <Int sr="arg5" val="5"/>
+      <Int sr="arg6" val="0"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+      <Str sr="arg9" ve="3"/>
+      <Str sr="arg10" ve="3">0,200,100,200</Str>
+      <Str sr="arg11" ve="3">AI Errors</Str>
+      <Str sr="arg12" ve="3"/>
+      <Int sr="arg13" val="0"/>
+      <Str sr="arg14" ve="3"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act10" ve="7">
+      <code>137</code>
+      <Int sr="arg0" val="1"/>
+      <Str sr="arg1" ve="3"/>
+    </Action>
+    <Action sr="act11" ve="7">
+      <code>38</code>
+    </Action>
+    <Action sr="act12" ve="7">
+      <code>37</code>
+      <ConditionList sr="if">
+        <Condition sr="c0" ve="3">
+          <lhs>%http_data[statusCode]</lhs>
+          <op>1</op>
+          <rhs>100</rhs>
+        </Condition>
+      </ConditionList>
+    </Action>
+    <Action sr="act13" ve="7">
+      <code>523</code>
+      <Str sr="arg0" ve="3">SwitchBot Scene API Error</Str>
+      <Str sr="arg1" ve="3">SwitchBot API エラー (statusCode: %http_data[statusCode]): %http_data[message]</Str>
+      <Img sr="arg2" ve="2">
+        <uri>android.resource://net.dinglisch.android.taskerm/drawable/mw_alert_error_outline</uri>
+      </Img>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+      <Int sr="arg5" val="5"/>
+      <Int sr="arg6" val="0"/>
+      <Int sr="arg7" val="0"/>
+      <Int sr="arg8" val="0"/>
+      <Str sr="arg9" ve="3"/>
+      <Str sr="arg10" ve="3">0,200,100,200</Str>
+      <Str sr="arg11" ve="3">AI Errors</Str>
+      <Str sr="arg12" ve="3"/>
+      <Int sr="arg13" val="0"/>
+      <Str sr="arg14" ve="3"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act14" ve="7">
+      <code>137</code>
+      <Int sr="arg0" val="1"/>
+      <Str sr="arg1" ve="3"/>
+    </Action>
+    <Action sr="act15" ve="7">
+      <code>38</code>
+    </Action>
+    <Action sr="act16" ve="7">
+      <code>548</code>
+      <Str sr="arg0" ve="3">SwitchBot シーンを実行しました</Str>
+      <Int sr="arg1" val="0"/>
+      <Int sr="arg2" val="1"/>
+      <Str sr="arg3" ve="3"/>
+      <Str sr="arg4" ve="3"/>
+      <Str sr="arg5" ve="3"/>
+      <Str sr="arg6" ve="3"/>
+      <Str sr="arg7" ve="3"/>
+      <Str sr="arg8" ve="3"/>
+      <Int sr="arg9" val="1"/>
+      <Str sr="arg10" ve="3"/>
+      <Int sr="arg11" val="1"/>
+      <Int sr="arg12" val="0"/>
+      <Str sr="arg13" ve="3"/>
+      <Int sr="arg14" val="0"/>
+      <Str sr="arg15" ve="3"/>
+    </Action>
+    <Action sr="act17" ve="7">
+      <code>126</code>
+      <Str sr="arg0" ve="3">true</Str>
+      <Int sr="arg1" val="1"/>
+      <Int sr="arg2" val="0"/>
+      <Int sr="arg3" val="0"/>
+      <Str sr="arg4" ve="3"/>
+    </Action>
+  </Task>
+</TaskerData>
