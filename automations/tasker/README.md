@@ -17,6 +17,7 @@ automations/tasker/
 │   └── <feature-name>/       # 1つの自動化機能（Project 等）のまとまり
 │       └── <feature-name>.{prj,prf,tsk}.xml
 ├── shared-tasks/             # 複数レシピから Perform Task で再利用する共通タスク (*.tsk.xml)
+├── scripts/                  # 設定値（シーン ID 等）の確認用補助スクリプト
 ├── eslint.config.ts          # ESLint 設定
 ├── moon.jsonc                # moon プロジェクト設定
 ├── package.json              # パッケージ定義
