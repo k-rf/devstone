@@ -46,7 +46,7 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
    `Run SwitchBot And Start Toggl` を開きます。
 2. アクション 1（`Multiple Variables Set`）を開き、以下のプレースホルダーを実際の値に書き換えます。
    - `%switchbot_scene_id=YOUR_SCENE_ID` → 実行したい SwitchBot シーンの ID
-     （`GET https://api.switch-bot.com/v1.1/scenes` 等で確認可能）
+     （`automations/tasker/scripts/get-switchbot-scenes.sh` を実行して一覧から確認可能）
    - `%toggl_project_id=YOUR_PROJECT_ID` → 開始したい Toggl プロジェクトの ID（数値）
    - `%toggl_description=YOUR_DESCRIPTION` → 開始したい Toggl タイマーの説明文（Description）
 3. ウィジェットの表示ラベルや名称を変更したい場合は、`Create SwitchBot Toggl Widget` タスク内の
