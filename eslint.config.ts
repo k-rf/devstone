@@ -22,6 +22,7 @@ const config = defineConfig(
       ".pnpm-store/",
       ".moon/",
       "apps/",
+      "automations/",
       "packages/",
     ],
   },

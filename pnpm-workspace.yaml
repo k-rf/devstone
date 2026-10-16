@@ -1,5 +1,6 @@
 packages:
   - apps/*
+  - automations/*
   - packages/configs/*
   - packages/design-system/*
   - packages/design-system/*/*

@@ -36,6 +36,7 @@ const config: KnipConfig = {
     },
     "packages/configs/*": {},
     "packages/plugins/*": {},
+    "automations/*": {},
   },
 };
 

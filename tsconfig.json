@@ -12,6 +12,9 @@
       "path": "./apps/notion-toggl-bridge"
     },
     {
+      "path": "./automations/tasker"
+    },
+    {
       "path": "./packages/configs/commitlint"
     },
     {
