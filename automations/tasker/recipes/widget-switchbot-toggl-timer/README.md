@@ -49,8 +49,9 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
      （`automations/tasker/scripts/get-switchbot-scenes.sh` を実行して一覧から確認可能）
    - `%toggl_project_id=YOUR_PROJECT_ID` → 開始したい Toggl プロジェクトの ID（数値）
    - `%toggl_description=YOUR_DESCRIPTION` → 開始したい Toggl タイマーの説明文（Description）
-3. ウィジェットの表示ラベルや名称を変更したい場合は、`Create SwitchBot Toggl Widget` タスク内の
-   アクション 1（`%widget_button_label`）およびアクション 2（`Widget v2` の Widget Name）を編集します。
+3. ウィジェットの表示ラベル（初期値: `💤`）や識別名（初期値: `消灯`）を変更したい場合は、
+   `Create SwitchBot Toggl Widget` タスク内のアクション 1（`%widget_button_label`）および
+   アクション 2（`Widget v2` の Widget Name）を編集します。
 
 ### 4. ホーム画面へのウィジェット配置
 
@@ -59,7 +60,7 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
 2. `Widget v2` の「存在しない場合に確認して追加（Ask To Add If Not Present）」が有効になっているため、
    ホーム画面へウィジェットを追加する確認ポップアップが表示されます
    （またはランチャーのウィジェット一覧から **Tasker -> Widget v2** を選択し、
-   `SwitchBot & Toggl` を配置します）。
+   `消灯` を 1x1 サイズで配置します）。
 3. 配置したウィジェットをタップすると、SwitchBot シーンの実行に続けて
    Toggl タイマーが開始されます。
 

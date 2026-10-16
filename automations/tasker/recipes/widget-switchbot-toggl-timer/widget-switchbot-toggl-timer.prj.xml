@@ -15,12 +15,11 @@
       <Bundle sr="arg0">
         <Vals sr="val"/>
       </Bundle>
-      <Str sr="arg1" ve="3">%widget_color_background=surface
-%widget_color_button_bg=primary
-%widget_color_button_text=onPrimary
-%widget_corner_radius=16
-%widget_padding=12
-%widget_button_label=SwitchBot &amp; Toggl</Str>
+      <Str sr="arg1" ve="3">%widget_color_button_bg=primaryContainer
+%widget_color_button_text=onPrimaryContainer
+%widget_corner_radius=20
+%widget_text_size=28
+%widget_button_label=💤</Str>
       <Str sr="arg2" ve="3"/>
       <Str sr="arg3" ve="3"/>
       <Str sr="arg4" ve="3">=</Str>
@@ -34,7 +33,7 @@
       <Bundle sr="arg0">
         <Vals sr="val"/>
       </Bundle>
-      <Str sr="arg1" ve="3">SwitchBot &amp; Toggl</Str>
+      <Str sr="arg1" ve="3">消灯</Str>
       <Str sr="arg2" ve="3">Custom</Str>
       <Str sr="arg3" ve="3"/>
       <Str sr="arg4" ve="3"/>
@@ -46,7 +45,7 @@
       <Str sr="arg10" ve="3"/>
       <Str sr="arg11" ve="3"/>
       <Str sr="arg12" ve="3"/>
-      <Str sr="arg13" ve="3">{&quot;type&quot;:&quot;Box&quot;,&quot;size&quot;:&quot;fill&quot;,&quot;padding&quot;:&quot;%widget_padding&quot;,&quot;backgroundColor&quot;:&quot;%widget_color_background&quot;,&quot;cornerRadius&quot;:&quot;%widget_corner_radius&quot;,&quot;horizontalAlignment&quot;:&quot;Center&quot;,&quot;verticalAlignment&quot;:&quot;Center&quot;,&quot;children&quot;:[{&quot;type&quot;:&quot;Button&quot;,&quot;text&quot;:&quot;%widget_button_label&quot;,&quot;buttonType&quot;:&quot;Filled&quot;,&quot;backgroundColor&quot;:&quot;%widget_color_button_bg&quot;,&quot;contentColor&quot;:&quot;%widget_color_button_text&quot;,&quot;cornerRadius&quot;:&quot;%widget_corner_radius&quot;,&quot;size&quot;:&quot;fill&quot;,&quot;task&quot;:&quot;Run SwitchBot And Start Toggl&quot;}]}</Str>
+      <Str sr="arg13" ve="3">{&quot;type&quot;:&quot;Box&quot;,&quot;size&quot;:&quot;fill&quot;,&quot;backgroundColor&quot;:&quot;%widget_color_button_bg&quot;,&quot;cornerRadius&quot;:&quot;%widget_corner_radius&quot;,&quot;horizontalAlignment&quot;:&quot;Center&quot;,&quot;verticalAlignment&quot;:&quot;Center&quot;,&quot;task&quot;:&quot;Run SwitchBot And Start Toggl&quot;,&quot;children&quot;:[{&quot;type&quot;:&quot;Text&quot;,&quot;text&quot;:&quot;%widget_button_label&quot;,&quot;textSize&quot;:&quot;%widget_text_size&quot;,&quot;color&quot;:&quot;%widget_color_button_text&quot;,&quot;align&quot;:&quot;Center&quot;}]}</Str>
       <Int sr="arg14" val="1"/>
       <Str sr="arg15" ve="3"/>
       <Int sr="arg16" val="1"/>
