@@ -36,11 +36,14 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
 2. Tasker アプリ下部のプロジェクトバー（ホームアイコン等）を長押しして **Import Project** を選択し、
    `nfc-toggl-timer.prj.xml` をインポートします。
 
-### 3. 対象の NFC タグ ID とタイマー情報の設定
+### 3. 対象の NFC タグ ID とタイマー引数の設定
+
+本レシピでは、**TASKS** タブの `Start NFC Toggl Timer` は引数（`%par1`, `%par2`）を受け取る
+共通の受け口になっており、編集は不要です。設定はすべて **PROFILES** タブ側で行います。
 
 1. **NFC タグ ID の設定（およびアプリ選択ダイアログの回避設定）**:
    - インポートされた `NFC Toggl Timer` プロジェクト内の **PROFILES** タブで
-     `Start Toggl Timer On NFC Tag` を展開し、**NFC タグ ID: YOUR_NFC_TAG_ID** をタップします。
+     `Start Toggl Timer On NFC Tag` を展開し、左側の **NFC タグ ID: YOUR_NFC_TAG_ID** をタップします。
    - スマートフォンを NFC タグから**完全に離した状態**で、**ID** 欄右側の虫眼鏡アイコン（🔍）をタップします。
    - **「タグの内容を初期化しますか？」**（データ書き込み確認）が表示されたら **「はい」** を選択し、
      任意の文字列（例: `toggl`）を入力して OK を押します。
@@ -50,21 +53,21 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
      NFC タグにスマートフォン背面の NFC マークを密着させ、完了するまで 1〜2 秒間動かさずに待ちます。
    - **ID** 欄が実際のタグ ID に置き換わったことを確認します（ID のみで判定する場合は、
      **内容 / Content** 欄に入った文字列は空にして構いません）。左上の戻るボタン（←）で確定します。
-2. **開始する Toggl タイマーの設定**:
-   - `NFC Toggl Timer` プロジェクト内の **TASKS** タブから `Start NFC Toggl Timer` を開きます。
-   - アクション 1（`Multiple Variables Set`）を開き、以下のプレースホルダーを実際の値に書き換えます。
-     - `%toggl_project_id=YOUR_PROJECT_ID` → 開始したい Toggl プロジェクトの ID（数値）
-     - `%toggl_description=YOUR_DESCRIPTION` → 開始したい Toggl タイマーの説明文（Description）
-     - `%cooldown_seconds=5` → チャタリング防止のクールダウン秒数（初期値: `5` 秒）
+2. **開始する Toggl タイマー（引数 `%par1`, `%par2`）の設定**:
+   - 同じプロファイルの右側に紐づいている匿名タスク（`タスク実行: Start NFC Toggl Timer`）をタップして開きます。
+   - アクション 1（`タスク実行 / Perform Task`）を開き、以下の引数を実際の値に書き換えます。
+     - **パラメーター 1 (`%par1`)**: `YOUR_PROJECT_ID` → 開始したい Toggl プロジェクトの ID（数値）
+     - **パラメーター 2 (`%par2`)**: `YOUR_DESCRIPTION` → 開始したい Toggl タイマーの説明文（Description）
 3. Tasker 画面右上のチェックマーク（✓）をタップして設定を保存・適用します。
 
 ### 4. 複数の NFC タグ・タイマーを追加する場合
 
-1. **TASKS** タブで `Start NFC Toggl Timer` を長押しして複製（Clone）し、
-   新しい名前を付けてアクション 1 の `%toggl_project_id` と `%toggl_description` を変更します。
-2. **PROFILES** タブで `Start Toggl Timer On NFC Tag` を長押しして複製（Clone）し、
-   イベント条件の NFC タグ ID を新しいタグでスキャンし直したうえで、
-   右側のタスク名を長押しして手順 1 で複製したタスクへ紐づけを変更します。
+`TASKS` タブのタスクを複製する必要はありません。プロファイルだけを複製して引数を変更します。
+
+1. **PROFILES** タブで `Start Toggl Timer On NFC Tag` を長押しして複製（Clone）します。
+2. 複製したプロファイルの左側のイベント条件を開き、新しい NFC タグの ID をスキャンします。
+3. 複製したプロファイルの右側のタスクを開き、アクション 1（`Perform Task: Start NFC Toggl Timer`）の
+   **パラメーター 1 (`%par1`)** と **パラメーター 2 (`%par2`)** を新しいタイマーの値に変更します。
 
 ## 動作仕様・エラーハンドリング
 
@@ -72,7 +75,7 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
   Event Context（`NFC タグ`）の `ID` 条件で対象タグの UID を指定しているため、
   未登録の別 NFC タグを読み取ってもこのプロファイルは発火しません。
 - **未設定防止チェック**:
-  NFC タグ ID またはプロジェクト ID・説明文が初期プレースホルダー
+  NFC タグ ID または引数（`%par1` / `%par2`）が初期プレースホルダー
   （`YOUR_NFC_TAG_ID` / `YOUR_PROJECT_ID` / `YOUR_DESCRIPTION`）のまま実行された場合は、
   `AI Errors` カテゴリの通知（`Notify`）とトースト（`Flash`）を表示して処理を中断します。
 - **稼働中タイマーの扱い**:
@@ -84,6 +87,6 @@ Tasker の **VARS** タブで、以下のグローバル変数を設定してく
      API 通信中にかざし続けて発生した重複イベントは破棄されます。
   2. **クールダウン（デバウンス）制御**:
      前回実行時の時刻（`%LastNfcTogglTime`）とタグ ID（`%LastNfcTogglTagId`）を記録し、
-     同一の NFC タグが `%cooldown_seconds`（初期値 5 秒）以内に再読み取りされた場合は
-     何もせず静かに終了します。異なる NFC タグ（別プロファイル）を続けて読み取った場合は
-     クールダウンの対象外となり、即座に切り替わります。
+     同一の NFC タグが 5 秒以内に再読み取りされた場合は何もせず静かに終了します。
+     異なる NFC タグ（別プロファイル）を続けて読み取った場合はクールダウンの対象外となり、
+     即座に切り替わります。
