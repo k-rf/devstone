@@ -13,10 +13,18 @@
       <Str sr="arg1" ve="3"/>
     </Event>
   </Profile>
+  <Project sr="proj0" ve="2">
+    <cdate>1743500000000</cdate>
+    <name>NFC Toggl Timer</name>
+    <pids>30</pids>
+    <tids>31</tids>
+  </Project>
   <Task sr="task31">
     <cdate>1743500000000</cdate>
     <edate>1743500000000</edate>
     <id>31</id>
+    <nme>Start NFC Toggl Timer</nme>
+    <pri>100</pri>
     <rty>0</rty>
     <Action sr="act0" ve="7">
       <code>389</code>
