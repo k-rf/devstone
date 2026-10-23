@@ -18,6 +18,11 @@
       "dev": "./src/base.ts",
       "default": "./dist/base.js"
     },
+    "./minimal": {
+      "types": "./dist/minimal.d.ts",
+      "dev": "./src/minimal.ts",
+      "default": "./dist/minimal.js"
+    },
     "./react": {
       "types": "./dist/react.d.ts",
       "dev": "./src/react.ts",

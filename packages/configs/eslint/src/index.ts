@@ -6,6 +6,7 @@ export { importConfig } from "./import.js";
 export { jsdoc } from "./jsdoc.js";
 export { json } from "./json.js";
 export { markdown } from "./markdown.js";
+export { minimal } from "./minimal.js";
 export { namingConvention } from "./naming-convention.js";
 export { node } from "./node.js";
 export { plugin } from "./plugins/devstone/index.js";
