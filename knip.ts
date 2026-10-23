@@ -6,6 +6,7 @@ const config: KnipConfig = {
   lefthook: false,
   workspaces: {
     ".": {},
+    "apps/agent-analytics": {},
     "apps/easel": {
       entry: ["src/main.ts", "src/**/*.spec-d.ts"],
       project: ["src/**/*.ts"],

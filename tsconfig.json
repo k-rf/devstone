@@ -6,6 +6,9 @@
   "include": ["*.ts", ".gemini/**/*.ts"],
   "references": [
     {
+      "path": "./apps/agent-analytics"
+    },
+    {
       "path": "./apps/easel"
     },
     {

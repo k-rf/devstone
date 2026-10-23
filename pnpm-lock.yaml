@@ -57,6 +57,21 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
 
+  apps/agent-analytics:
+    devDependencies:
+      '@devstone/configs-eslint':
+        specifier: workspace:*
+        version: link:../../packages/configs/eslint
+      '@devstone/configs-typescript':
+        specifier: workspace:*
+        version: link:../../packages/configs/typescript
+      eslint:
+        specifier: 10.2.1
+        version: 10.2.1(jiti@2.7.0)(supports-color@10.2.2)
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+
   apps/easel:
     dependencies:
       '@devstone/libs-json-canvas-spec':
