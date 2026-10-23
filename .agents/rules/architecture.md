@@ -28,6 +28,7 @@ trigger: always_on
 ```plaintext
 root/
 ├── apps/               # アプリケーション本体
+│   ├── agent-analytics/      # エージェントスキル利用統計の集計・可視化アプリ
 │   └── notion-toggl-bridge/  # Cloudflare Workers アプリ
 ├── automations/        # 外部ツール・端末等の自動化レシピ
 │   └── tasker/         # Android Tasker の自動化レシピ（XML）
