@@ -1,0 +1,17 @@
+{
+  "name": "@devstone/agent-analytics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "トランスクリプト解析を用いてエージェントスキルの利用統計とサブリソース到達率を可視化するアプリケーションです。",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.check.json",
+    "lint": "eslint --fix --max-warnings 0"
+  },
+  "devDependencies": {
+    "@devstone/configs-eslint": "workspace:*",
+    "@devstone/configs-typescript": "workspace:*",
+    "eslint": "10.2.1",
+    "typescript": "7.0.2"
+  }
+}

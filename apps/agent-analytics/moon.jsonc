@@ -1,0 +1,13 @@
+{
+  "$schema": "../../.moon/cache/schemas/project.json",
+
+  "id": "agent-analytics",
+  "layer": "application",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+
+  "project": {
+    "title": "agent-analytics",
+    "description": "トランスクリプト解析を用いてエージェントスキルの利用統計とサブリソース到達率を可視化するアプリケーションです。"
+  }
+}
