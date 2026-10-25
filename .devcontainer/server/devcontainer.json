@@ -30,5 +30,8 @@
       "target": "/home/devstone/.ssh/agent",
       "type": "bind"
     }
-  ]
+  ],
+  "containerEnv": {
+    "SSH_AUTH_SOCK": "/home/devstone/.ssh/agent/agent.sock"
+  }
 }
