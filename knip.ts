@@ -5,7 +5,9 @@ const config: KnipConfig = {
   ignoreDependencies: ["commitlint", "lint-staged", "nyc", "lefthook"],
   lefthook: false,
   workspaces: {
-    ".": {},
+    ".": {
+      entry: ["eslint.format.config.ts"],
+    },
     "apps/easel": {
       entry: ["src/main.ts", "src/**/*.spec-d.ts"],
       project: ["src/**/*.ts"],

@@ -3,8 +3,9 @@
 
   "tasks": {
     "format": {
-      "description": "コードをoxfmtで整形します。",
+      "description": "コードを整形します。",
       "command": "pnpm run format",
+      "dependsOn": ["configs-eslint:build"],
       "options": { "cache": false }
     },
     "knip": {

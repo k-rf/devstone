@@ -3,7 +3,6 @@ packages:
   - automations/*
   - packages/configs/*
   - packages/design-system/*
-  - packages/design-system/*/*
   - packages/libs/*
   - packages/plugins/*
 

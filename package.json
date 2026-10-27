@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "typecheck": "tsc -p tsconfig.check.json",
-    "format": "oxfmt",
+    "format": "./scripts/format.sh",
     "lint": "eslint --fix --max-warnings 0",
     "lint:md": "markdownlint-cli2 --fix '**/*.md'",
     "lint:spell": "cspell --config .vscode/cspell.json --no-progress --dot --gitignore \"**/*\"",
