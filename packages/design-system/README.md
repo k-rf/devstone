@@ -5,7 +5,7 @@ W3C DTCG（Design Tokens Community Group）仕様と Chakra UI v3 をベース�
 
 ## 💡 設計思想
 
-1. **Code as SSoT (真実の単一ソース)**
+1. **コードを単一情報源（SSoT）とするトークン管理**
    デザイントークンは Figma 等の外部ツールではなく、W3C DTCG 準拠の TypeScript コードを
    一次ソース（SSoT）として管理します。
 2. **型システムによる厳格なトークン制約**
@@ -26,12 +26,12 @@ W3C DTCG（Design Tokens Community Group）仕様と Chakra UI v3 をベース�
 
 | ディレクトリ                    | パッケージ名                     | 役割・責務                                                                       |
 | :------------------------------ | :------------------------------- | :------------------------------------------------------------------------------- |
-| `packages/design-system/tokens` | `@devstone/design-system-tokens` | UI フレームワーク非依存の純粋なデザイントークンパッケージ（Code as SSoT）        |
+| `packages/design-system/tokens` | `@devstone/design-system-tokens` | UI フレームワーク非依存の純粋なデザイントークンパッケージ                        |
 | `packages/design-system/react`  | `@devstone/design-system-react`  | Chakra UI v3 アダプター、Provider、UI コンポーネント、Storybook を提供する実装層 |
 
 ### `@devstone/design-system-tokens` (`packages/design-system/tokens`)
 
-- UI フレームワーク非依存の純粋なデザイントークンパッケージ（Code as SSoT）。
+- UI フレームワーク非依存の純粋なデザイントークンパッケージ。
 - `@terrazzo/token-types` をベースに、以下の型安全機構を提供：
   - 末端トークンへの `$type` 明記ルール
   - `$type` 別のエイリアスパス自動補完（Template Literal Types）
