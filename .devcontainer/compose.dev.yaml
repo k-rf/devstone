@@ -53,6 +53,11 @@ x-volume-cursor-auth: &volume-cursor-auth
   source: ${HOME}/.config/cursor/auth.json
   target: ${ROOT_REMOTE_HOME}/.config/cursor/auth.json
 
+x-volume-ghealth: &volume-ghealth
+  type: bind
+  source: ${HOME}/.config/ghealth
+  target: ${ROOT_REMOTE_HOME}/.config/ghealth
+
 x-volume-orca: &volume-orca
   type: bind
   source: ${HOME}/.orca
@@ -75,6 +80,7 @@ services:
       - *volume-gemini
       - *volume-claude-json
       - *volume-cursor-auth
+      - *volume-ghealth
       - *volume-orca
       - *volume-bash-history
       - type: volume
@@ -95,6 +101,7 @@ services:
       - *volume-gemini
       - *volume-claude-json
       - *volume-cursor-auth
+      - *volume-ghealth
       - *volume-orca
       - *volume-bash-history
       - type: volume

@@ -9,7 +9,7 @@ import sys
 import tomllib
 from pathlib import Path
 
-TOOLS = ("node", "npm", "python")
+TOOLS = ("go", "node", "npm", "python")
 
 
 def main() -> None:
