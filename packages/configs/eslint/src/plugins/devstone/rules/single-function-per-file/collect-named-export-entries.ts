@@ -3,12 +3,12 @@ import { type RuleContext } from "@typescript-eslint/utils/ts-eslint";
 import { P, match } from "ts-pattern";
 
 import { isErrorClass } from "./is-error-class.js";
-import { isFunctionNode } from "./is-function-node.js";
+import { isUniqueSymbolDeclarator } from "./is-unique-symbol-declarator.js";
 import { isSpecifierReferencingFunction } from "./resolve-exported-specifier.js";
 import { type ExportedEntry, type MessageIds, type Options } from "./types.js";
 
 /**
- * ExportNamedDeclaration ノードから主要な関数・クラスのエクスポートエントリを収集する。
+ * ExportNamedDeclaration ノードから主要な関数・クラス・定数（変数）のエクスポートエントリを収集する。
  */
 export const collectNamedExportEntries = (
   context: RuleContext<MessageIds, Options>,
@@ -29,7 +29,7 @@ export const collectNamedExportEntries = (
       })
       .with({ type: VariableDeclaration }, ({ declarations }) =>
         declarations.flatMap((declarator) => {
-          if (declarator.id.type === Identifier && isFunctionNode(declarator.init)) {
+          if (declarator.id.type === Identifier && !isUniqueSymbolDeclarator(declarator)) {
             return [{ node: declarator, name: declarator.id.name }];
           }
 
