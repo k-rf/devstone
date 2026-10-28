@@ -34,7 +34,7 @@ ENV LANG=ja_JP.UTF-8
 # ------------------------------------------------------------------------------
 RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   && mkdir -p /commandhistory ${REMOTE_HOME}/.vscode-server/extensions ${REMOTE_HOME}/.ssh \
-    ${REMOTE_HOME}/.config/orca \
+    ${REMOTE_HOME}/.config/orca ${REMOTE_HOME}/.config/ghealth \
   && touch /commandhistory/.bash_history \
   && chown -R ${REMOTE_USER}:${REMOTE_USER} /commandhistory ${REMOTE_HOME}/.vscode-server ${REMOTE_HOME}/.ssh \
     ${REMOTE_HOME}/.config \

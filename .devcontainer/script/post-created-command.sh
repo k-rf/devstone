@@ -18,6 +18,8 @@ NO_TTY=1 proto install --quiet
 # REMARKS: Orca SSH relay 等はホーム起点で動くため、ワークスペースの .prototools だけでは proto::detect::failed になり Node/Python 未検出と判定される。
 python "${SCRIPT_DIR}/pin-proto-globals.py" .prototools
 
+"${SCRIPT_DIR}/install-ghealth.sh"
+
 pnpm install
 moon run :build
 
