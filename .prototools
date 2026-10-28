@@ -1,10 +1,10 @@
 act = "0.2.89"
-bun = "1.4.0"
-moon = "2.5.3"
-node = "26.7.0"
-npm = "12.0.2"
-pnpm = "11.24.0"
-python = "3.14.7"
+bun = "1.4.4"
+moon = "2.6.4"
+node = "26.12.1"
+npm = "12.2.1"
+pnpm = "12.15.0"
+python = "3.15.2"
 
 [plugins.tools]
 act = "https://raw.githubusercontent.com/theomessin/proto-toml-plugins/master/act.toml"
