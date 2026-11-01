@@ -10,9 +10,14 @@ trigger: always_on
 
 - **Language**: 原則として英語を使用します。
 - **Case**:
-  - `PascalCase`: クラス、インターフェース、`Context.Tag`、`Schema`、型定義。
+  - `PascalCase`: クラス、インターフェース、`Context.Tag`、`Schema`、型定義、型引数。
   - `camelCase`: 変数、関数、プロパティ、`Effect` インスタンス。
   - `kebab-case`: ファイル名、ディレクトリ名、ブランチ名の説明部分。
+- **Type Parameter（型引数）**:
+  - 単一の大文字（`T`, `K`, `U` 等、Effect-TS の文脈では `A`, `E`, `R`）、または
+    `T` 接頭辞を付けない説明的な `PascalCase`（例: `Primitives`, `BaseTheme`, `Type`, `Options`）を使用します。
+  - `TData` や `TType` のような機械的な `T` 接頭辞は使用しません
+    （同一スコープ内の具象型と名前が衝突する場合のみ、別の説明的な名前や `BaseType` 等の表現で区別します）。
 - **Git ブランチ**: 作業ブランチは [branch-naming.md](./branch-naming.md) に従う。
   - 例: `feature/DEV-29/short-description`。
 
