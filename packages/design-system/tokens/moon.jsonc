@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "design-system-tokens",
+  "layer": "library",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "tags": ["testable"],
+
+  "project": {
+    "title": "design-system/tokens",
+    "description": "UIフレームワーク非依存の純粋なデザイントークンパッケージです。"
+  },
+
+  "tasks": {
+    "test": {
+      "command": "pnpm run test",
+      "outputs": ["coverage/**"]
+    }
+  }
+}

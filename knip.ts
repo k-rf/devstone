@@ -24,6 +24,10 @@ const config: KnipConfig = {
       entry: ["src/**/*.spec-d.ts"],
       project: ["src/**/*.ts"],
     },
+    "packages/design-system/*": {
+      entry: ["src/**/*.spec-d.ts"],
+      project: ["src/**/*.ts"],
+    },
     "packages/configs/commitlint": {
       entry: ["src/commitlint.config.ts"],
       project: ["src/**/*.ts"],
