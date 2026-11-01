@@ -27,6 +27,9 @@
       "path": "./packages/configs/vitest"
     },
     {
+      "path": "./packages/design-system/tokens"
+    },
+    {
       "path": "./packages/libs/json-canvas-spec"
     },
     {
