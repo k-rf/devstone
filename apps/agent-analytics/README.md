@@ -3,6 +3,15 @@
 Antigravity の会話ログ（トランスクリプト）からエージェントスキルの利用統計・発火理由・
 サブリソース到達率を集計して可視化するアプリケーションです。
 
+## CLI 実行方法
+
+ビルド後、標準入力（`stdin`）から `transcript_path`（または `transcriptPath`）を含む JSON を渡して
+`statusline` サブコマンドを実行できます。
+
+```bash
+echo '{"transcript_path":"transcript.jsonl"}' | bun apps/agent-analytics/dist/main.js statusline
+```
+
 ## 主な機能（予定）
 
 1. **CLI `statusLine` 連携**
