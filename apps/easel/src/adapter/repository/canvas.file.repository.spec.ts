@@ -11,7 +11,8 @@ import { CanvasError } from "../../core/domain/errors.js";
 import { CanvasRepository } from "../../core/port/repository/canvas.repository.js";
 import { mockFileSystem } from "../../test-utils/mock-fs.js";
 
-import { CanvasFileConfig, CanvasFileRepository } from "./canvas.file.repository.js";
+import { CanvasFileConfig } from "./canvas-file-config.repository.js";
+import { CanvasFileRepository } from "./canvas.file.repository.js";
 
 const testFilePath = path.join(process.cwd(), "test.canvas");
 
