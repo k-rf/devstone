@@ -3,7 +3,8 @@ import { Console, Effect } from "effect";
 
 import { listCanvasItemsWorkflow } from "../../../core/application/list-canvas-items.workflow.js";
 
-import { fileOption, provideCanvasRepository } from "./options/file.option.js";
+import { fileOption } from "./options/file.option.js";
+import { provideCanvasRepository } from "./options/provide-canvas-repository.option.js";
 
 /**
  * 指定された .canvas ファイルに含まれるすべてのノードIDとエッジIDの一覧を表示します。
