@@ -2,7 +2,8 @@ import { Command } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateNodeWorkflow } from "../../../../../core/application/update-node.workflow.js";
-import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
+import { fileOption } from "../../options/file.option.js";
+import { provideCanvasRepository } from "../../options/provide-canvas-repository.option.js";
 
 import {
   colorOption,

@@ -2,7 +2,8 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { removeNodeWorkflow } from "../../../../core/application/remove-node.workflow.js";
-import { fileOption, provideCanvasRepository } from "../options/file.option.js";
+import { fileOption } from "../options/file.option.js";
+import { provideCanvasRepository } from "../options/provide-canvas-repository.option.js";
 
 const rmNodeIdOption = Options.text("id").pipe(
   Options.withDescription("Unique identifier of the node to remove"),
