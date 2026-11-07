@@ -63,6 +63,11 @@ x-volume-orca: &volume-orca
   source: ${HOME}/.orca
   target: ${ROOT_REMOTE_HOME}/.orca
 
+x-volume-t3: &volume-t3
+  type: bind
+  source: ${HOME}/.t3
+  target: ${ROOT_REMOTE_HOME}/.t3
+
 x-volume-bash-history: &volume-bash-history
   type: volume
   source: root-bash-history
@@ -82,6 +87,7 @@ services:
       - *volume-cursor-auth
       - *volume-ghealth
       - *volume-orca
+      - *volume-t3
       - *volume-bash-history
       - type: volume
         source: root-vscode-extensions
@@ -92,6 +98,7 @@ services:
     container_name: ${ROOT_CONTAINER_NAME}-server
     ports:
       - 2222:2222
+      - 3773:3773
       - 6768:6768
     volumes:
       - *volume-repo
@@ -103,6 +110,7 @@ services:
       - *volume-cursor-auth
       - *volume-ghealth
       - *volume-orca
+      - *volume-t3
       - *volume-bash-history
       - type: volume
         source: root-orca-config
