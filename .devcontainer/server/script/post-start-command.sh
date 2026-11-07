@@ -6,3 +6,4 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 "${SCRIPT_DIR}/start-cursor-agent.sh"
 "${SCRIPT_DIR}/start-orca-serve.sh"
+"${SCRIPT_DIR}/start-t3code-serve.sh"
