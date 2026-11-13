@@ -5,6 +5,9 @@ W3C DTCG（Design Tokens Community Group）仕様と Chakra UI v3 をベース�
 
 ## 💡 設計思想
 
+視覚・体験のデザイン原則およびトークン設計の指針については、[`DESIGN.md`](./DESIGN.md) を参照してください。
+技術・アーキテクチャ面では、以下の 3 つの思想に基づいています。
+
 1. **コードを単一情報源（SSoT）とするトークン管理**
    デザイントークンは Figma 等の外部ツールではなく、W3C DTCG 準拠の TypeScript コードを
    一次ソース（SSoT）として管理します。
