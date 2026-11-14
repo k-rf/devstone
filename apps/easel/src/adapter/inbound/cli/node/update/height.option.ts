@@ -1,8 +1,6 @@
 import { Options } from "@effect/cli";
 
-import { heightOptionBase } from "../options.js";
-
-export const heightOption = heightOptionBase.pipe(
+export const heightOption = Options.integer("height").pipe(
   Options.optional,
   Options.withDescription("New height of the node"),
 );

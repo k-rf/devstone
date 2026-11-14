@@ -6,15 +6,13 @@ import { generateId } from "../../../../../utils/generate-id.js";
 import { CanvasFileRepository } from "../../../../repository/canvas.file.repository.js";
 import { fileOption } from "../../options/file.option.js";
 
-import {
-  colorOption,
-  heightOption,
-  labelOption,
-  nodeIdOption,
-  widthOption,
-  xOption,
-  yOption,
-} from "./options.js";
+import { colorOption } from "./color.option.js";
+import { heightOption } from "./height.option.js";
+import { labelOption } from "./label.option.js";
+import { nodeIdOption } from "./node-id.option.js";
+import { widthOption } from "./width.option.js";
+import { xOption } from "./x.option.js";
+import { yOption } from "./y.option.js";
 
 const urlOption = Options.text("url").pipe(Options.withDescription("URL for the link node"));
 

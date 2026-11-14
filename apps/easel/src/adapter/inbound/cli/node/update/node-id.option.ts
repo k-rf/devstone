@@ -1,7 +1,5 @@
 import { Options } from "@effect/cli";
 
-import { nodeIdOptionBase } from "../options.js";
-
-export const nodeIdOption = nodeIdOptionBase.pipe(
+export const nodeIdOption = Options.text("id").pipe(
   Options.withDescription("Unique identifier of the node to update"),
 );

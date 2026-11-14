@@ -6,14 +6,12 @@ import { generateId } from "../../../../../utils/generate-id.js";
 import { CanvasFileRepository } from "../../../../repository/canvas.file.repository.js";
 import { fileOption } from "../../options/file.option.js";
 
-import {
-  colorOption,
-  heightOption,
-  nodeIdOption,
-  widthOption,
-  xOption,
-  yOption,
-} from "./options.js";
+import { colorOption } from "./color.option.js";
+import { heightOption } from "./height.option.js";
+import { nodeIdOption } from "./node-id.option.js";
+import { widthOption } from "./width.option.js";
+import { xOption } from "./x.option.js";
+import { yOption } from "./y.option.js";
 
 const textOption = Options.text("text").pipe(Options.withDescription("Text content for the node"));
 
