@@ -2,9 +2,9 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { getCanvasItemWorkflow } from "../../../core/application/get-canvas-item.workflow.js";
+import { CanvasFileRepository } from "../../repository/canvas.file.repository.js";
 
 import { fileOption } from "./options/file.option.js";
-import { provideCanvasRepository } from "./options/provide-canvas-repository.option.js";
 
 const getTargetIdOption = Options.text("id").pipe(
   Options.withDescription("ID of the node or edge to retrieve"),
@@ -23,7 +23,7 @@ export const getCommand = Command.make("get", {
       Effect.flatMap((item) =>
         Console.log(JSON.stringify({ type: item.type, data: item.data }, undefined, 2)),
       ),
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
       ),

@@ -2,9 +2,9 @@ import { Command } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { listCanvasItemsWorkflow } from "../../../core/application/list-canvas-items.workflow.js";
+import { CanvasFileRepository } from "../../repository/canvas.file.repository.js";
 
 import { fileOption } from "./options/file.option.js";
-import { provideCanvasRepository } from "./options/provide-canvas-repository.option.js";
 
 /**
  * 指定された .canvas ファイルに含まれるすべてのノードIDとエッジIDの一覧を表示します。
@@ -16,7 +16,7 @@ export const listCommand = Command.make("list", {
   Command.withHandler(({ file }) =>
     listCanvasItemsWorkflow().pipe(
       Effect.flatMap((output) => Console.log(output)),
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
       ),

@@ -2,8 +2,8 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateNodeWorkflow } from "../../../../../core/application/update-node.workflow.js";
+import { CanvasFileRepository } from "../../../../repository/canvas.file.repository.js";
 import { fileOption } from "../../options/file.option.js";
-import { provideCanvasRepository } from "../../options/provide-canvas-repository.option.js";
 
 import {
   colorOption,
@@ -44,7 +44,7 @@ export const updateTextNodeCommand = Command.make("text", {
       color: color,
       text: text,
     }).pipe(
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.tap(() => Console.log(`Successfully updated text node: ${id}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

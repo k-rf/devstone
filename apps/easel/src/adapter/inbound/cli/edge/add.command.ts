@@ -3,8 +3,8 @@ import { Console, Effect, Option } from "effect";
 
 import { addEdgeWorkflow } from "../../../../core/application/add-edge.workflow.js";
 import { generateId } from "../../../../utils/generate-id.js";
+import { CanvasFileRepository } from "../../../repository/canvas.file.repository.js";
 import { fileOption } from "../options/file.option.js";
-import { provideCanvasRepository } from "../options/provide-canvas-repository.option.js";
 
 const fromNodeOption = Options.text("from-node").pipe(Options.withDescription("Source Node ID"));
 const toNodeOption = Options.text("to-node").pipe(Options.withDescription("Target Node ID"));
@@ -58,7 +58,7 @@ export const addEdgeCommand = Command.make("add", {
     };
 
     return addEdgeWorkflow(edgeData).pipe(
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.tap(() => Console.log(`Successfully added edge: ${edgeId}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

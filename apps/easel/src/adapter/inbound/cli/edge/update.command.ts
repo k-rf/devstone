@@ -2,8 +2,8 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateEdgeWorkflow } from "../../../../core/application/update-edge.workflow.js";
+import { CanvasFileRepository } from "../../../repository/canvas.file.repository.js";
 import { fileOption } from "../options/file.option.js";
-import { provideCanvasRepository } from "../options/provide-canvas-repository.option.js";
 
 const edgeIdOption = Options.text("id").pipe(
   Options.withDescription("Unique identifier of the edge to update"),
@@ -75,7 +75,7 @@ export const updateEdgeCommand = Command.make("update", {
         color: color,
         label: label,
       }).pipe(
-        provideCanvasRepository(file),
+        Effect.provide(CanvasFileRepository(file)),
         Effect.tap(() => Console.log(`Successfully updated edge: ${id}`)),
         Effect.catchAll((error) =>
           Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

@@ -3,8 +3,8 @@ import { Console, Effect, Option } from "effect";
 
 import { addNodeWorkflow } from "../../../../../core/application/add-node.workflow.js";
 import { generateId } from "../../../../../utils/generate-id.js";
+import { CanvasFileRepository } from "../../../../repository/canvas.file.repository.js";
 import { fileOption } from "../../options/file.option.js";
-import { provideCanvasRepository } from "../../options/provide-canvas-repository.option.js";
 
 import {
   colorOption,
@@ -46,7 +46,7 @@ export const addGroupNodeCommand = Command.make("group", {
     };
 
     return addNodeWorkflow(nodeData).pipe(
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.tap(() => Console.log(`Successfully added or updated group node: ${nodeId}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),
