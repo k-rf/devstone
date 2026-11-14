@@ -5,7 +5,7 @@
 ## Rule Details
 
 原則として、1つのファイルには1つの主要な関数（あるいは主要なエクスポート）のみを定義します。
-同一ファイルから複数の関数やクラスがエクスポートされるのを防ぎ、ファイル分割を促すことでモジュールの肥大化と複雑化を防止します。
+同一ファイルから複数の関数、クラス、または定数（変数）がエクスポートされるのを防ぎ、ファイル分割を促すことでモジュールの肥大化と複雑化を防止します。
 
 なお、以下のものは評価の対象外です：
 
@@ -14,8 +14,8 @@
 - 型定義ファイル（`*.d.ts`）
 - 型エクスポート（`export type`, `export interface`）
 - 再エクスポート（`export * from "..."`, `export { ... } from "..."`）
-- 主要機能に付随する単純な定数
 - エラー定義クラス（`Data.TaggedError` や `Error` を継承）
+- ブランド型等の識別子として用いる `unique symbol` 型定数（`export const FooBrand: unique symbol = ...`）
 
 ### ❌ Incorrect
 
@@ -38,6 +38,20 @@ export class UserHandler {}
 export class OrderHandler {}
 ```
 
+```typescript
+// schemas.ts
+// 複数の定数（Schema 等）がエクスポートされている
+export const ToolCallEntry = Schema.Struct({ ... });
+export const SessionStats = Schema.Struct({ ... });
+```
+
+```typescript
+// file.option.ts
+// 定数（CLI オプション定義）と関数（DI ヘルパー）が混在してエクスポートされている
+export const fileOption = Options.file("file");
+export const provideCanvasRepository = (filePath: string) => ...;
+```
+
 ### ✅ Correct
 
 ```typescript
@@ -57,10 +71,18 @@ export const addEdgeWorkflow = (input: AddEdgeInput) => Effect.gen(...);
 ```
 
 ```typescript
-// file.option.ts
-// 主要な関数に付随する定数のエクスポートは許可
-export const fileOption = Options.file("file");
-export const provideCanvasRepository = (filePath: string) => ...;
+// session-stats.ts
+// コンパニオンオブジェクトパターン（1つの export const ＋ export type）は許可
+export const SessionStats = Schema.Struct({ ... });
+export type SessionStats = typeof SessionStats.Type;
+```
+
+```typescript
+// node-id.ts
+// unique symbol 型定数とスキーマ定数の組み合わせは許可
+export const NodeIdBrand: unique symbol = Symbol.for("NodeIdBrand");
+export const NodeId = Schema.String.pipe(Schema.brand(NodeIdBrand));
+export type NodeId = typeof NodeId.Type;
 ```
 
 ```typescript

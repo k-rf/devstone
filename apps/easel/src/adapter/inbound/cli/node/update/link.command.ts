@@ -2,16 +2,15 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { updateNodeWorkflow } from "../../../../../core/application/update-node.workflow.js";
-import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
+import { CanvasFileRepository } from "../../../../repository/canvas.file.repository.js";
+import { fileOption } from "../../options/file.option.js";
 
-import {
-  colorOption,
-  heightOption,
-  nodeIdOption,
-  widthOption,
-  xOption,
-  yOption,
-} from "./options.js";
+import { colorOption } from "./color.option.js";
+import { heightOption } from "./height.option.js";
+import { nodeIdOption } from "./node-id.option.js";
+import { widthOption } from "./width.option.js";
+import { xOption } from "./x.option.js";
+import { yOption } from "./y.option.js";
 
 const urlOption = Options.text("url").pipe(
   Options.optional,
@@ -43,7 +42,7 @@ export const updateLinkNodeCommand = Command.make("link", {
       color: color,
       url: url,
     }).pipe(
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.tap(() => Console.log(`Successfully updated link node: ${id}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

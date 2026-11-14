@@ -11,15 +11,12 @@ import { CanvasError } from "../../core/domain/errors.js";
 import { CanvasRepository } from "../../core/port/repository/canvas.repository.js";
 import { mockFileSystem } from "../../test-utils/mock-fs.js";
 
-import { CanvasFileConfig, CanvasFileRepository } from "./canvas.file.repository.js";
+import { CanvasFileRepository } from "./canvas.file.repository.js";
 
 const testFilePath = path.join(process.cwd(), "test.canvas");
 
 const makeTestLayer = (filePath: string = testFilePath) =>
-  CanvasFileRepository.pipe(
-    Layer.provide(mockFileSystem),
-    Layer.provide(Layer.succeed(CanvasFileConfig, { filePath: filePath })),
-  );
+  CanvasFileRepository(filePath).pipe(Layer.provide(mockFileSystem));
 
 describe("CanvasFileRepository によるファイル入出力", () => {
   beforeEach(() => {

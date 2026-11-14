@@ -3,17 +3,16 @@ import { Console, Effect, Option } from "effect";
 
 import { addNodeWorkflow } from "../../../../../core/application/add-node.workflow.js";
 import { generateId } from "../../../../../utils/generate-id.js";
-import { fileOption, provideCanvasRepository } from "../../options/file.option.js";
+import { CanvasFileRepository } from "../../../../repository/canvas.file.repository.js";
+import { fileOption } from "../../options/file.option.js";
 
-import {
-  colorOption,
-  heightOption,
-  labelOption,
-  nodeIdOption,
-  widthOption,
-  xOption,
-  yOption,
-} from "./options.js";
+import { colorOption } from "./color.option.js";
+import { heightOption } from "./height.option.js";
+import { labelOption } from "./label.option.js";
+import { nodeIdOption } from "./node-id.option.js";
+import { widthOption } from "./width.option.js";
+import { xOption } from "./x.option.js";
+import { yOption } from "./y.option.js";
 
 const fileRefOption = Options.text("file-ref").pipe(
   Options.withDescription("File path for the file node"),
@@ -51,7 +50,7 @@ export const addFileNodeCommand = Command.make("file", {
     };
 
     return addNodeWorkflow(nodeData).pipe(
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.tap(() => Console.log(`Successfully added or updated file node: ${nodeId}`)),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

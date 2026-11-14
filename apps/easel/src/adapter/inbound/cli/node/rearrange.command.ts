@@ -2,7 +2,8 @@ import { Command, Options } from "@effect/cli";
 import { Console, Effect } from "effect";
 
 import { rearrangeNodesWorkflow } from "../../../../core/application/rearrange-nodes.workflow.js";
-import { fileOption, provideCanvasRepository } from "../options/file.option.js";
+import { CanvasFileRepository } from "../../../repository/canvas.file.repository.js";
+import { fileOption } from "../options/file.option.js";
 
 const paddingOption = Options.integer("padding").pipe(
   Options.optional,
@@ -38,7 +39,7 @@ export const rearrangeNodeCommand = Command.make("rearrange", {
       maxIterations: maxIterations,
       damping: damping,
     }).pipe(
-      provideCanvasRepository(file),
+      Effect.provide(CanvasFileRepository(file)),
       Effect.tap(() => Console.log("Successfully rearranged nodes in canvas.")),
       Effect.catchAll((error) =>
         Console.error(`Error: ${error.message}`).pipe(Effect.flatMap(() => Effect.fail(error))),

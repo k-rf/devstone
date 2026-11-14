@@ -3,7 +3,7 @@ import { type RuleContext } from "@typescript-eslint/utils/ts-eslint";
 import { match } from "ts-pattern";
 
 import { isErrorClass } from "./is-error-class.js";
-import { isFunctionNode } from "./is-function-node.js";
+import { isUniqueSymbolDeclarator } from "./is-unique-symbol-declarator.js";
 import { type MessageIds, type Options } from "./types.js";
 
 type ScopeType = ReturnType<RuleContext<MessageIds, Options>["sourceCode"]["getScope"]>;
@@ -21,7 +21,7 @@ const findVariableInScope = (
 };
 
 /**
- * Specifier が参照しているローカルの定義が主要な関数またはクラスであるかを判定する。
+ * Specifier が参照しているローカルの定義が関数・クラス（非エラークラス）・定数（変数）であるかを判定する。
  */
 export const isSpecifierReferencingFunction = (
   context: RuleContext<MessageIds, Options>,
@@ -39,7 +39,7 @@ export const isSpecifierReferencingFunction = (
     match(definition.node)
       .with({ type: FunctionDeclaration }, () => true)
       .with({ type: ClassDeclaration }, (node) => !isErrorClass(node))
-      .with({ type: VariableDeclarator }, (node) => isFunctionNode(node.init))
+      .with({ type: VariableDeclarator }, (node) => !isUniqueSymbolDeclarator(node))
       .otherwise(() => false),
   );
 };
