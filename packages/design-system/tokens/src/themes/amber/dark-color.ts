@@ -12,7 +12,7 @@ export const amberDarkColor = {
       },
       surface: {
         $type: "color",
-        $value: "{color.stone.900}",
+        $value: "{color.stone.950}",
       },
       subtle: {
         $type: "color",
@@ -33,19 +33,19 @@ export const amberDarkColor = {
       accent: {
         default: {
           $type: "color",
-          $value: "{color.amber.500}",
+          $value: "{color.orange.500}",
         },
         emphasized: {
           $type: "color",
-          $value: "{color.amber.400}",
+          $value: "{color.orange.400}",
         },
         subtle: {
           $type: "color",
-          $value: "{color.amber.950}",
+          $value: "{color.orange.950}",
         },
         muted: {
           $type: "color",
-          $value: "{color.amber.900}",
+          $value: "{color.orange.900}",
         },
       },
       status: {
@@ -146,24 +146,24 @@ export const amberDarkColor = {
       },
       accent: {
         $type: "color",
-        $value: "{color.amber.400}",
+        $value: "{color.orange.300}",
       },
       status: {
         info: {
           $type: "color",
-          $value: "{color.blue.400}",
+          $value: "{color.blue.300}",
         },
         success: {
           $type: "color",
-          $value: "{color.emerald.400}",
+          $value: "{color.emerald.300}",
         },
         warning: {
           $type: "color",
-          $value: "{color.amber.400}",
+          $value: "{color.amber.300}",
         },
         danger: {
           $type: "color",
-          $value: "{color.red.400}",
+          $value: "{color.red.300}",
         },
       },
     },
@@ -182,11 +182,11 @@ export const amberDarkColor = {
       },
       focus: {
         $type: "color",
-        $value: "{color.amber.400}",
+        $value: "{color.orange.400}",
       },
       accent: {
         $type: "color",
-        $value: "{color.amber.500}",
+        $value: "{color.orange.500}",
       },
       status: {
         info: {

@@ -151,7 +151,7 @@ export const quartzLightColor = {
       status: {
         info: {
           $type: "color",
-          $value: "{color.blue.600}",
+          $value: "{color.blue.700}",
         },
         success: {
           $type: "color",
@@ -159,11 +159,11 @@ export const quartzLightColor = {
         },
         warning: {
           $type: "color",
-          $value: "{color.amber.700}",
+          $value: "{color.amber.800}",
         },
         danger: {
           $type: "color",
-          $value: "{color.red.600}",
+          $value: "{color.red.700}",
         },
       },
     },

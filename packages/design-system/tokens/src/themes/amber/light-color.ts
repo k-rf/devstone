@@ -33,19 +33,19 @@ export const amberLightColor = {
       accent: {
         default: {
           $type: "color",
-          $value: "{color.amber.700}",
+          $value: "{color.orange.700}",
         },
         emphasized: {
           $type: "color",
-          $value: "{color.amber.800}",
+          $value: "{color.orange.800}",
         },
         subtle: {
           $type: "color",
-          $value: "{color.amber.50}",
+          $value: "{color.orange.50}",
         },
         muted: {
           $type: "color",
-          $value: "{color.amber.100}",
+          $value: "{color.orange.100}",
         },
       },
       status: {
@@ -146,12 +146,12 @@ export const amberLightColor = {
       },
       accent: {
         $type: "color",
-        $value: "{color.amber.700}",
+        $value: "{color.orange.700}",
       },
       status: {
         info: {
           $type: "color",
-          $value: "{color.blue.600}",
+          $value: "{color.blue.700}",
         },
         success: {
           $type: "color",
@@ -159,11 +159,11 @@ export const amberLightColor = {
         },
         warning: {
           $type: "color",
-          $value: "{color.amber.700}",
+          $value: "{color.amber.800}",
         },
         danger: {
           $type: "color",
-          $value: "{color.red.600}",
+          $value: "{color.red.700}",
         },
       },
     },
@@ -182,11 +182,11 @@ export const amberLightColor = {
       },
       focus: {
         $type: "color",
-        $value: "{color.amber.700}",
+        $value: "{color.orange.700}",
       },
       accent: {
         $type: "color",
-        $value: "{color.amber.500}",
+        $value: "{color.orange.500}",
       },
       status: {
         info: {

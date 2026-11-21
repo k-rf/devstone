@@ -12,7 +12,7 @@ export const quartzDarkColor = {
       },
       surface: {
         $type: "color",
-        $value: "{color.slate.900}",
+        $value: "{color.slate.950}",
       },
       subtle: {
         $type: "color",
@@ -146,24 +146,24 @@ export const quartzDarkColor = {
       },
       accent: {
         $type: "color",
-        $value: "{color.indigo.400}",
+        $value: "{color.indigo.300}",
       },
       status: {
         info: {
           $type: "color",
-          $value: "{color.blue.400}",
+          $value: "{color.blue.300}",
         },
         success: {
           $type: "color",
-          $value: "{color.emerald.400}",
+          $value: "{color.emerald.300}",
         },
         warning: {
           $type: "color",
-          $value: "{color.amber.400}",
+          $value: "{color.amber.300}",
         },
         danger: {
           $type: "color",
-          $value: "{color.red.400}",
+          $value: "{color.red.300}",
         },
       },
     },
