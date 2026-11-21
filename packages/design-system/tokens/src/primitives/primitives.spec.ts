@@ -1,8 +1,8 @@
 import { expect, it } from "vitest";
 
-import { primitives, type Primitives } from "../index.js";
+import { Primitives } from "../index.js";
 
 it("プリミティブトークン定義がスナップショットと一致する", () => {
-  const subject: Primitives = primitives;
+  const subject: Primitives = Primitives;
   expect(subject).toMatchSnapshot();
 });

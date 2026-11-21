@@ -11,7 +11,7 @@ import { spacing } from "./spacing.js";
 /**
  * すべてのプリミティブトークンを統合した定義です。
  */
-export const primitives = {
+export const Primitives = {
   color: color,
   spacing: spacing,
   radius: radius,
@@ -24,4 +24,4 @@ export const primitives = {
 /**
  * プリミティブトークン全体の型定義です。
  */
-export type Primitives = typeof primitives;
+export type Primitives = typeof Primitives;
