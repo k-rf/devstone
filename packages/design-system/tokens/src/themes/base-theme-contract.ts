@@ -52,7 +52,7 @@ export type BaseThemeContract = Readonly<{
     readonly "3xl": SemanticToken<Primitives, "dimension">;
   };
   readonly borderWidth: {
-    readonly thin: SemanticToken<Primitives, "dimension">;
+    readonly none: SemanticToken<Primitives, "dimension">;
     readonly default: SemanticToken<Primitives, "dimension">;
     readonly thick: SemanticToken<Primitives, "dimension">;
   };

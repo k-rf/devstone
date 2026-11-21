@@ -1,5 +1,5 @@
-import { amberTheme } from "./amber/amber-theme.js";
-import { quartzTheme } from "./quartz/quartz-theme.js";
+import { amberTheme } from "./amber/theme.js";
+import { quartzTheme } from "./quartz/theme.js";
 import { type Theme } from "./theme.js";
 
 /**
