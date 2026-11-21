@@ -2,8 +2,8 @@ import { type TokenTree } from "../spec/index.js";
 
 /**
  * OKLCH 色空間に基づく Primitive カラートークン定義です。
- * すべての 11 段階スケール（50〜950）で知覚明度（Lightness）の段階を揃え、
- * テーマや色相が変わっても予測可能なコントラスト比を保証します。
+ * すべての 11 段階スケール（50〜950）は色相ごとの視覚バランスを最適化しつつ sRGB ガマット内に収めており、
+ * どのディスプレイでも一貫した発色と正確な WCAG 相対輝度計算を保証します。
  */
 export const color = {
   white: {
@@ -37,7 +37,7 @@ export const color = {
     },
     500: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.554, 0.032, 255] },
+      $value: { colorSpace: "oklch", components: [0.54, 0.032, 255] },
     },
     600: {
       $type: "color",
@@ -83,7 +83,7 @@ export const color = {
     },
     500: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.556, 0, 0] },
+      $value: { colorSpace: "oklch", components: [0.54, 0, 0] },
     },
     600: {
       $type: "color",
@@ -129,7 +129,7 @@ export const color = {
     },
     500: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.553, 0.02, 60] },
+      $value: { colorSpace: "oklch", components: [0.54, 0.02, 60] },
     },
     600: {
       $type: "color",
@@ -163,15 +163,15 @@ export const color = {
     },
     200: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.882, 0.059, 255] },
+      $value: { colorSpace: "oklch", components: [0.882, 0.058, 255] },
     },
     300: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.809, 0.105, 255] },
+      $value: { colorSpace: "oklch", components: [0.809, 0.097, 255] },
     },
     400: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.707, 0.165, 255] },
+      $value: { colorSpace: "oklch", components: [0.707, 0.155, 255] },
     },
     500: {
       $type: "color",
@@ -179,15 +179,15 @@ export const color = {
     },
     600: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.546, 0.195, 255] },
+      $value: { colorSpace: "oklch", components: [0.546, 0.179, 255] },
     },
     700: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.488, 0.18, 255] },
+      $value: { colorSpace: "oklch", components: [0.488, 0.16, 255] },
     },
     800: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.424, 0.148, 255] },
+      $value: { colorSpace: "oklch", components: [0.424, 0.139, 255] },
     },
     900: {
       $type: "color",
@@ -201,19 +201,19 @@ export const color = {
   indigo: {
     50: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.968, 0.016, 275] },
+      $value: { colorSpace: "oklch", components: [0.968, 0.015, 275] },
     },
     100: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.93, 0.034, 275] },
+      $value: { colorSpace: "oklch", components: [0.93, 0.033, 275] },
     },
     200: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.87, 0.065, 275] },
+      $value: { colorSpace: "oklch", components: [0.87, 0.063, 275] },
     },
     300: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.785, 0.115, 275] },
+      $value: { colorSpace: "oklch", components: [0.785, 0.109, 275] },
     },
     400: {
       $type: "color",
@@ -267,19 +267,19 @@ export const color = {
     },
     500: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.696, 0.162, 160] },
+      $value: { colorSpace: "oklch", components: [0.696, 0.157, 160] },
     },
     600: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.596, 0.145, 160] },
+      $value: { colorSpace: "oklch", components: [0.596, 0.134, 160] },
     },
     700: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.508, 0.122, 160] },
+      $value: { colorSpace: "oklch", components: [0.508, 0.114, 160] },
     },
     800: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.432, 0.098, 160] },
+      $value: { colorSpace: "oklch", components: [0.432, 0.097, 160] },
     },
     900: {
       $type: "color",
@@ -293,47 +293,93 @@ export const color = {
   amber: {
     50: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.987, 0.022, 75] },
+      $value: { colorSpace: "oklch", components: [0.987, 0.01, 75] },
     },
     100: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.962, 0.055, 75] },
+      $value: { colorSpace: "oklch", components: [0.962, 0.03, 75] },
     },
     200: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.924, 0.105, 75] },
+      $value: { colorSpace: "oklch", components: [0.924, 0.062, 75] },
     },
     300: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.879, 0.15, 75] },
+      $value: { colorSpace: "oklch", components: [0.879, 0.102, 75] },
     },
     400: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.828, 0.168, 75] },
+      $value: { colorSpace: "oklch", components: [0.828, 0.15, 75] },
     },
     500: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.769, 0.168, 75] },
+      $value: { colorSpace: "oklch", components: [0.769, 0.162, 75] },
     },
     600: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.666, 0.158, 75] },
+      $value: { colorSpace: "oklch", components: [0.666, 0.14, 75] },
     },
     700: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.555, 0.142, 75] },
+      $value: { colorSpace: "oklch", components: [0.555, 0.117, 75] },
     },
     800: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.473, 0.12, 75] },
+      $value: { colorSpace: "oklch", components: [0.473, 0.099, 75] },
     },
     900: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.414, 0.098, 75] },
+      $value: { colorSpace: "oklch", components: [0.414, 0.087, 75] },
     },
     950: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.279, 0.068, 75] },
+      $value: { colorSpace: "oklch", components: [0.279, 0.058, 75] },
+    },
+  },
+  orange: {
+    50: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.98, 0.01, 48] },
+    },
+    100: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.954, 0.025, 48] },
+    },
+    200: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.901, 0.056, 48] },
+    },
+    300: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.837, 0.098, 48] },
+    },
+    400: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.75, 0.163, 48] },
+    },
+    500: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.68, 0.18, 48] },
+    },
+    600: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.595, 0.162, 48] },
+    },
+    700: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.515, 0.14, 48] },
+    },
+    800: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.445, 0.121, 48] },
+    },
+    900: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.388, 0.098, 48] },
+    },
+    950: {
+      $type: "color",
+      $value: { colorSpace: "oklch", components: [0.266, 0.068, 48] },
     },
   },
   red: {
@@ -347,11 +393,11 @@ export const color = {
     },
     200: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.885, 0.062, 25] },
+      $value: { colorSpace: "oklch", components: [0.885, 0.06, 25] },
     },
     300: {
       $type: "color",
-      $value: { colorSpace: "oklch", components: [0.808, 0.114, 25] },
+      $value: { colorSpace: "oklch", components: [0.808, 0.108, 25] },
     },
     400: {
       $type: "color",
