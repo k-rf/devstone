@@ -1,0 +1,19 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "pr-review",
+  "displayName": "PR Review",
+  "version": "0.1.0",
+  "description": "PR 向け多観点レビュープラグイン。オーケストレータースキル 1 つと読み取り専用の専門レビューエージェント 4 体で、設計・事実検算・テスト品質・ドキュメント初見違和感を並列検証し、PR #62 基準のフラットな口調でコメントを作成する。",
+  "suggestedPrompts": [
+    "現在のブランチに紐づく PR を多観点レビューして",
+    "PR の変更内容を設計・事実検算・テスト品質・ドキュメントの観点でレビューして",
+    "この PR のレビューコメント案を作って、確認後に投稿して"
+  ],
+  "author": {
+    "name": "Kawano Kenichi",
+    "url": "https://github.com/k-rf"
+  },
+  "repository": "https://github.com/k-rf/devstone",
+  "license": "MIT",
+  "keywords": ["pr-review", "code-review", "multi-agent", "devstone"]
+}
