@@ -1,0 +1,21 @@
+{
+  "$schema": "../../.moon/cache/schemas/project.json",
+
+  "id": "modggl",
+  "layer": "application",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "tags": ["testable"],
+
+  "project": {
+    "title": "modggl",
+    "description": "Toggl 2.0 のタイムエントリーを自動整形・隙間補完・重複解消する CLI アプリケーションです。"
+  },
+
+  "tasks": {
+    "test": {
+      "command": "pnpm run test",
+      "outputs": ["coverage/**"]
+    }
+  }
+}

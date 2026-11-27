@@ -12,6 +12,9 @@
       "path": "./apps/easel"
     },
     {
+      "path": "./apps/modggl"
+    },
+    {
       "path": "./apps/notion-toggl-bridge"
     },
     {
