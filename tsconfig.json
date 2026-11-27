@@ -33,6 +33,9 @@
       "path": "./packages/libs/json-canvas-spec"
     },
     {
+      "path": "./packages/libs/time-interval"
+    },
+    {
       "path": "./packages/libs/toggl-sdk"
     },
     {
