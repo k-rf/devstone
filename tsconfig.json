@@ -36,6 +36,9 @@
       "path": "./packages/libs/time-interval"
     },
     {
+      "path": "./packages/libs/toggl-2-sdk"
+    },
+    {
       "path": "./packages/libs/toggl-sdk"
     },
     {

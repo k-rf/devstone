@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "customConditions": ["dev"],
+    "outDir": "dist"
+  },
+  "include": ["src", "*.ts"],
+  "references": [
+    {
+      "path": "../../configs/eslint"
+    },
+    {
+      "path": "../../configs/typescript"
+    },
+    {
+      "path": "../../configs/vitest"
+    }
+  ]
+}
