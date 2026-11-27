@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../.moon/cache/schemas/project.json",
+
+  "id": "libs-toggl-2-sdk",
+  "layer": "library",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+  "tags": ["testable"],
+
+  "project": {
+    "title": "libs/toggl-2-sdk",
+    "description": "Toggl 2.0 API の SDK パッケージです。"
+  },
+
+  "tasks": {
+    "test": {
+      "command": "pnpm run test",
+      "outputs": ["coverage/**"]
+    }
+  }
+}
