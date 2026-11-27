@@ -109,10 +109,11 @@ GitHub PR の変更を 4 体の読み取り専用サブエージェントで並�
 
 ## Step 5: GitHub PR へのレビュー投稿（承認後または明示依頼時のみ）
 
-1. [comment-style.md](./references/comment-style.md) の投稿手順に従い、
-   サマリーとインラインコメントを 1 回の Review API 呼び出しでまとめて投稿する。
-2. 自分の PR では `REQUEST_CHANGES` や `APPROVE` が GitHub API で拒否されるため、
-   ユーザーから明示指定がない限り `event` は `"COMMENT"` を使用する。
+1. 投稿直前に `gh pr view <number> --json headRefOid` で最新の `headRefOid` を再確認し、
+   Step 1 時点のコミットと一致していることを確かめる。
+2. [github-review-api.md](./references/github-review-api.md) の投稿手順に従い、
+   サマリーとインラインコメントを 1 回の Review API 呼び出し（デフォルト `event: "COMMENT"`）で
+   まとめて投稿する。
 3. 投稿完了後、作成されたレビュー URL と投稿件数（サマリー + インライン件数）を報告する。
 
 ## やらないこと
