@@ -10,7 +10,6 @@
 .gemini
 .git
 .gitignore
-.mcp.json
 .pnpm-store
 .todo
 .vscode
