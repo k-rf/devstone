@@ -14,7 +14,7 @@ import {
 import { defineConfig } from "eslint/config";
 
 const config = defineConfig(
-  { ignores: ["dist/"] },
+  { ignores: ["dist/", "infra/"] },
   {
     languageOptions: {
       parserOptions: {
