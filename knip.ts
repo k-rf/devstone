@@ -19,6 +19,7 @@ const config: KnipConfig = {
       entry: ["scripts/*.ts"],
       project: ["src/**/*.ts"],
     },
+    "infra/modggl": {},
     "packages/libs/toggl-2-sdk": {
       entry: ["src/**/*.spec.ts"],
       project: ["src/**/*.ts"],

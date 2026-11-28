@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - automations/*
+  - infra/*
   - packages/configs/*
   - packages/design-system/*
   - packages/design-system/*/*
@@ -13,6 +14,7 @@ allowBuilds:
   msgpackr-extract: false
   esbuild: false
   msw: false
+  protobufjs: false
   sharp: false
   style-dictionary: false
   unrs-resolver: false

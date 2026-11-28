@@ -23,6 +23,7 @@ const config = defineConfig(
       ".moon/",
       "apps/",
       "automations/",
+      "infra/",
       "packages/",
     ],
   },

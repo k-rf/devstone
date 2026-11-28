@@ -21,6 +21,9 @@
       "path": "./automations/tasker"
     },
     {
+      "path": "./infra/modggl"
+    },
+    {
       "path": "./packages/configs/commitlint"
     },
     {

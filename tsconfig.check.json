@@ -5,5 +5,5 @@
     "outDir": "dist"
   },
   "include": ["**/*.ts"],
-  "exclude": ["packages/", "apps/", "automations/"]
+  "exclude": ["packages/", "apps/", "automations/", "infra/"]
 }

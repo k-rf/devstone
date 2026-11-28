@@ -1,0 +1,13 @@
+{
+  "$schema": "../../.moon/cache/schemas/project.json",
+
+  "id": "infra-modggl",
+  "layer": "configuration",
+  "language": "typescript",
+  "toolchains": { "default": "node" },
+
+  "project": {
+    "title": "infra/modggl",
+    "description": "modggl 2.0 の GCP インフラを管理する Pulumi スタックです。"
+  }
+}
