@@ -11,6 +11,8 @@ GCP Cloud Run Jobs 上で定期実行・任意実行されます。
 - `TOGGL_API_TOKEN`: Toggl 2.0 API の Bearer トークン（空白のみ不可）。
 - `TOGGL_ORGANIZATION_ID`: 対象の Toggl Organization ID（正の整数）。
 - `TOGGL_WORKSPACE_ID`: 対象の Toggl Workspace ID（正の整数）。
+- `DISCORD_WEBHOOK_URL`: Discord Incoming Webhook URL（`https://discord.com/api/webhooks/...` 形式）。
+  通知が有効な実行（通常実行および `--dry-run --notify`）では必須です。`--no-notify` または既定の `--dry-run` 時は省略できます。
 
 ## CLI オプション・終了コード
 
@@ -33,13 +35,17 @@ bun run apps/modggl/dist/bun/modggl.js [options]
 - **終了コード `1`**: 判定不能重複による全停止（`aborted`）、外部 API エラー、日時範囲不正、
   または環境変数・CLI 引数不正（標準エラー出力に構造化 JSON またはエラーを出力）。
 
-### 通知実装の現状
+### Discord 通知仕様
 
-`NotificationPort`（`src/core/port/outbound/notification/notification.port.ts`）は、
-本番の通知先（Slack / Discord 等）が確定するまでの暫定実装として
-`NotificationNoopLive` および `NotificationConsoleLive` を備えています。
-現在の CLI エントリ（`src/adapter/inbound/cli/run.command.ts`）では `NotificationNoopLive` が
-接続されており、本番通知先の確定後にコアロジックを変更せず Outbound Adapter を差し替えます。
+`NotificationPort`（`src/core/port/outbound/notification/notification.port.ts`）の実装として
+`DiscordAdapterLive`（`src/adapter/outbound/discord/discord.adapter.ts`）を接続し、
+通知オフ時は `NotificationNoopLive` に切り替わります。
+
+- `completed`（緑）: 補正・削除件数、取得/除外件数、残クォータを Embed で通知
+- `no_changes`（グレー）: 日次バッチの死活監視として変更 0 件である旨を Embed で通知
+- `dry_run`（青、`--dry-run --notify` 時）: 書き込みなしのドライラン結果を Embed で通知
+- `aborted`（橙）: 判定不能重複（`NotDetermine` / `InvalidOrder`）による停止と競合 2 件の詳細を通知
+- `error`（赤）: 外部 API エラー内容・HTTP ステータス・クォータリセット秒数を通知
 
 ## ローカル実行・Docker ビルド
 
@@ -79,8 +85,9 @@ pnpm run build:modggl
 
 - **Artifact Registry**: Docker リポジトリ（`asia-northeast1`）
 - **Service Account**: Cloud Run Job 実行用 `modggl-job-sa`、Cloud Scheduler 起動用 `modggl-scheduler-sa`
-- **Secret Manager**: `modggl-toggl-api-token`（`TOGGL_API_TOKEN`）および任意設定の
-  通知シークレットフックと、`modggl-job-sa` への `roles/secretmanager.secretAccessor` 付与
+- **Secret Manager**: `modggl-toggl-api-token`（`TOGGL_API_TOKEN`）、
+  `modggl-discord-webhook-url`（`DISCORD_WEBHOOK_URL`）および `modggl-job-sa` への
+  `roles/secretmanager.secretAccessor` 付与
 - **Cloud Run Jobs v2**: `modggl`（公開エンドポイントなし、`maxRetries: 0`、環境変数と Secret 参照を設定）
 - **Cloud Run Job IAM**: `modggl-scheduler-sa` に `roles/run.invoker`、Make OAuth
   プリンシパルに `roles/run.jobsExecutorWithOverrides` を付与
@@ -101,11 +108,9 @@ pnpm run build:modggl
    - `modggl:imageTag`: Artifact Registry にプッシュ済みのコンテナイメージタグ
    - `modggl:togglOrganizationId` / `modggl:togglWorkspaceId`: Toggl の ID
    - `modggl:makeExecutorMember`: Make 連携用 Google OAuth プリンシパル（例: `user:...@example.com`）
-   - （任意）通知用シークレットフックを使う場合は `modggl:notificationSecretId` と
-     `modggl:notificationSecretEnvName` の両方を設定
 
-3. Artifact Registry へイメージをプッシュし、Secret Manager のシークレット `modggl-toggl-api-token` に
-   `TOGGL_API_TOKEN` のシークレットバージョンを登録したうえで差分確認・適用を行います。
+3. Artifact Registry へイメージをプッシュし、Secret Manager のシークレット `modggl-toggl-api-token` と
+   `modggl-discord-webhook-url` にそれぞれ実値のシークレットバージョンを登録したうえで差分確認・適用を行います。
 
    ```bash
    cd apps/modggl/infra

@@ -18,15 +18,6 @@ const makeExecutorMember = appConfig.require("makeExecutorMember");
 const schedule = appConfig.get("schedule") ?? "0 5 * * *";
 const timeZone = appConfig.get("timeZone") ?? "Asia/Tokyo";
 
-const notificationSecretId = appConfig.get("notificationSecretId");
-const notificationSecretEnvName = appConfig.get("notificationSecretEnvName");
-
-if ((notificationSecretId === undefined) !== (notificationSecretEnvName === undefined)) {
-  throw new Error(
-    "Both modggl:notificationSecretId and modggl:notificationSecretEnvName must be set together.",
-  );
-}
-
 const registry = createDockerRepository({
   project,
   region,
@@ -40,20 +31,9 @@ const serviceAccounts = createServiceAccounts({ project });
 const secrets = createSecrets({
   project,
   jobServiceAccountMember: serviceAccounts.jobServiceAccount.member,
-  ...(notificationSecretId !== undefined && notificationSecretEnvName !== undefined
-    ? {
-        notificationSecret: {
-          secretId: notificationSecretId,
-          envVarName: notificationSecretEnvName,
-        },
-      }
-    : {}),
 });
 
-const secretBindings = [
-  secrets.togglApiTokenBinding,
-  ...(secrets.notificationSecretBinding ? [secrets.notificationSecretBinding] : []),
-];
+const secretBindings = [secrets.togglApiTokenBinding, secrets.discordWebhookUrlBinding];
 
 const cloudRun = createCloudRunJob({
   project,
@@ -87,4 +67,4 @@ export const cloudSchedulerJobName = scheduler.schedulerJob.name;
 export const jobServiceAccountEmail = serviceAccounts.jobServiceAccount.email;
 export const schedulerServiceAccountEmail = serviceAccounts.schedulerServiceAccount.email;
 export const togglApiTokenSecretId = secrets.togglApiTokenSecret.secretId;
-export const notificationSecretIdExport = secrets.notificationSecret?.secretId;
+export const discordWebhookUrlSecretId = secrets.discordWebhookUrlSecret.secretId;

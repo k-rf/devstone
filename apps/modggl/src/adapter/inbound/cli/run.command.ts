@@ -8,12 +8,14 @@ import {
   type ModifyEntriesWorkflowError,
 } from "../../../core/application/modify-entries.workflow.js";
 import { type TimeEntry } from "../../../core/domain/time-entry.js";
+import { type NotificationPort } from "../../../core/port/outbound/notification/notification.port.js";
+import { DiscordAdapterLive } from "../../outbound/discord/discord.adapter.js";
 import { NotificationNoopLive } from "../../outbound/notification/notification-noop.adapter.js";
 import { Toggl2AdapterLive } from "../../outbound/toggl/toggl-2.adapter.js";
 
 import { daysOption } from "./days.option.js";
 import { dryRunOption } from "./dry-run.option.js";
-import { loadEnv, type EnvValidationError } from "./env.middleware.js";
+import { EnvValidationError, loadEnv } from "./env.middleware.js";
 import { notifyOption } from "./notify.option.js";
 import { sinceOption } from "./since.option.js";
 import { untilOption } from "./until.option.js";
@@ -104,6 +106,28 @@ const formatErrorJson = (error: ModifyEntriesWorkflowError | EnvValidationError)
     Match.exhaustive,
   );
 
+const resolveNotificationLayer = (
+  shouldNotify: boolean,
+  discordWebhookUrl: Option.Option<string>,
+): Effect.Effect<Layer.Layer<NotificationPort>, EnvValidationError> =>
+  Match.value(shouldNotify).pipe(
+    Match.when(false, () => Effect.succeed(NotificationNoopLive)),
+    Match.when(true, () =>
+      Option.match(discordWebhookUrl, {
+        onNone: () =>
+          Effect.fail(
+            new EnvValidationError({
+              message:
+                "環境変数の検証に失敗しました: 通知が有効なため DISCORD_WEBHOOK_URL が必要です",
+              cause: "Missing DISCORD_WEBHOOK_URL",
+            }),
+          ),
+        onSome: (url) => Effect.succeed(DiscordAdapterLive(url)),
+      }),
+    ),
+    Match.exhaustive,
+  );
+
 /**
  * Toggl 2.0 タイムエントリーの補正を実行するルート CLI コマンド
  */
@@ -115,15 +139,22 @@ export const runCommand = Command.make("modggl", {
   notify: notifyOption,
 }).pipe(
   Command.withDescription("Normalize, merge, and fill gaps in Toggl 2.0 time entries"),
-  Command.withHandler(({ since, until, days, dryRun, notify }) =>
-    loadEnv().pipe(
+  Command.withHandler(({ since, until, days, dryRun, notify }) => {
+    const shouldNotify = Option.getOrElse(notify, () => !dryRun);
+
+    return loadEnv().pipe(
       Effect.flatMap((env) =>
+        resolveNotificationLayer(shouldNotify, env.discordWebhookUrl).pipe(
+          Effect.map((notificationLayer) => ({ env: env, notificationLayer: notificationLayer })),
+        ),
+      ),
+      Effect.flatMap(({ env, notificationLayer }) =>
         modifyEntriesWorkflow({
           since: since,
           until: until,
           days: days,
           dryRun: dryRun,
-          notify: Option.getOrElse(notify, () => !dryRun),
+          notify: shouldNotify,
         }).pipe(
           Effect.provide(
             Layer.mergeAll(
@@ -132,7 +163,7 @@ export const runCommand = Command.make("modggl", {
                 organizationId: env.togglOrganizationId,
                 workspaceId: env.togglWorkspaceId,
               }),
-              NotificationNoopLive,
+              notificationLayer,
             ),
           ),
         ),
@@ -141,6 +172,6 @@ export const runCommand = Command.make("modggl", {
       Effect.catchAll((error) =>
         Console.error(formatErrorJson(error)).pipe(Effect.andThen(Effect.fail(error))),
       ),
-    ),
-  ),
+    );
+  }),
 );

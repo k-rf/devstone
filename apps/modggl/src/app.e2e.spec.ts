@@ -22,8 +22,18 @@ afterAll(() => {
 const organizationId = 1001;
 const workspaceId = 2002;
 const baseUrl = `https://focus.toggl.com/api/organizations/${String(organizationId)}/workspaces/${String(workspaceId)}`;
+const discordWebhookUrl = "https://discord.com/api/webhooks/123456789/test-token";
 
 const validEnvProvider = ConfigProvider.fromMap(
+  new Map([
+    ["TOGGL_API_TOKEN", "toggl_sk_e2e"],
+    ["TOGGL_ORGANIZATION_ID", String(organizationId)],
+    ["TOGGL_WORKSPACE_ID", String(workspaceId)],
+    ["DISCORD_WEBHOOK_URL", discordWebhookUrl],
+  ]),
+);
+
+const envWithoutDiscordProvider = ConfigProvider.fromMap(
   new Map([
     ["TOGGL_API_TOKEN", "toggl_sk_e2e"],
     ["TOGGL_ORGANIZATION_ID", String(organizationId)],
@@ -60,9 +70,10 @@ const runWithCapture = (
 };
 
 describe("正常系（E2E）", () => {
-  it("連鎖マージ・隙間補完・重複切り詰めを全レイヤー結合で実行し構造化 JSON を stdout 出力すること", async () => {
+  it("連鎖マージ・隙間補完・重複切り詰めを全レイヤー結合で実行し構造化 JSON 出力と Discord 通知を行うこと", async () => {
     const patchSpy = vi.fn<(body: unknown) => void>();
     const deleteSpy = vi.fn<(url: string) => void>();
+    const discordSpy = vi.fn<(body: unknown) => void>();
 
     server.use(
       http.get(`${baseUrl}/time-entries/stream`, () =>
@@ -98,6 +109,10 @@ describe("正常系（E2E）", () => {
           headers: { "X-Toggl-Quota-Remaining": "27", "X-Toggl-Quota-Resets-In": "3580" },
         });
       }),
+      http.post(discordWebhookUrl, async ({ request }) => {
+        discordSpy(await request.json());
+        return new HttpResponse(undefined, { status: 204 });
+      }),
     );
 
     const { effect, stdoutSpy, stderrSpy } = runWithCapture([
@@ -115,6 +130,15 @@ describe("正常系（E2E）", () => {
       { id: 4, duration: 1800 },
     ]);
     expect(deleteSpy).toHaveBeenCalledWith(`${baseUrl}/time-entries/bulk?ids=2,1`);
+    expect(discordSpy).toHaveBeenCalledTimes(1);
+    expect(discordSpy.mock.calls[0]?.[0]).toMatchObject({
+      embeds: [
+        {
+          title: "modggl: タイムエントリーを補正しました",
+          color: 0x2E_CC_71,
+        },
+      ],
+    });
 
     const stdoutJson: unknown = JSON.parse(String(stdoutSpy.mock.calls[0]?.[0]));
     expect(stdoutJson).toStrictEqual({
@@ -150,7 +174,38 @@ describe("正常系（E2E）", () => {
     });
   });
 
-  it("--dry-run と --no-notify のデフォルト動作時に書き込みを行わず dry_run サマリーを出力すること", async () => {
+  it("変更対象がない場合（no_changes）でも死活監視用のグレー Embed を Discord へ送信すること", async () => {
+    const discordSpy = vi.fn<(body: unknown) => void>();
+
+    server.use(
+      http.get(`${baseUrl}/time-entries/stream`, () => HttpResponse.json([])),
+      http.post(discordWebhookUrl, async ({ request }) => {
+        discordSpy(await request.json());
+        return new HttpResponse(undefined, { status: 204 });
+      }),
+    );
+
+    const { effect, stdoutSpy } = runWithCapture([]);
+    await Effect.runPromise(effect);
+
+    expect(discordSpy).toHaveBeenCalledTimes(1);
+    expect(discordSpy.mock.calls[0]?.[0]).toMatchObject({
+      embeds: [
+        {
+          title: "modggl: 変更対象のエントリーはありませんでした",
+          color: 0x95_A5_A6,
+        },
+      ],
+    });
+
+    const stdoutJson: unknown = JSON.parse(String(stdoutSpy.mock.calls[0]?.[0]));
+    expect(stdoutJson).toMatchObject({
+      status: "no_changes",
+      stats: { fetchedCount: 0, modifiedCount: 0, deletedCount: 0 },
+    });
+  });
+
+  it("--dry-run 時は DISCORD_WEBHOOK_URL 未設定でも書き込み・通知を行わず dry_run サマリーを出力すること", async () => {
     const patchSpy = vi.fn();
     const deleteSpy = vi.fn();
 
@@ -171,7 +226,10 @@ describe("正常系（E2E）", () => {
       }),
     );
 
-    const { effect, stdoutSpy } = runWithCapture(["--days", "3", "--dry-run"]);
+    const { effect, stdoutSpy } = runWithCapture(
+      ["--days", "3", "--dry-run"],
+      envWithoutDiscordProvider,
+    );
 
     await Effect.runPromise(effect);
 
@@ -183,12 +241,25 @@ describe("正常系（E2E）", () => {
       stats: { modifiedCount: 1, deletedCount: 0 },
     });
   });
+
+  it("--no-notify 時は DISCORD_WEBHOOK_URL 未設定でも通知なしで正常完了すること", async () => {
+    server.use(http.get(`${baseUrl}/time-entries/stream`, () => HttpResponse.json([])));
+
+    const { effect, stdoutSpy } = runWithCapture(["--no-notify"], envWithoutDiscordProvider);
+    await Effect.runPromise(effect);
+
+    const stdoutJson: unknown = JSON.parse(String(stdoutSpy.mock.calls[0]?.[0]));
+    expect(stdoutJson).toMatchObject({
+      status: "no_changes",
+    });
+  });
 });
 
 describe("異常系（E2E・終了コード1相当の失敗）", () => {
-  it("判定不能重複を検出したとき書き込みを一切行わず stderr に競合2件を出力して失敗すること", async () => {
+  it("判定不能重複を検出したとき書き込みを一切行わず stderr 出力と Discord 停止通知を行って失敗すること", async () => {
     const patchSpy = vi.fn();
     const deleteSpy = vi.fn();
+    const discordSpy = vi.fn<(body: unknown) => void>();
 
     server.use(
       http.get(`${baseUrl}/time-entries/stream`, () =>
@@ -205,9 +276,13 @@ describe("異常系（E2E・終了コード1相当の失敗）", () => {
         deleteSpy();
         return new HttpResponse(undefined, { status: 204 });
       }),
+      http.post(discordWebhookUrl, async ({ request }) => {
+        discordSpy(await request.json());
+        return new HttpResponse(undefined, { status: 204 });
+      }),
     );
 
-    const { effect, stdoutSpy, stderrSpy } = runWithCapture(["--no-notify"]);
+    const { effect, stdoutSpy, stderrSpy } = runWithCapture([]);
 
     const error = await Effect.runPromise(Effect.flip(effect));
 
@@ -215,6 +290,15 @@ describe("異常系（E2E・終了コード1相当の失敗）", () => {
     expect(deleteSpy).not.toHaveBeenCalled();
     expect(stdoutSpy).not.toHaveBeenCalled();
     expect(stderrSpy).toHaveBeenCalledTimes(1);
+    expect(discordSpy).toHaveBeenCalledTimes(1);
+    expect(discordSpy.mock.calls[0]?.[0]).toMatchObject({
+      embeds: [
+        {
+          title: "modggl: 判定不能な重複を検出して停止しました",
+          color: 0xF3_9C_12,
+        },
+      ],
+    });
     expect(error._tag).toBe("ModifyEntriesAbortedError");
 
     const stderrJson: unknown = JSON.parse(String(stderrSpy.mock.calls[0]?.[0]));
@@ -226,7 +310,9 @@ describe("異常系（E2E・終了コード1相当の失敗）", () => {
     });
   });
 
-  it("API が 402 Quota Exceeded を返したとき resetsInSeconds 付き JSON を stderr 出力して失敗すること", async () => {
+  it("API が 402 Quota Exceeded を返したとき stderr 出力と Discord エラー通知を行って失敗すること", async () => {
+    const discordSpy = vi.fn<(body: unknown) => void>();
+
     server.use(
       http.get(
         `${baseUrl}/time-entries/stream`,
@@ -236,12 +322,25 @@ describe("異常系（E2E・終了コード1相当の失敗）", () => {
             headers: { "X-Toggl-Quota-Resets-In": "1800" },
           }),
       ),
+      http.post(discordWebhookUrl, async ({ request }) => {
+        discordSpy(await request.json());
+        return new HttpResponse(undefined, { status: 204 });
+      }),
     );
 
     const { effect, stderrSpy } = runWithCapture([]);
     const error = await Effect.runPromise(Effect.flip(effect));
 
     expect(error._tag).toBe("TimeEntriesError");
+    expect(discordSpy).toHaveBeenCalledTimes(1);
+    expect(discordSpy.mock.calls[0]?.[0]).toMatchObject({
+      embeds: [
+        {
+          title: "modggl: 実行エラーが発生しました",
+          color: 0xE7_4C_3C,
+        },
+      ],
+    });
     const stderrJson: unknown = JSON.parse(String(stderrSpy.mock.calls[0]?.[0]));
     expect(stderrJson).toMatchObject({
       status: "error",
@@ -251,6 +350,33 @@ describe("異常系（E2E・終了コード1相当の失敗）", () => {
       resetsInSeconds: 1800,
     });
   });
+
+  it.each([
+    { label: "通常実行", args: [] as readonly string[] },
+    { label: "--dry-run --notify", args: ["--dry-run", "--notify"] as readonly string[] },
+  ])(
+    "通知有効（$label）かつ DISCORD_WEBHOOK_URL 未設定のとき API を呼ばず EnvValidationError で失敗すること",
+    async ({ args }) => {
+      const getSpy = vi.fn();
+      server.use(
+        http.get(`${baseUrl}/time-entries/stream`, () => {
+          getSpy();
+          return HttpResponse.json([]);
+        }),
+      );
+
+      const { effect, stderrSpy } = runWithCapture(args, envWithoutDiscordProvider);
+      const error = await Effect.runPromise(Effect.flip(effect));
+
+      expect(getSpy).not.toHaveBeenCalled();
+      expect(error._tag).toBe("EnvValidationError");
+      const stderrJson: unknown = JSON.parse(String(stderrSpy.mock.calls[0]?.[0]));
+      expect(stderrJson).toMatchObject({
+        status: "error",
+        error: "EnvValidationError",
+      });
+    },
+  );
 
   it("since >= until のときは API を呼ばず InvalidDateRangeError JSON を stderr 出力して失敗すること", async () => {
     const getSpy = vi.fn();

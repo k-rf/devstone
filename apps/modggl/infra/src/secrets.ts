@@ -4,10 +4,6 @@ import * as pulumi from "@pulumi/pulumi";
 export interface SecretsArgs {
   readonly project: string;
   readonly jobServiceAccountMember: pulumi.Input<string>;
-  readonly notificationSecret?: {
-    readonly secretId: string;
-    readonly envVarName: string;
-  };
 }
 
 export interface SecretEnvBinding {
@@ -19,8 +15,8 @@ export interface SecretEnvBinding {
 export interface SecretsResources {
   readonly togglApiTokenSecret: gcp.secretmanager.Secret;
   readonly togglApiTokenBinding: SecretEnvBinding;
-  readonly notificationSecret?: gcp.secretmanager.Secret;
-  readonly notificationSecretBinding?: SecretEnvBinding;
+  readonly discordWebhookUrlSecret: gcp.secretmanager.Secret;
+  readonly discordWebhookUrlBinding: SecretEnvBinding;
 }
 
 const createSecretWithAccessor = (
@@ -67,24 +63,18 @@ export const createSecrets = (args: SecretsArgs): SecretsResources => {
     args.jobServiceAccountMember,
   );
 
-  const notification = args.notificationSecret
-    ? createSecretWithAccessor(
-        "notification-secret",
-        args.project,
-        args.notificationSecret.secretId,
-        args.notificationSecret.envVarName,
-        args.jobServiceAccountMember,
-      )
-    : undefined;
+  const discordWebhook = createSecretWithAccessor(
+    "discord-webhook-url",
+    args.project,
+    "modggl-discord-webhook-url",
+    "DISCORD_WEBHOOK_URL",
+    args.jobServiceAccountMember,
+  );
 
   return {
     togglApiTokenSecret: togglToken.secret,
     togglApiTokenBinding: togglToken.binding,
-    ...(notification
-      ? {
-          notificationSecret: notification.secret,
-          notificationSecretBinding: notification.binding,
-        }
-      : {}),
+    discordWebhookUrlSecret: discordWebhook.secret,
+    discordWebhookUrlBinding: discordWebhook.binding,
   };
 };
