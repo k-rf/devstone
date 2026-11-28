@@ -16,6 +16,12 @@
 **/coverage
 **/dist
 **/node_modules
+infra/*/src
+infra/*/Pulumi*.yaml*
+infra/*/eslint.config.ts
+infra/*/moon.jsonc
+infra/*/README.md
+infra/*/tsconfig*.json
 CLAUDE.md
 LICENSE
 pnpm-debug.log
