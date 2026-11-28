@@ -1,6 +1,7 @@
 import { Context, Data, type DateTime, type Effect, type Option } from "effect";
 
 import { type EntryModification } from "../../../domain/revision-plan.js";
+import { type TimeEntryId } from "../../../domain/time-entry-id.js";
 import { type TimeEntry } from "../../../domain/time-entry.js";
 
 /**
@@ -58,7 +59,7 @@ export class TimeEntriesPort extends Context.Tag("TimeEntriesPort")<
       modifications: readonly EntryModification[],
     ) => Effect.Effect<Option.Option<QuotaInfo>, TimeEntriesError>;
     readonly deleteEntries: (
-      ids: readonly number[],
+      ids: readonly TimeEntryId[],
     ) => Effect.Effect<Option.Option<QuotaInfo>, TimeEntriesError>;
   }
 >() {}

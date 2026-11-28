@@ -1,6 +1,7 @@
 import { DateTime, Effect, Option } from "effect";
 
-import { InvalidDateRangeError } from "../domain/errors.js";
+import { type LookbackDays } from "./lookback-days.input.js";
+import { InvalidDateRangeError } from "./modify-entries.output.js";
 
 /**
  * 取得期間の入力パラメータ
@@ -8,7 +9,7 @@ import { InvalidDateRangeError } from "../domain/errors.js";
 export interface DateRangeParams {
   readonly since: Option.Option<DateTime.Utc>;
   readonly until: Option.Option<DateTime.Utc>;
-  readonly days: number;
+  readonly days: LookbackDays;
 }
 
 /**

@@ -1,6 +1,7 @@
 import { type TimeInterval } from "@devstone/libs-time-interval";
 
 import { type EntryModification } from "./revision-plan.js";
+import { type TimeEntryId } from "./time-entry-id.js";
 
 /**
  * 変更計画リストへタイムエントリーの区間変更を不変的に登録または更新する。
@@ -14,7 +15,7 @@ import { type EntryModification } from "./revision-plan.js";
  */
 export const upsertModification = (
   modifications: readonly EntryModification[],
-  id: number,
+  id: TimeEntryId,
   previousInterval: TimeInterval,
   nextInterval: TimeInterval,
 ): readonly EntryModification[] => {

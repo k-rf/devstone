@@ -1,6 +1,6 @@
 import { Option } from "effect";
 
-import { type Toggl2QuotaInfo } from "../schema/quota-info.js";
+import { Toggl2QuotaInfo } from "../schema/quota-info.js";
 
 const parseNonNegativeIntegerHeader = (headers: Headers, name: string): Option.Option<number> =>
   Option.fromNullable(headers.get(name)).pipe(
@@ -15,7 +15,8 @@ const parseNonNegativeIntegerHeader = (headers: Headers, name: string): Option.O
  * @param headers - HTTP レスポンスヘッダ
  * @returns パースされたクォータ情報
  */
-export const parseQuotaHeaders = (headers: Headers): Toggl2QuotaInfo => ({
-  remaining: parseNonNegativeIntegerHeader(headers, "X-Toggl-Quota-Remaining"),
-  resetsInSeconds: parseNonNegativeIntegerHeader(headers, "X-Toggl-Quota-Resets-In"),
-});
+export const parseQuotaHeaders = (headers: Headers): Toggl2QuotaInfo =>
+  Toggl2QuotaInfo.make({
+    remaining: parseNonNegativeIntegerHeader(headers, "X-Toggl-Quota-Remaining"),
+    resetsInSeconds: parseNonNegativeIntegerHeader(headers, "X-Toggl-Quota-Resets-In"),
+  });

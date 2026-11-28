@@ -1,5 +1,6 @@
 import { type TimeInterval } from "@devstone/libs-time-interval";
 
+import { type TimeEntryId } from "./time-entry-id.js";
 import { type TimeEntry } from "./time-entry.js";
 
 /**
@@ -11,7 +12,7 @@ export type AbortReason = "NotDetermine" | "InvalidOrder";
  * 更新対象となるタイムエントリーの変更内容
  */
 export interface EntryModification {
-  readonly id: number;
+  readonly id: TimeEntryId;
   readonly previousInterval: TimeInterval;
   readonly interval: TimeInterval;
 }
@@ -22,7 +23,7 @@ export interface EntryModification {
 export interface RevisionPlanned {
   readonly _tag: "Planned";
   readonly modifications: readonly EntryModification[];
-  readonly deletions: readonly number[];
+  readonly deletions: readonly TimeEntryId[];
 }
 
 /**

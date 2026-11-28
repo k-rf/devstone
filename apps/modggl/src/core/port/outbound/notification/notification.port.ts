@@ -1,21 +1,27 @@
 import { Context, Data, type DateTime, type Effect, type Option } from "effect";
 
 import { type AbortReason, type EntryModification } from "../../../domain/revision-plan.js";
+import { type TimeEntryId } from "../../../domain/time-entry-id.js";
 import { type TimeEntry } from "../../../domain/time-entry.js";
+import { type QuotaInfo, type TimeEntriesErrorReason } from "../toggl/time-entries.port.js";
+
+/**
+ * タイムエントリー補正ユースケースの正常終了ステータス
+ */
+export type ModifyEntriesStatus = "completed" | "no_changes" | "dry_run";
 
 /**
  * 処理完了・ドライラン・変更なし時の通知データ
  */
 export interface CompletedNotification {
-  readonly status: "completed" | "no_changes" | "dry_run";
+  readonly status: ModifyEntriesStatus;
   readonly since: DateTime.Utc;
   readonly until: DateTime.Utc;
   readonly fetchedCount: number;
   readonly excludedCount: number;
   readonly modifications: readonly EntryModification[];
-  readonly deletedIds: readonly number[];
-  readonly quotaRemaining: Option.Option<number>;
-  readonly quotaResetsInSeconds: Option.Option<number>;
+  readonly deletedIds: readonly TimeEntryId[];
+  readonly quota: QuotaInfo;
 }
 
 /**
@@ -32,7 +38,7 @@ export interface AbortedNotification {
  */
 export interface ErrorNotification {
   readonly message: string;
-  readonly reason: string;
+  readonly reason: TimeEntriesErrorReason;
   readonly status: Option.Option<number>;
   readonly resetsInSeconds: Option.Option<number>;
 }

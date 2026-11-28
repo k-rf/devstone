@@ -8,33 +8,39 @@ import {
   type Toggl2SdkError,
 } from "./error.js";
 import { parseQuotaHeaders } from "./header/parse-quota-headers.js";
-import { BulkUpdateTimeEntryItem } from "./schema/bulk-update-time-entry.js";
+import { Toggl2BulkUpdateTimeEntryItem } from "./schema/bulk-update-time-entry.js";
+import { type Toggl2OrganizationId } from "./schema/organization-id.js";
 import { type Toggl2QuotaInfo } from "./schema/quota-info.js";
-import { TimeEntryStreamItem } from "./schema/time-entry-stream-item.js";
+import { type Toggl2TimeEntryId } from "./schema/time-entry-id.js";
+import { Toggl2TimeEntryStreamItem } from "./schema/time-entry-stream-item.js";
+import { type Toggl2WorkspaceId } from "./schema/workspace-id.js";
 
 /**
  * Toggl 2.0 API クライアントの設定
  */
 export interface Toggl2ClientConfig {
   readonly apiToken: string;
-  readonly organizationId: number;
-  readonly workspaceId: number;
+  readonly organizationId: Toggl2OrganizationId;
+  readonly workspaceId: Toggl2WorkspaceId;
 }
 
 /**
  * `listTimeEntriesStream` の検索パラメータ
  */
-export interface ListTimeEntriesStreamParams {
+export interface Toggl2ListTimeEntriesStreamParams {
   readonly dateFrom: string;
   readonly dateTo: string;
-  readonly includeLockReason: Option.Option<boolean>;
+  readonly includeLockReason?: boolean;
+  readonly includeTaskless?: boolean;
+  readonly archived?: boolean;
+  readonly orderBy?: string;
 }
 
 /**
  * `listTimeEntriesStream` の取得結果
  */
-export interface ListTimeEntriesStreamResult {
-  readonly entries: readonly TimeEntryStreamItem[];
+export interface Toggl2ListTimeEntriesStreamResult {
+  readonly entries: readonly Toggl2TimeEntryStreamItem[];
   readonly quota: Toggl2QuotaInfo;
 }
 
@@ -48,8 +54,8 @@ export interface Toggl2ApiClient {
    * @returns エントリー一覧とクォータ情報を含む Effect
    */
   readonly listTimeEntriesStream: (
-    params: ListTimeEntriesStreamParams,
-  ) => Effect.Effect<ListTimeEntriesStreamResult, Toggl2SdkError>;
+    params: Toggl2ListTimeEntriesStreamParams,
+  ) => Effect.Effect<Toggl2ListTimeEntriesStreamResult, Toggl2SdkError>;
 
   /**
    * タイムエントリーを一括部分更新する（空配列の場合は通信せず `Option.none()` を返す）
@@ -57,7 +63,7 @@ export interface Toggl2ApiClient {
    * @returns 通信時のクォータ情報を含む Effect
    */
   readonly bulkUpdateTimeEntries: (
-    items: readonly BulkUpdateTimeEntryItem[],
+    items: readonly Toggl2BulkUpdateTimeEntryItem[],
   ) => Effect.Effect<Option.Option<Toggl2QuotaInfo>, Toggl2SdkError>;
 
   /**
@@ -66,7 +72,7 @@ export interface Toggl2ApiClient {
    * @returns 通信時のクォータ情報を含む Effect
    */
   readonly bulkDeleteTimeEntries: (
-    ids: readonly number[],
+    ids: readonly Toggl2TimeEntryId[],
   ) => Effect.Effect<Option.Option<Toggl2QuotaInfo>, Toggl2SdkError>;
 }
 
@@ -144,7 +150,9 @@ const requestToggl2 = (
     });
 
     if (!response.ok) {
-      const bodyText = yield* Effect.promise(() => response.text());
+      const bodyText = yield* Effect.tryPromise(() => response.text()).pipe(
+        Effect.orElseSucceed(() => ""),
+      );
       return yield* mapHttpErrorResponse(response.status, response.headers, bodyText);
     }
 
@@ -166,8 +174,8 @@ const decodeTimeEntries = (
   json: unknown,
   path: string,
   status: number,
-): Effect.Effect<readonly TimeEntryStreamItem[], Toggl2ApiError> =>
-  Schema.decodeUnknown(Schema.Array(TimeEntryStreamItem))(json).pipe(
+): Effect.Effect<readonly Toggl2TimeEntryStreamItem[], Toggl2ApiError> =>
+  Schema.decodeUnknown(Schema.Array(Toggl2TimeEntryStreamItem))(json).pipe(
     Effect.mapError(
       (e) =>
         new Toggl2ApiError({
@@ -179,16 +187,16 @@ const decodeTimeEntries = (
   );
 
 const encodeBulkUpdateItems = (
-  items: readonly BulkUpdateTimeEntryItem[],
+  items: readonly Toggl2BulkUpdateTimeEntryItem[],
 ): Effect.Effect<
-  readonly Schema.Schema.Encoded<typeof BulkUpdateTimeEntryItem>[],
+  readonly Schema.Schema.Encoded<typeof Toggl2BulkUpdateTimeEntryItem>[],
   Toggl2ApiError
 > =>
-  Schema.encode(Schema.Array(BulkUpdateTimeEntryItem))(items).pipe(
+  Schema.encode(Schema.Array(Toggl2BulkUpdateTimeEntryItem))(items).pipe(
     Effect.mapError(
       (e) =>
         new Toggl2ApiError({
-          message: "Failed to encode BulkUpdateTimeEntryItem",
+          message: "Failed to encode Toggl2BulkUpdateTimeEntryItem",
           status: Option.none(),
           cause: Option.some(e),
         }),
@@ -197,16 +205,19 @@ const encodeBulkUpdateItems = (
 
 const fetchTimeEntriesStream = (
   ctx: Toggl2Context,
-  params: ListTimeEntriesStreamParams,
-): Effect.Effect<ListTimeEntriesStreamResult, Toggl2SdkError> =>
+  params: Toggl2ListTimeEntriesStreamParams,
+): Effect.Effect<Toggl2ListTimeEntriesStreamResult, Toggl2SdkError> =>
   Effect.gen(function* () {
-    const includeLockReason = Option.getOrElse(params.includeLockReason, () => true);
+    const includeLockReason = params.includeLockReason ?? true;
+    const includeTaskless = params.includeTaskless ?? true;
+    const archived = params.archived ?? false;
+    const orderBy = params.orderBy ?? "start";
     const searchParams = new URLSearchParams({
       date_from: params.dateFrom,
       date_to: params.dateTo,
-      include_taskless: "true",
-      archived: "false",
-      order_by: "start",
+      include_taskless: String(includeTaskless),
+      archived: String(archived),
+      order_by: orderBy,
       include_lock_reason: String(includeLockReason),
     });
     const path = `${ctx.workspacePath}/time-entries/stream?${searchParams.toString()}`;
@@ -222,7 +233,7 @@ const fetchTimeEntriesStream = (
 
 const sendBulkUpdateTimeEntries = (
   ctx: Toggl2Context,
-  items: readonly BulkUpdateTimeEntryItem[],
+  items: readonly Toggl2BulkUpdateTimeEntryItem[],
 ): Effect.Effect<Option.Option<Toggl2QuotaInfo>, Toggl2SdkError> => {
   if (items.length === 0) return Effect.succeed(Option.none());
 
@@ -239,7 +250,7 @@ const sendBulkUpdateTimeEntries = (
 
 const sendBulkDeleteTimeEntries = (
   ctx: Toggl2Context,
-  ids: readonly number[],
+  ids: readonly Toggl2TimeEntryId[],
 ): Effect.Effect<Option.Option<Toggl2QuotaInfo>, Toggl2SdkError> => {
   if (ids.length === 0) return Effect.succeed(Option.none());
 

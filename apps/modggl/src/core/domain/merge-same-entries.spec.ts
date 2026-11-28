@@ -2,7 +2,12 @@ import { TimeInstant, TimeInterval } from "@devstone/libs-time-interval";
 import { Option } from "effect";
 import { expect, it } from "vitest";
 
+import { ClientId } from "./client-id.js";
 import { mergeSameEntries } from "./merge-same-entries.js";
+import { ProjectId } from "./project-id.js";
+import { TagId } from "./tag-id.js";
+import { TaskId } from "./task-id.js";
+import { TimeEntryId } from "./time-entry-id.js";
 import { type TimeEntry } from "./time-entry.js";
 
 const interval = (startSec: number, endSec: number): TimeInterval =>
@@ -17,14 +22,14 @@ const makeEntry = (
   endSec: number,
   overrides: Partial<TimeEntry> = {},
 ): TimeEntry => ({
-  id: id,
+  id: TimeEntryId.make(id),
   interval: interval(startSec, endSec),
   type: "activity",
-  taskId: Option.some(10),
-  projectId: Option.some(20),
-  clientId: Option.some(30),
+  taskId: Option.some(TaskId.make(10)),
+  projectId: Option.some(ProjectId.make(20)),
+  clientId: Option.some(ClientId.make(30)),
   description: "作業",
-  tagIds: [1],
+  tagIds: [TagId.make(1)],
   billable: false,
   hasScheduleBinding: false,
   ...overrides,
@@ -67,9 +72,9 @@ it("両方 hasScheduleBinding=false の同一ペアは first を残して second
 
   expect(result.entries).toStrictEqual([makeEntry(1, 0, 1200, { hasScheduleBinding: false })]);
   expect(result.modifications).toStrictEqual([
-    { id: 1, previousInterval: interval(0, 600), interval: interval(0, 1200) },
+    { id: TimeEntryId.make(1), previousInterval: interval(0, 600), interval: interval(0, 1200) },
   ]);
-  expect(result.deletions).toStrictEqual([2]);
+  expect(result.deletions).toStrictEqual([TimeEntryId.make(2)]);
 });
 
 it("first=true, second=false の同一ペアは first を残して second を削除すること", () => {
@@ -80,9 +85,9 @@ it("first=true, second=false の同一ペアは first を残して second を削
 
   expect(result.entries).toStrictEqual([makeEntry(1, 0, 1200, { hasScheduleBinding: true })]);
   expect(result.modifications).toStrictEqual([
-    { id: 1, previousInterval: interval(0, 600), interval: interval(0, 1200) },
+    { id: TimeEntryId.make(1), previousInterval: interval(0, 600), interval: interval(0, 1200) },
   ]);
-  expect(result.deletions).toStrictEqual([2]);
+  expect(result.deletions).toStrictEqual([TimeEntryId.make(2)]);
 });
 
 it("first=false, second=true の同一ペアは second を残して first を削除すること", () => {
@@ -93,9 +98,9 @@ it("first=false, second=true の同一ペアは second を残して first を削
 
   expect(result.entries).toStrictEqual([makeEntry(2, 0, 1200, { hasScheduleBinding: true })]);
   expect(result.modifications).toStrictEqual([
-    { id: 2, previousInterval: interval(600, 1200), interval: interval(0, 1200) },
+    { id: TimeEntryId.make(2), previousInterval: interval(600, 1200), interval: interval(0, 1200) },
   ]);
-  expect(result.deletions).toStrictEqual([1]);
+  expect(result.deletions).toStrictEqual([TimeEntryId.make(1)]);
 });
 
 it("両方 hasScheduleBinding=true の同一ペアはマージせず両方残すこと", () => {
@@ -120,7 +125,7 @@ it("完全同一区間の同一ペアでは second を削除し modifications �
   expect(result).toStrictEqual({
     entries: [first],
     modifications: [],
-    deletions: [2],
+    deletions: [TimeEntryId.make(2)],
   });
 });
 
@@ -133,9 +138,13 @@ it("3件連鎖マージで3件目に hasScheduleBinding=true があるとき、�
 
   expect(result.entries).toStrictEqual([makeEntry(3, 0, 1800, { hasScheduleBinding: true })]);
   expect(result.modifications).toStrictEqual([
-    { id: 3, previousInterval: interval(1200, 1800), interval: interval(0, 1800) },
+    {
+      id: TimeEntryId.make(3),
+      previousInterval: interval(1200, 1800),
+      interval: interval(0, 1800),
+    },
   ]);
-  expect(result.deletions).toStrictEqual([2, 1]);
+  expect(result.deletions).toStrictEqual([TimeEntryId.make(2), TimeEntryId.make(1)]);
   expect(
     result.modifications.some((modification) => result.deletions.includes(modification.id)),
   ).toBe(false);
@@ -150,9 +159,9 @@ it("3件連鎖マージで2件目に hasScheduleBinding=true があるとき2件
 
   expect(result.entries).toStrictEqual([makeEntry(2, 0, 1800, { hasScheduleBinding: true })]);
   expect(result.modifications).toStrictEqual([
-    { id: 2, previousInterval: interval(600, 1200), interval: interval(0, 1800) },
+    { id: TimeEntryId.make(2), previousInterval: interval(600, 1200), interval: interval(0, 1800) },
   ]);
-  expect(result.deletions).toStrictEqual([1, 3]);
+  expect(result.deletions).toStrictEqual([TimeEntryId.make(1), TimeEntryId.make(3)]);
 });
 
 it("1件目と3件目が hasScheduleBinding=true で2件目が false のとき、1+2 のみマージし3件目は独立して残すこと", () => {
@@ -167,7 +176,7 @@ it("1件目と3件目が hasScheduleBinding=true で2件目が false のとき�
     third,
   ]);
   expect(result.modifications).toStrictEqual([
-    { id: 1, previousInterval: interval(0, 600), interval: interval(0, 1200) },
+    { id: TimeEntryId.make(1), previousInterval: interval(0, 600), interval: interval(0, 1200) },
   ]);
-  expect(result.deletions).toStrictEqual([2]);
+  expect(result.deletions).toStrictEqual([TimeEntryId.make(2)]);
 });

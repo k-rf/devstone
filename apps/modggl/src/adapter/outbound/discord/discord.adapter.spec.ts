@@ -4,6 +4,7 @@ import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
+import { TimeEntryId } from "../../../core/domain/time-entry-id.js";
 import { NotificationPort } from "../../../core/port/outbound/notification/notification.port.js";
 
 import { DiscordAdapterLive } from "./discord.adapter.js";
@@ -11,7 +12,7 @@ import { DiscordAdapterLive } from "./discord.adapter.js";
 const server = setupServer();
 
 beforeAll(() => {
-  server.listen();
+  server.listen({ onUnhandledRequest: "error" });
 });
 afterEach(() => {
   server.resetHandlers();
@@ -25,7 +26,7 @@ const webhookUrl = "https://discord.com/api/webhooks/123456789/test-webhook-toke
 const adapterLayer = DiscordAdapterLive(webhookUrl);
 
 const entry = (id: number, description: string) => ({
-  id: id,
+  id: TimeEntryId.make(id),
   interval: TimeInterval.make({
     start: TimeInstant.make(Date.parse("2026-11-27T09:00:00.000Z")),
     end: TimeInstant.make(Date.parse("2026-11-27T09:30:00.000Z")),
@@ -45,9 +46,9 @@ describe("正常系", () => {
     {
       status: "completed" as const,
       expectedTitle: "modggl: タイムエントリーを補正しました",
-      expectedColor: 0x2E_CC_71,
+      expectedColor: 0x2ecc71,
       modifiedCount: 1,
-      deletedIds: [2],
+      deletedIds: [TimeEntryId.make(2)],
       quotaRemaining: Option.some(27),
       quotaResetsInSeconds: Option.some(3500),
       expectedQuota: "残り 27 req / リセット 3500 秒後",
@@ -55,7 +56,7 @@ describe("正常系", () => {
     {
       status: "no_changes" as const,
       expectedTitle: "modggl: 変更対象のエントリーはありませんでした",
-      expectedColor: 0x95_A5_A6,
+      expectedColor: 0x95a5a6,
       modifiedCount: 0,
       deletedIds: [],
       quotaRemaining: Option.none(),
@@ -65,7 +66,7 @@ describe("正常系", () => {
     {
       status: "dry_run" as const,
       expectedTitle: "modggl: ドライラン結果",
-      expectedColor: 0x34_98_DB,
+      expectedColor: 0x3498db,
       modifiedCount: 1,
       deletedIds: [],
       quotaRemaining: Option.some(29),
@@ -101,7 +102,7 @@ describe("正常系", () => {
           ? []
           : [
               {
-                id: 1,
+                id: TimeEntryId.make(1),
                 previousInterval: TimeInterval.make({ start: t0, end: t1 }),
                 interval: TimeInterval.make({ start: t0, end: t2 }),
               },
@@ -118,8 +119,10 @@ describe("正常系", () => {
             excludedCount: 1,
             modifications: modifications,
             deletedIds: deletedIds,
-            quotaRemaining: quotaRemaining,
-            quotaResetsInSeconds: quotaResetsInSeconds,
+            quota: {
+              remaining: quotaRemaining,
+              resetsInSeconds: quotaResetsInSeconds,
+            },
           });
         }).pipe(Effect.provide(adapterLayer)),
       );
@@ -186,7 +189,7 @@ describe("正常系", () => {
           title: "modggl: 判定不能な重複を検出して停止しました",
           description:
             "停止理由: NotDetermine（All-or-Nothing 保護により書き込みは一切行っていません）",
-          color: 0xF3_9C_12,
+          color: 0xf39c12,
           fields: [
             {
               name: "競合エントリー 1",
@@ -204,6 +207,62 @@ describe("正常系", () => {
         },
       ],
     });
+  });
+
+  it("Discord Embed の上限を超える description やエラーメッセージをサロゲートペアを壊さず切り詰めること", async () => {
+    interface CapturedEmbedPayload {
+      readonly embeds: readonly [
+        {
+          readonly description?: string;
+          readonly fields: readonly { readonly value: string }[];
+        },
+      ];
+    }
+    const postSpy = vi.fn<(body: CapturedEmbedPayload) => void>();
+
+    server.use(
+      http.post(webhookUrl, async ({ request }) => {
+        postSpy((await request.json()) as CapturedEmbedPayload);
+        return new HttpResponse(undefined, { status: 204 });
+      }),
+    );
+
+    const longAsciiDescription = "a".repeat(1200);
+    // 先頭文字列の後にサロゲートペア絵文字を並べて 1023 文字境界が上位サロゲートへ重なるケースを作る
+    const prefixLength =
+      "ID: 2\n区間: 2026-11-27T09:00:00.000Z 〜 2026-11-27T09:30:00.000Z (1800 秒)\n説明: ".length;
+    const padCount = 1022 - prefixLength;
+    const surrogateBoundaryDescription = `${"x".repeat(padCount)}😀😀`;
+    const longErrorMessage = "e".repeat(5000);
+
+    await Effect.runPromise(
+      Effect.gen(function* () {
+        const port = yield* NotificationPort;
+        yield* port.notifyAborted({
+          reason: "NotDetermine",
+          first: entry(1, longAsciiDescription),
+          second: entry(2, surrogateBoundaryDescription),
+        });
+        yield* port.notifyError({
+          message: longErrorMessage,
+          reason: "ApiError",
+          status: Option.some(500),
+          resetsInSeconds: Option.none(),
+        });
+      }).pipe(Effect.provide(adapterLayer)),
+    );
+
+    const abortedField1 = postSpy.mock.calls[0]?.[0].embeds[0].fields[0]?.value ?? "";
+    const abortedField2 = postSpy.mock.calls[0]?.[0].embeds[0].fields[1]?.value ?? "";
+    const errorDescription = postSpy.mock.calls[1]?.[0].embeds[0].description ?? "";
+
+    expect(abortedField1).toHaveLength(1024);
+    expect(abortedField1.endsWith("…")).toBe(true);
+    expect(abortedField2.length).toBeLessThanOrEqual(1024);
+    expect(abortedField2.endsWith("…")).toBe(true);
+    expect(abortedField2.isWellFormed()).toBe(true);
+    expect(errorDescription).toHaveLength(4096);
+    expect(errorDescription.endsWith("…")).toBe(true);
   });
 
   it("notifyError がステータスとリセット待ち秒数の有無に応じた赤色 Embed を送信すること", async () => {
@@ -240,7 +299,7 @@ describe("正常系", () => {
         {
           title: "modggl: 実行エラーが発生しました",
           description: "quota exceeded",
-          color: 0xE7_4C_3C,
+          color: 0xe74c3c,
           fields: [
             { name: "種別", value: "QuotaExceeded", inline: true },
             { name: "HTTP ステータス", value: "402", inline: true },
@@ -254,7 +313,7 @@ describe("正常系", () => {
         {
           title: "modggl: 実行エラーが発生しました",
           description: "network error",
-          color: 0xE7_4C_3C,
+          color: 0xe74c3c,
           fields: [
             { name: "種別", value: "ApiError", inline: true },
             { name: "HTTP ステータス", value: "なし", inline: true },
@@ -289,6 +348,29 @@ describe("異常系", () => {
     expect(error._tag).toBe("NotificationError");
     expect(error.message).toBe("Discord Webhook がエラーを返しました (401): Invalid Webhook Token");
     expect(Option.isNone(error.cause)).toBe(true);
+  });
+
+  it("非 2xx 応答の本文読み取りが reject しても NotificationError を返すこと", async () => {
+    const response = new Response(undefined, { status: 500 });
+    vi.spyOn(response, "text").mockRejectedValue(new Error("stream broken"));
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(response);
+
+    const error = await Effect.runPromise(
+      Effect.flip(
+        Effect.gen(function* () {
+          const port = yield* NotificationPort;
+          yield* port.notifyError({
+            message: "failure",
+            reason: "ApiError",
+            status: Option.some(500),
+            resetsInSeconds: Option.none(),
+          });
+        }).pipe(Effect.provide(adapterLayer)),
+      ),
+    );
+
+    expect(error._tag).toBe("NotificationError");
+    expect(error.message).toBe("Discord Webhook がエラーを返しました (500): ");
   });
 
   it("ネットワークエラーが発生したとき cause 付き NotificationError を返すこと", async () => {

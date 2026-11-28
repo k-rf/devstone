@@ -2,7 +2,8 @@
 import { Option, Schema } from "effect";
 import { expect, it } from "vitest";
 
-import { TimeEntryStreamItem } from "./time-entry-stream-item.js";
+import { Toggl2TimeEntryId } from "./time-entry-id.js";
+import { Toggl2TimeEntryStreamItem } from "./time-entry-stream-item.js";
 
 it("全フィールドを含む JSON を Option と camelCase に正規化してデコードできること", () => {
   const raw = {
@@ -53,10 +54,10 @@ it("全フィールドを含む JSON を Option と camelCase に正規化して
     calendar_event_id: 500,
   };
 
-  const decoded = Schema.decodeUnknownSync(TimeEntryStreamItem)(raw);
+  const decoded = Schema.decodeUnknownSync(Toggl2TimeEntryStreamItem)(raw);
 
   expect(decoded).toStrictEqual({
-    id: 1,
+    id: Toggl2TimeEntryId.make(1),
     start: Option.some("2026-11-27T09:00:00+09:00"),
     duration: Option.some(3600),
     deletedAt: Option.some("2026-11-27T12:00:00+09:00"),
@@ -105,10 +106,10 @@ it("全フィールドを含む JSON を Option と camelCase に正規化して
 });
 
 it("任意フィールドが省略された JSON を既定値および Option.none に正規化できること", () => {
-  const decoded = Schema.decodeUnknownSync(TimeEntryStreamItem)({ id: 2 });
+  const decoded = Schema.decodeUnknownSync(Toggl2TimeEntryStreamItem)({ id: 2 });
 
   expect(decoded).toStrictEqual({
-    id: 2,
+    id: Toggl2TimeEntryId.make(2),
     start: Option.none(),
     duration: Option.none(),
     deletedAt: Option.none(),
@@ -131,7 +132,7 @@ it("任意フィールドが省略された JSON を既定値および Option.no
 });
 
 it("null を含む JSON フィールドが Option.none および既定値に正規化されること", () => {
-  const decoded = Schema.decodeUnknownSync(TimeEntryStreamItem)({
+  const decoded = Schema.decodeUnknownSync(Toggl2TimeEntryStreamItem)({
     id: 3,
     start: null,
     duration: null,
@@ -154,7 +155,7 @@ it("null を含む JSON フィールドが Option.none および既定値に正�
   });
 
   expect(decoded).toStrictEqual({
-    id: 3,
+    id: Toggl2TimeEntryId.make(3),
     start: Option.none(),
     duration: Option.none(),
     deletedAt: Option.none(),
@@ -178,9 +179,10 @@ it("null を含む JSON フィールドが Option.none および既定値に正�
 
 it.each([
   { label: "id が文字列", payload: { id: "bad" } },
+  { label: "id が 0", payload: { id: 0 } },
   { label: "type が不正なリテラル", payload: { id: 1, type: "unknown" } },
   { label: "duration が文字列", payload: { id: 1, duration: "60" } },
   { label: "tags 要素の id が文字列", payload: { id: 1, tags: [{ id: "bad" }] } },
 ])("不正なペイロード（$label）は Schema.decodeUnknownSync で失敗すること", ({ payload }) => {
-  expect(() => Schema.decodeUnknownSync(TimeEntryStreamItem)(payload)).toThrow();
+  expect(() => Schema.decodeUnknownSync(Toggl2TimeEntryStreamItem)(payload)).toThrow();
 });

@@ -1,18 +1,24 @@
 import { TimeInterval } from "@devstone/libs-time-interval";
 import { Schema } from "effect";
 
+import { ClientId } from "./client-id.js";
+import { ProjectId } from "./project-id.js";
+import { TagId } from "./tag-id.js";
+import { TaskId } from "./task-id.js";
+import { TimeEntryId } from "./time-entry-id.js";
+
 /**
  * 正規化されたタイムエントリーを表すドメインスキーマ
  */
 export const TimeEntry = Schema.Struct({
-  id: Schema.Number,
+  id: TimeEntryId,
   interval: TimeInterval,
   type: Schema.Literal("activity", "break"),
-  taskId: Schema.OptionFromSelf(Schema.Number),
-  projectId: Schema.OptionFromSelf(Schema.Number),
-  clientId: Schema.OptionFromSelf(Schema.Number),
+  taskId: Schema.OptionFromSelf(TaskId),
+  projectId: Schema.OptionFromSelf(ProjectId),
+  clientId: Schema.OptionFromSelf(ClientId),
   description: Schema.String,
-  tagIds: Schema.Array(Schema.Number),
+  tagIds: Schema.Array(TagId),
   billable: Schema.Boolean,
   hasScheduleBinding: Schema.Boolean,
 });

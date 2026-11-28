@@ -1,7 +1,8 @@
+import { Toggl2OrganizationId, Toggl2WorkspaceId } from "@devstone/libs-toggl-2-sdk";
 import { ConfigProvider, Effect, Option } from "effect";
 import { expect, it } from "vitest";
 
-import { loadEnv } from "./env.middleware.js";
+import { loadEnv } from "./load-env.js";
 
 it("必須環境変数がすべて正しい形式で DISCORD_WEBHOOK_URL が未設定のとき Option.none() を返すこと", async () => {
   const provider = ConfigProvider.fromMap(
@@ -16,14 +17,14 @@ it("必須環境変数がすべて正しい形式で DISCORD_WEBHOOK_URL が未�
 
   expect(result).toStrictEqual({
     togglApiToken: "toggl_sk_secret",
-    togglOrganizationId: 1001,
-    togglWorkspaceId: 2002,
+    togglOrganizationId: Toggl2OrganizationId.make(1001),
+    togglWorkspaceId: Toggl2WorkspaceId.make(2002),
     discordWebhookUrl: Option.none(),
   });
 });
 
 it.each([
-  "https://discord.com/api/webhooks/123456789/token-abc",
+  "https://discord.com/api/webhooks/123456789/token-abc_XYZ",
   "https://discordapp.com/api/webhooks/123456789/token-abc",
   "https://ptb.discord.com/api/webhooks/123456789/token-abc",
   "https://canary.discord.com/api/webhooks/123456789/token-abc",
@@ -41,8 +42,8 @@ it.each([
 
   expect(result).toStrictEqual({
     togglApiToken: "toggl_sk_secret",
-    togglOrganizationId: 1001,
-    togglWorkspaceId: 2002,
+    togglOrganizationId: Toggl2OrganizationId.make(1001),
+    togglWorkspaceId: Toggl2WorkspaceId.make(2002),
     discordWebhookUrl: Option.some(url),
   });
 });
@@ -67,6 +68,38 @@ it.each([
     label: "TOGGL_API_TOKEN が空白のみ",
     entries: [
       ["TOGGL_API_TOKEN", "   "],
+      ["TOGGL_ORGANIZATION_ID", "1001"],
+      ["TOGGL_WORKSPACE_ID", "2002"],
+    ] as const,
+  },
+  {
+    label: "TOGGL_API_TOKEN に前後空白が含まれる",
+    entries: [
+      ["TOGGL_API_TOKEN", " token "],
+      ["TOGGL_ORGANIZATION_ID", "1001"],
+      ["TOGGL_WORKSPACE_ID", "2002"],
+    ] as const,
+  },
+  {
+    label: "TOGGL_API_TOKEN に中間空白が含まれる",
+    entries: [
+      ["TOGGL_API_TOKEN", "tok en"],
+      ["TOGGL_ORGANIZATION_ID", "1001"],
+      ["TOGGL_WORKSPACE_ID", "2002"],
+    ] as const,
+  },
+  {
+    label: "TOGGL_API_TOKEN に改行が含まれる",
+    entries: [
+      ["TOGGL_API_TOKEN", "tok\nfoo"],
+      ["TOGGL_ORGANIZATION_ID", "1001"],
+      ["TOGGL_WORKSPACE_ID", "2002"],
+    ] as const,
+  },
+  {
+    label: "TOGGL_API_TOKEN にタブが含まれる",
+    entries: [
+      ["TOGGL_API_TOKEN", "tok\tfoo"],
       ["TOGGL_ORGANIZATION_ID", "1001"],
       ["TOGGL_WORKSPACE_ID", "2002"],
     ] as const,
@@ -137,6 +170,24 @@ it.each([
       ["TOGGL_ORGANIZATION_ID", "1001"],
       ["TOGGL_WORKSPACE_ID", "2002"],
       ["DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/123"],
+    ] as const,
+  },
+  {
+    label: "DISCORD_WEBHOOK_URL が相対パスを含む",
+    entries: [
+      ["TOGGL_API_TOKEN", "toggl_sk_secret"],
+      ["TOGGL_ORGANIZATION_ID", "1001"],
+      ["TOGGL_WORKSPACE_ID", "2002"],
+      ["DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/../.."],
+    ] as const,
+  },
+  {
+    label: "DISCORD_WEBHOOK_URL の ID 部が非数字",
+    entries: [
+      ["TOGGL_API_TOKEN", "toggl_sk_secret"],
+      ["TOGGL_ORGANIZATION_ID", "1001"],
+      ["TOGGL_WORKSPACE_ID", "2002"],
+      ["DISCORD_WEBHOOK_URL", "https://discord.com/api/webhooks/abc/token"],
     ] as const,
   },
 ])("環境変数が不正（$label）なとき EnvValidationError を返すこと", async ({ entries }) => {

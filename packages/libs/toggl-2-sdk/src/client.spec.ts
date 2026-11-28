@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-null -- 外部 API の JSON レスポンスに含まれる null をテストで再現するため */
+/* eslint-disable unicorn/no-null -- 外部 API の JSON レスポンスや fetch ヘッダ検証で null を再現するため */
 import { faker } from "@faker-js/faker";
 import { Effect, Option } from "effect";
 import { HttpResponse, http } from "msw";
@@ -6,11 +6,14 @@ import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import { makeToggl2ApiClient } from "./client.js";
+import { Toggl2OrganizationId } from "./schema/organization-id.js";
+import { Toggl2TimeEntryId } from "./schema/time-entry-id.js";
+import { Toggl2WorkspaceId } from "./schema/workspace-id.js";
 
 const server = setupServer();
 
 beforeAll(() => {
-  server.listen();
+  server.listen({ onUnhandledRequest: "error" });
 });
 afterEach(() => {
   server.resetHandlers();
@@ -21,8 +24,8 @@ afterAll(() => {
 });
 
 const apiToken = faker.string.alphanumeric(24);
-const organizationId = 1001;
-const workspaceId = 2002;
+const organizationId = Toggl2OrganizationId.make(1001);
+const workspaceId = Toggl2WorkspaceId.make(2002);
 const baseUrl = `https://focus.toggl.com/api/organizations/${String(organizationId)}/workspaces/${String(workspaceId)}`;
 const clientEffect = makeToggl2ApiClient({
   apiToken: apiToken,
@@ -32,12 +35,23 @@ const clientEffect = makeToggl2ApiClient({
 
 describe("タイムエントリーのストリーム取得", () => {
   it("クエリパラメータと RFC 3339 の + オフセットをエンコードしてエントリー一覧とクォータ情報を取得できること", async () => {
-    const captureRequest = vi.fn<(url: string, authorization: Option.Option<string>) => void>();
+    const captureRequest =
+      vi.fn<
+        (
+          url: string,
+          authorization: Option.Option<string>,
+          contentType: Option.Option<string>,
+        ) => void
+      >();
     const description = faker.lorem.sentence();
 
     server.use(
       http.get(`${baseUrl}/time-entries/stream`, ({ request }) => {
-        captureRequest(request.url, Option.fromNullable(request.headers.get("Authorization")));
+        captureRequest(
+          request.url,
+          Option.fromNullable(request.headers.get("Authorization")),
+          Option.fromNullable(request.headers.get("Content-Type")),
+        );
 
         return HttpResponse.json(
           [
@@ -76,7 +90,6 @@ describe("タイムエントリーのストリーム取得", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00+09:00",
           dateTo: "2026-11-28T00:00:00+09:00",
-          includeLockReason: Option.none(),
         }),
       ),
     );
@@ -84,8 +97,13 @@ describe("タイムエントリーのストリーム取得", () => {
     const result = await Effect.runPromise(program);
 
     expect(captureRequest).toHaveBeenCalledTimes(1);
-    const [rawUrl, authorization] = captureRequest.mock.calls[0] ?? ["", Option.none()];
+    const [rawUrl, authorization, contentType] = captureRequest.mock.calls[0] ?? [
+      "",
+      Option.none(),
+      Option.none(),
+    ];
     expect(authorization).toStrictEqual(Option.some(`Bearer ${apiToken}`));
+    expect(contentType).toStrictEqual(Option.none());
 
     const parsedUrl = new URL(rawUrl);
     expect(parsedUrl.search).toContain("%2B09%3A00");
@@ -110,7 +128,7 @@ describe("タイムエントリーのストリーム取得", () => {
     });
   });
 
-  it("includeLockReason に Option.some(false) を指定したとき include_lock_reason=false が送信されること", async () => {
+  it("任意クエリパラメータを上書き指定したとき対応するクエリ文字列が送信されること", async () => {
     const captureSearch = vi.fn<(search: string) => void>();
 
     server.use(
@@ -125,7 +143,10 @@ describe("タイムエントリーのストリーム取得", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00Z",
           dateTo: "2026-11-21T00:00:00Z",
-          includeLockReason: Option.some(false),
+          includeLockReason: false,
+          includeTaskless: false,
+          archived: true,
+          orderBy: "duration",
         }),
       ),
     );
@@ -137,8 +158,11 @@ describe("タイムエントリーのストリーム取得", () => {
       remaining: Option.none(),
       resetsInSeconds: Option.none(),
     });
-    const search = captureSearch.mock.calls[0]?.[0] ?? "";
-    expect(new URLSearchParams(search).get("include_lock_reason")).toBe("false");
+    const searchParams = new URLSearchParams(captureSearch.mock.calls[0]?.[0] ?? "");
+    expect(searchParams.get("include_lock_reason")).toBe("false");
+    expect(searchParams.get("include_taskless")).toBe("false");
+    expect(searchParams.get("archived")).toBe("true");
+    expect(searchParams.get("order_by")).toBe("duration");
   });
 });
 
@@ -160,14 +184,22 @@ describe("タイムエントリーの一括更新", () => {
     expect(result).toStrictEqual(Option.none());
   });
 
-  it("部分更新ペイロードを PATCH で送信し 204 応答のクォータ情報を返すこと", async () => {
-    const capturePatch = vi.fn<(body: unknown, authorization: Option.Option<string>) => void>();
+  it("部分更新ペイロードと Content-Type: application/json を PATCH で送信し 204 応答のクォータ情報を返すこと", async () => {
+    const capturePatch =
+      vi.fn<
+        (
+          body: unknown,
+          authorization: Option.Option<string>,
+          contentType: Option.Option<string>,
+        ) => void
+      >();
 
     server.use(
       http.patch(`${baseUrl}/time-entries/bulk`, async ({ request }) => {
         capturePatch(
           await request.json(),
           Option.fromNullable(request.headers.get("Authorization")),
+          Option.fromNullable(request.headers.get("Content-Type")),
         );
 
         return new HttpResponse(null, {
@@ -184,12 +216,12 @@ describe("タイムエントリーの一括更新", () => {
       Effect.flatMap((client) =>
         client.bulkUpdateTimeEntries([
           {
-            id: 1,
+            id: Toggl2TimeEntryId.make(1),
             start: Option.some("2026-11-27T09:00:00+09:00"),
             duration: Option.some(1800),
           },
           {
-            id: 2,
+            id: Toggl2TimeEntryId.make(2),
             start: Option.none(),
             duration: Option.some(900),
           },
@@ -205,6 +237,7 @@ describe("タイムエントリーの一括更新", () => {
         { id: 2, duration: 900 },
       ],
       Option.some(`Bearer ${apiToken}`),
+      Option.some("application/json"),
     );
     expect(result).toStrictEqual(
       Option.some({
@@ -214,13 +247,34 @@ describe("タイムエントリーの一括更新", () => {
     );
   });
 
-  it("不正な更新項目のエンコードに失敗したとき Toggl2ApiError を返すこと", async () => {
-    const program = clientEffect.pipe(
+  it("不正な更新項目のエンコードに失敗したとき PATCH を送信せず Toggl2ApiError を返すこと", async () => {
+    const patchSpy = vi.fn();
+
+    server.use(
+      http.patch(`${baseUrl}/time-entries/bulk`, () => {
+        patchSpy();
+        return new HttpResponse(null, { status: 204 });
+      }),
+    );
+
+    const invalidIdProgram = clientEffect.pipe(
       Effect.flatMap((client) =>
         client.bulkUpdateTimeEntries([
           {
             // @ts-expect-error: id に数値でない値を渡してエンコードエラーを発生させる
             id: "invalid-id",
+            start: Option.none(),
+            duration: Option.some(600),
+          },
+        ]),
+      ),
+    );
+
+    const emptyFieldsProgram = clientEffect.pipe(
+      Effect.flatMap((client) =>
+        client.bulkUpdateTimeEntries([
+          {
+            id: Toggl2TimeEntryId.make(1),
             start: Option.none(),
             duration: Option.none(),
           },
@@ -228,10 +282,14 @@ describe("タイムエントリーの一括更新", () => {
       ),
     );
 
-    const error = await Effect.runPromise(Effect.flip(program));
+    const invalidIdError = await Effect.runPromise(Effect.flip(invalidIdProgram));
+    const emptyFieldsError = await Effect.runPromise(Effect.flip(emptyFieldsProgram));
 
-    expect(error._tag).toBe("Toggl2ApiError");
-    expect(error.message).toBe("Failed to encode BulkUpdateTimeEntryItem");
+    expect(patchSpy).not.toHaveBeenCalled();
+    expect(invalidIdError._tag).toBe("Toggl2ApiError");
+    expect(invalidIdError.message).toBe("Failed to encode Toggl2BulkUpdateTimeEntryItem");
+    expect(emptyFieldsError._tag).toBe("Toggl2ApiError");
+    expect(emptyFieldsError.message).toBe("Failed to encode Toggl2BulkUpdateTimeEntryItem");
   });
 });
 
@@ -253,12 +311,23 @@ describe("タイムエントリーの一括削除", () => {
     expect(result).toStrictEqual(Option.none());
   });
 
-  it("ids クエリを付けて DELETE を送信し 204 応答のクォータ情報を返すこと", async () => {
-    const captureDelete = vi.fn<(url: string, authorization: Option.Option<string>) => void>();
+  it("ids クエリを付けて Content-Type なしで DELETE を送信し 204 応答のクォータ情報を返すこと", async () => {
+    const captureDelete =
+      vi.fn<
+        (
+          url: string,
+          authorization: Option.Option<string>,
+          contentType: Option.Option<string>,
+        ) => void
+      >();
 
     server.use(
       http.delete(`${baseUrl}/time-entries/bulk`, ({ request }) => {
-        captureDelete(request.url, Option.fromNullable(request.headers.get("Authorization")));
+        captureDelete(
+          request.url,
+          Option.fromNullable(request.headers.get("Authorization")),
+          Option.fromNullable(request.headers.get("Content-Type")),
+        );
         return new HttpResponse(null, {
           status: 204,
           headers: {
@@ -270,14 +339,25 @@ describe("タイムエントリーの一括削除", () => {
     );
 
     const program = clientEffect.pipe(
-      Effect.flatMap((client) => client.bulkDeleteTimeEntries([11, 22, 33])),
+      Effect.flatMap((client) =>
+        client.bulkDeleteTimeEntries([
+          Toggl2TimeEntryId.make(11),
+          Toggl2TimeEntryId.make(22),
+          Toggl2TimeEntryId.make(33),
+        ]),
+      ),
     );
 
     const result = await Effect.runPromise(program);
 
-    const [rawUrl, authorization] = captureDelete.mock.calls[0] ?? ["", Option.none()];
+    const [rawUrl, authorization, contentType] = captureDelete.mock.calls[0] ?? [
+      "",
+      Option.none(),
+      Option.none(),
+    ];
     expect(rawUrl).toBe(`${baseUrl}/time-entries/bulk?ids=11,22,33`);
     expect(authorization).toStrictEqual(Option.some(`Bearer ${apiToken}`));
+    expect(contentType).toStrictEqual(Option.none());
     expect(result).toStrictEqual(
       Option.some({
         remaining: Option.some(26),
@@ -300,7 +380,6 @@ describe("異常系", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00Z",
           dateTo: "2026-11-21T00:00:00Z",
-          includeLockReason: Option.none(),
         }),
       ),
     );
@@ -327,7 +406,6 @@ describe("異常系", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00Z",
           dateTo: "2026-11-21T00:00:00Z",
-          includeLockReason: Option.none(),
         }),
       ),
     );
@@ -348,7 +426,9 @@ describe("異常系", () => {
 
     const program = clientEffect.pipe(
       Effect.flatMap((client) =>
-        client.bulkUpdateTimeEntries([{ id: 1, start: Option.none(), duration: Option.some(600) }]),
+        client.bulkUpdateTimeEntries([
+          { id: Toggl2TimeEntryId.make(1), start: Option.none(), duration: Option.some(600) },
+        ]),
       ),
     );
 
@@ -368,7 +448,9 @@ describe("異常系", () => {
 
     const program = clientEffect.pipe(
       Effect.flatMap((client) =>
-        client.bulkUpdateTimeEntries([{ id: 1, start: Option.none(), duration: Option.some(600) }]),
+        client.bulkUpdateTimeEntries([
+          { id: Toggl2TimeEntryId.make(1), start: Option.none(), duration: Option.some(600) },
+        ]),
       ),
     );
 
@@ -385,7 +467,7 @@ describe("異常系", () => {
     );
 
     const program = clientEffect.pipe(
-      Effect.flatMap((client) => client.bulkDeleteTimeEntries([1])),
+      Effect.flatMap((client) => client.bulkDeleteTimeEntries([Toggl2TimeEntryId.make(1)])),
     );
 
     const error = await Effect.runPromise(Effect.flip(program));
@@ -393,6 +475,23 @@ describe("異常系", () => {
     if (error._tag === "Toggl2ApiError") {
       expect(error.status).toStrictEqual(Option.some(500));
       expect(error.message).toBe("Toggl 2.0 API error: 500 Internal Server Error");
+    }
+  });
+
+  it("非 2xx 応答の本文読み取りが reject しても未捕捉例外にせず型付きエラーを返すこと", async () => {
+    const response = new Response(undefined, { status: 502 });
+    vi.spyOn(response, "text").mockRejectedValue(new Error("stream broken"));
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(response);
+
+    const program = clientEffect.pipe(
+      Effect.flatMap((client) => client.bulkDeleteTimeEntries([Toggl2TimeEntryId.make(1)])),
+    );
+
+    const error = await Effect.runPromise(Effect.flip(program));
+    expect(error._tag).toBe("Toggl2ApiError");
+    if (error._tag === "Toggl2ApiError") {
+      expect(error.status).toStrictEqual(Option.some(502));
+      expect(error.message).toBe("Toggl 2.0 API error: 502 ");
     }
   });
 
@@ -408,7 +507,6 @@ describe("異常系", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00Z",
           dateTo: "2026-11-21T00:00:00Z",
-          includeLockReason: Option.none(),
         }),
       ),
     );
@@ -436,7 +534,6 @@ describe("異常系", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00Z",
           dateTo: "2026-11-21T00:00:00Z",
-          includeLockReason: Option.none(),
         }),
       ),
     );
@@ -462,7 +559,6 @@ describe("異常系", () => {
         client.listTimeEntriesStream({
           dateFrom: "2026-11-20T00:00:00Z",
           dateTo: "2026-11-21T00:00:00Z",
-          includeLockReason: Option.none(),
         }),
       ),
     );

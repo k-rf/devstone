@@ -3,6 +3,8 @@ import { Option } from "effect";
 import { describe, expect, it } from "vitest";
 
 import { reviseEntries } from "./revise-entries.js";
+import { sortTimeEntries } from "./sort-time-entries.js";
+import { TimeEntryId } from "./time-entry-id.js";
 import { type TimeEntry } from "./time-entry.js";
 
 const interval = (startSec: number, endSec: number): TimeInterval =>
@@ -17,7 +19,7 @@ const makeEntry = (
   endSec: number,
   overrides: Partial<TimeEntry> = {},
 ): TimeEntry => ({
-  id: id,
+  id: TimeEntryId.make(id),
   interval: interval(startSec, endSec),
   type: "activity",
   taskId: Option.none(),
@@ -54,12 +56,24 @@ describe("正常系（計画生成）", () => {
     });
   });
 
+  it("ゼロ長区間の直後に通常エントリーが続く場合は隙間なく接続扱いになること", () => {
+    const result = reviseEntries([makeEntry(1, 0, 0), makeEntry(2, 0, 600)]);
+
+    expect(result).toStrictEqual({
+      _tag: "Planned",
+      modifications: [],
+      deletions: [],
+    });
+  });
+
   it("隙間のある非同一ペア（Less かつ first.end < second.start）では first.end を second.start まで延長すること", () => {
     const result = reviseEntries([makeEntry(1, 0, 500), makeEntry(2, 600, 1200)]);
 
     expect(result).toStrictEqual({
       _tag: "Planned",
-      modifications: [{ id: 1, previousInterval: interval(0, 500), interval: interval(0, 600) }],
+      modifications: [
+        { id: TimeEntryId.make(1), previousInterval: interval(0, 500), interval: interval(0, 600) },
+      ],
       deletions: [],
     });
   });
@@ -69,7 +83,9 @@ describe("正常系（計画生成）", () => {
 
     expect(result).toStrictEqual({
       _tag: "Planned",
-      modifications: [{ id: 1, previousInterval: interval(0, 700), interval: interval(0, 600) }],
+      modifications: [
+        { id: TimeEntryId.make(1), previousInterval: interval(0, 700), interval: interval(0, 600) },
+      ],
       deletions: [],
     });
   });
@@ -79,14 +95,20 @@ describe("正常系（計画生成）", () => {
 
     expect(result).toStrictEqual({
       _tag: "Planned",
-      modifications: [{ id: 1, previousInterval: interval(0, 1500), interval: interval(0, 600) }],
+      modifications: [
+        {
+          id: TimeEntryId.make(1),
+          previousInterval: interval(0, 1500),
+          interval: interval(0, 600),
+        },
+      ],
       deletions: [],
     });
   });
 
   it("同一エントリーマージ後に次エントリーとの重複で元の区間長へ戻った場合は不要な更新を省くこと", () => {
     const e1 = makeEntry(1, 0, 600, { description: "A" });
-    const e2 = makeEntry(2, 600, 900, { description: "A" });
+    const e2 = makeEntry(2, 500, 900, { description: "A" });
     const e3 = makeEntry(3, 600, 1200, { description: "B" });
 
     const result = reviseEntries([e1, e2, e3]);
@@ -94,7 +116,29 @@ describe("正常系（計画生成）", () => {
     expect(result).toStrictEqual({
       _tag: "Planned",
       modifications: [],
-      deletions: [2],
+      deletions: [TimeEntryId.make(2)],
+    });
+  });
+
+  it("3件以上の非同一エントリーで隙間補完・重複切り詰め・連続接続を順に処理すること", () => {
+    const e1 = makeEntry(1, 0, 300, { description: "A" });
+    const e2 = makeEntry(2, 400, 800, { description: "B" });
+    const e3 = makeEntry(3, 700, 1000, { description: "C" });
+    const e4 = makeEntry(4, 1000, 1200, { description: "D" });
+
+    const result = reviseEntries([e1, e2, e3, e4]);
+
+    expect(result).toStrictEqual({
+      _tag: "Planned",
+      modifications: [
+        { id: TimeEntryId.make(1), previousInterval: interval(0, 300), interval: interval(0, 400) },
+        {
+          id: TimeEntryId.make(2),
+          previousInterval: interval(400, 800),
+          interval: interval(400, 700),
+        },
+      ],
+      deletions: [],
     });
   });
 
@@ -108,8 +152,14 @@ describe("正常系（計画生成）", () => {
 
     expect(result).toStrictEqual({
       _tag: "Planned",
-      modifications: [{ id: 3, previousInterval: interval(600, 800), interval: interval(0, 1000) }],
-      deletions: [2, 1],
+      modifications: [
+        {
+          id: TimeEntryId.make(3),
+          previousInterval: interval(600, 800),
+          interval: interval(0, 1000),
+        },
+      ],
+      deletions: [TimeEntryId.make(2), TimeEntryId.make(1)],
     });
   });
 });
@@ -167,11 +217,72 @@ describe("異常系（全停止 All-or-Nothing）", () => {
     },
   );
 
+  it("同一開始時刻の異内容競合があるときは ID 順に関わらずマージ前に NotDetermine で全停止すること", () => {
+    const a1 = makeEntry(1, 0, 600, { description: "A" });
+    const aSmall = makeEntry(2, 600, 900, { description: "A" });
+    const aLarge = makeEntry(30, 600, 900, { description: "A" });
+    const bSameLength = makeEntry(3, 600, 900, { description: "B" });
+    const bLonger = makeEntry(3, 600, 1200, { description: "B" });
+
+    expect(reviseEntries(sortTimeEntries([a1, aSmall, bSameLength]))).toStrictEqual({
+      _tag: "Aborted",
+      reason: "NotDetermine",
+      first: aSmall,
+      second: bSameLength,
+    });
+
+    expect(reviseEntries(sortTimeEntries([a1, aLarge, bSameLength]))).toStrictEqual({
+      _tag: "Aborted",
+      reason: "NotDetermine",
+      first: bSameLength,
+      second: aLarge,
+    });
+
+    expect(reviseEntries(sortTimeEntries([a1, aSmall, bLonger]))).toStrictEqual({
+      _tag: "Aborted",
+      reason: "NotDetermine",
+      first: aSmall,
+      second: bLonger,
+    });
+  });
+
+  it("前段ペアの補正蓄積後に後続で判定不能重複を検出した場合も All-or-Nothing で Aborted を返すこと", () => {
+    const e1 = makeEntry(1, 0, 300, { description: "A" });
+    const e2 = makeEntry(2, 400, 700, { description: "B" });
+    const e3 = makeEntry(3, 800, 1100, { description: "C" });
+    const e4 = makeEntry(4, 800, 1100, { description: "D" });
+
+    const result = reviseEntries([e1, e2, e3, e4]);
+
+    expect(result).toStrictEqual({
+      _tag: "Aborted",
+      reason: "NotDetermine",
+      first: e3,
+      second: e4,
+    });
+  });
+
+  it("前段ペアの補正蓄積後に後続で順序異常を検出した場合も All-or-Nothing で Aborted を返すこと", () => {
+    const e1 = makeEntry(1, 0, 300, { description: "A" });
+    const e2 = makeEntry(2, 400, 900, { description: "B" });
+    const e3 = makeEntry(3, 200, 500, { description: "C" });
+
+    const result = reviseEntries([e1, e2, e3]);
+
+    expect(result).toStrictEqual({
+      _tag: "Aborted",
+      reason: "InvalidOrder",
+      first: e2,
+      second: e3,
+    });
+  });
+
   it("両方 hasScheduleBinding=true の同一エントリーが Equivalent のときマージせず NotDetermine で停止すること", () => {
     const first = makeEntry(1, 0, 600, { description: "Same", hasScheduleBinding: true });
     const second = makeEntry(2, 0, 600, { description: "Same", hasScheduleBinding: true });
+    const third = makeEntry(3, 1200, 1800, { description: "Other" });
 
-    const result = reviseEntries([first, second]);
+    const result = reviseEntries([first, second, third]);
 
     expect(result).toStrictEqual({
       _tag: "Aborted",

@@ -1,8 +1,12 @@
 import { TimeInterval } from "@devstone/libs-time-interval";
-import { type TimeEntryStreamItem, type Toggl2TimeEntryProject } from "@devstone/libs-toggl-2-sdk";
+import {
+  type Toggl2TimeEntryProject,
+  type Toggl2TimeEntryStreamItem,
+} from "@devstone/libs-toggl-2-sdk";
 import { Option, Schema } from "effect";
 
-import { type TimeEntry } from "../../../core/domain/time-entry.js";
+import { sortTimeEntries } from "../../../core/domain/sort-time-entries.js";
+import { TimeEntry } from "../../../core/domain/time-entry.js";
 
 const MILLISECONDS_PER_SECOND = 1000;
 
@@ -15,7 +19,7 @@ export interface MappedTimeEntries {
   readonly excludedCount: number;
 }
 
-const isEligibleStreamItem = (item: TimeEntryStreamItem): boolean =>
+const isEligibleStreamItem = (item: Toggl2TimeEntryStreamItem): boolean =>
   Option.isSome(item.start) &&
   Option.isSome(item.duration) &&
   Option.isNone(item.deletedAt) &&
@@ -24,6 +28,7 @@ const isEligibleStreamItem = (item: TimeEntryStreamItem): boolean =>
   !item.patternManaged &&
   Option.isNone(item.lockReason);
 
+// Toggl 2.0 PATCH API は秒単位の duration のみを受け付けるため、開始時刻・区間長ともに秒粒度へ揃えて冪等性を保つ。
 const parseValidInterval = (
   startString: string,
   durationSeconds: number,
@@ -32,8 +37,14 @@ const parseValidInterval = (
     return Option.none();
   }
 
-  const startMs = Date.parse(startString);
-  const endMs = startMs + Math.round(durationSeconds * MILLISECONDS_PER_SECOND);
+  const rawStartMs = Date.parse(startString);
+
+  if (!Number.isFinite(rawStartMs)) {
+    return Option.none();
+  }
+
+  const startMs = Math.floor(rawStartMs / MILLISECONDS_PER_SECOND) * MILLISECONDS_PER_SECOND;
+  const endMs = startMs + Math.floor(durationSeconds) * MILLISECONDS_PER_SECOND;
 
   return Schema.decodeUnknownOption(TimeInterval)({
     start: startMs,
@@ -49,12 +60,22 @@ const getProjectClientId = (
     Option.map((client) => client.id),
   );
 
-const resolveProjectId = (item: TimeEntryStreamItem): Option.Option<number> =>
+const resolveTaskId = (item: Toggl2TimeEntryStreamItem): Option.Option<number> =>
+  item.taskId.pipe(Option.orElse(() => item.task.pipe(Option.map((task) => task.id))));
+
+const resolveProjectId = (item: Toggl2TimeEntryStreamItem): Option.Option<number> =>
   item.projectId.pipe(
+    Option.orElse(() => item.project.pipe(Option.map((project) => project.id))),
     Option.orElse(() => item.task.pipe(Option.flatMap((task) => task.projectId))),
+    Option.orElse(() =>
+      item.task.pipe(
+        Option.flatMap((task) => task.project),
+        Option.map((project) => project.id),
+      ),
+    ),
   );
 
-const resolveClientId = (item: TimeEntryStreamItem): Option.Option<number> =>
+const resolveClientId = (item: Toggl2TimeEntryStreamItem): Option.Option<number> =>
   getProjectClientId(item.project).pipe(
     Option.orElse(() => item.task.pipe(Option.flatMap((task) => getProjectClientId(task.project)))),
     Option.orElse(() =>
@@ -65,41 +86,31 @@ const resolveClientId = (item: TimeEntryStreamItem): Option.Option<number> =>
     ),
   );
 
-const mapSingleStreamItem = (item: TimeEntryStreamItem): Option.Option<TimeEntry> => {
+const mapSingleStreamItem = (item: Toggl2TimeEntryStreamItem): Option.Option<TimeEntry> => {
   if (!isEligibleStreamItem(item)) {
     return Option.none();
   }
 
   return Option.all([item.start, item.duration]).pipe(
     Option.flatMap(([startString, durationSec]) => parseValidInterval(startString, durationSec)),
-    Option.map((interval) => ({
-      id: item.id,
-      interval: interval,
-      type: item.type,
-      taskId: item.taskId,
-      projectId: resolveProjectId(item),
-      clientId: resolveClientId(item),
-      description: Option.getOrElse(item.description, () => ""),
-      tagIds: [...new Set(item.tags.map((tag) => tag.id))].toSorted((a, b) => a - b),
-      billable: Option.getOrElse(item.billable, () => false),
-      hasScheduleBinding:
-        Option.isSome(item.plannedStart) ||
-        Option.isSome(item.plannedDuration) ||
-        Option.isSome(item.calendarEventId),
-    })),
+    Option.flatMap((interval) =>
+      Schema.decodeUnknownOption(TimeEntry)({
+        id: item.id,
+        interval: interval,
+        type: item.type,
+        taskId: resolveTaskId(item),
+        projectId: resolveProjectId(item),
+        clientId: resolveClientId(item),
+        description: Option.getOrElse(item.description, () => ""),
+        tagIds: [...new Set(item.tags.map((tag) => tag.id))].toSorted((a, b) => a - b),
+        billable: Option.getOrElse(item.billable, () => false),
+        hasScheduleBinding:
+          Option.isSome(item.plannedStart) ||
+          Option.isSome(item.plannedDuration) ||
+          Option.isSome(item.calendarEventId),
+      }),
+    ),
   );
-};
-
-const compareTimeEntries = (first: TimeEntry, second: TimeEntry): number => {
-  if (first.interval.start !== second.interval.start) {
-    return first.interval.start - second.interval.start;
-  }
-
-  if (first.interval.end !== second.interval.end) {
-    return first.interval.end - second.interval.end;
-  }
-
-  return first.id - second.id;
 };
 
 /**
@@ -108,11 +119,11 @@ const compareTimeEntries = (first: TimeEntry, second: TimeEntry): number => {
  * @returns 補正対象となるソート済み `TimeEntry` 配列と取得・除外件数統計
  */
 export const mapStreamItemsToTimeEntries = (
-  items: readonly TimeEntryStreamItem[],
+  items: readonly Toggl2TimeEntryStreamItem[],
 ): MappedTimeEntries => {
-  const entries = items
-    .flatMap((item) => Option.toArray(mapSingleStreamItem(item)))
-    .toSorted(compareTimeEntries);
+  const entries = sortTimeEntries(
+    items.flatMap((item) => Option.toArray(mapSingleStreamItem(item))),
+  );
 
   return {
     entries: entries,

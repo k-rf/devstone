@@ -1,10 +1,6 @@
 import { Options } from "@effect/cli";
-import { Schema } from "effect";
 
-const IsoDateTimeSchema = Schema.String.pipe(
-  Schema.pattern(/^\d{4}-\d{2}-\d{2}/u),
-  Schema.compose(Schema.DateTimeUtc),
-);
+import { IsoDateTimeSchema } from "./iso-date-time.option.js";
 
 /**
  * 取得終了日時（ISO 8601）を指定するオプション

@@ -1,7 +1,8 @@
 import { getIntervalDurationSeconds } from "@devstone/libs-time-interval";
 import {
+  Toggl2TimeEntryId,
   makeToggl2ApiClient,
-  type BulkUpdateTimeEntryItem,
+  type Toggl2BulkUpdateTimeEntryItem,
   type Toggl2ClientConfig,
   type Toggl2SdkError,
 } from "@devstone/libs-toggl-2-sdk";
@@ -12,6 +13,7 @@ import {
   TimeEntriesError,
   TimeEntriesPort,
 } from "../../../core/port/outbound/toggl/time-entries.port.js";
+import { formatIsoMillis } from "../../../utils/format-iso-millis.js";
 
 import { mapStreamItemsToTimeEntries } from "./toggl-2.mapper.js";
 
@@ -64,19 +66,23 @@ const mapToggl2SdkError = (error: Toggl2SdkError): TimeEntriesError =>
     Match.exhaustive,
   );
 
-const toBulkUpdateItem = (modification: EntryModification): BulkUpdateTimeEntryItem => {
+const toBulkUpdateItem = (
+  modification: EntryModification,
+): Option.Option<Toggl2BulkUpdateTimeEntryItem> => {
   const startChanged = modification.interval.start !== modification.previousInterval.start;
   const prevDuration = getIntervalDurationSeconds(modification.previousInterval);
   const nextDuration = getIntervalDurationSeconds(modification.interval);
   const durationChanged = prevDuration !== nextDuration;
 
-  return {
-    id: modification.id,
-    start: startChanged
-      ? Option.some(DateTime.formatIso(DateTime.unsafeMake(modification.interval.start)))
-      : Option.none(),
+  if (!startChanged && !durationChanged) {
+    return Option.none();
+  }
+
+  return Option.some({
+    id: Toggl2TimeEntryId.make(modification.id),
+    start: startChanged ? Option.some(formatIsoMillis(modification.interval.start)) : Option.none(),
     duration: durationChanged ? Option.some(nextDuration) : Option.none(),
-  };
+  });
 };
 
 /**
@@ -93,7 +99,7 @@ export const Toggl2AdapterLive = (config: Toggl2ClientConfig): Layer.Layer<TimeE
           .listTimeEntriesStream({
             dateFrom: DateTime.formatIso(since),
             dateTo: DateTime.formatIso(until),
-            includeLockReason: Option.some(true),
+            includeLockReason: true,
           })
           .pipe(
             Effect.map((result) => ({
@@ -104,9 +110,13 @@ export const Toggl2AdapterLive = (config: Toggl2ClientConfig): Layer.Layer<TimeE
           ),
       updateEntries: (modifications) =>
         client
-          .bulkUpdateTimeEntries(modifications.map(toBulkUpdateItem))
+          .bulkUpdateTimeEntries(
+            modifications.flatMap((modification) => Option.toArray(toBulkUpdateItem(modification))),
+          )
           .pipe(Effect.mapError(mapToggl2SdkError)),
       deleteEntries: (ids) =>
-        client.bulkDeleteTimeEntries(ids).pipe(Effect.mapError(mapToggl2SdkError)),
+        client
+          .bulkDeleteTimeEntries(ids.map((id) => Toggl2TimeEntryId.make(id)))
+          .pipe(Effect.mapError(mapToggl2SdkError)),
     })),
   );

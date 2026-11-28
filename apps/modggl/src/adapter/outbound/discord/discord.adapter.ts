@@ -9,6 +9,7 @@ import {
   type CompletedNotification,
   type ErrorNotification,
 } from "../../../core/port/outbound/notification/notification.port.js";
+import { formatIsoMillis } from "../../../utils/format-iso-millis.js";
 
 interface DiscordEmbedField {
   readonly name: string;
@@ -27,14 +28,25 @@ interface DiscordWebhookPayload {
   readonly embeds: readonly DiscordEmbed[];
 }
 
-const COLOR_COMPLETED = 0x2E_CC_71;
-const COLOR_NO_CHANGES = 0x95_A5_A6;
-const COLOR_DRY_RUN = 0x34_98_DB;
-const COLOR_ABORTED = 0xF3_9C_12;
-const COLOR_ERROR = 0xE7_4C_3C;
+const COLOR_COMPLETED = 0x2ecc71;
+const COLOR_NO_CHANGES = 0x95a5a6;
+const COLOR_DRY_RUN = 0x3498db;
+const COLOR_ABORTED = 0xf39c12;
+const COLOR_ERROR = 0xe74c3c;
 
-const formatIsoMillis = (epochMillis: number): string =>
-  DateTime.formatIso(DateTime.unsafeMake(epochMillis));
+const DISCORD_FIELD_VALUE_MAX_LENGTH = 1024;
+const DISCORD_EMBED_DESCRIPTION_MAX_LENGTH = 4096;
+
+const truncateText = (text: string, maxLength: number): string => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  const candidate = text.slice(0, maxLength - 1);
+  const safePrefix = candidate.isWellFormed() ? candidate : candidate.slice(0, -1);
+
+  return `${safePrefix}…`;
+};
 
 const formatQuotaText = (
   remaining: Option.Option<number>,
@@ -58,7 +70,10 @@ const formatEntrySummary = (entry: TimeEntry): string => {
   const duration = getIntervalDurationSeconds(entry.interval);
   const description = entry.description === "" ? "(説明なし)" : entry.description;
 
-  return `ID: ${String(entry.id)}\n区間: ${start} 〜 ${end} (${String(duration)} 秒)\n説明: ${description}`;
+  return truncateText(
+    `ID: ${String(entry.id)}\n区間: ${start} 〜 ${end} (${String(duration)} 秒)\n説明: ${description}`,
+    DISCORD_FIELD_VALUE_MAX_LENGTH,
+  );
 };
 
 const buildCompletedEmbed = (notification: CompletedNotification): DiscordEmbed => {
@@ -99,7 +114,7 @@ const buildCompletedEmbed = (notification: CompletedNotification): DiscordEmbed 
       },
       {
         name: "クォータ",
-        value: formatQuotaText(notification.quotaRemaining, notification.quotaResetsInSeconds),
+        value: formatQuotaText(notification.quota.remaining, notification.quota.resetsInSeconds),
         inline: false,
       },
     ],
@@ -126,7 +141,7 @@ const buildAbortedEmbed = (notification: AbortedNotification): DiscordEmbed => (
 
 const buildErrorEmbed = (notification: ErrorNotification): DiscordEmbed => ({
   title: "modggl: 実行エラーが発生しました",
-  description: notification.message,
+  description: truncateText(notification.message, DISCORD_EMBED_DESCRIPTION_MAX_LENGTH),
   color: COLOR_ERROR,
   fields: [
     {
@@ -175,7 +190,9 @@ const postWebhook = (
     });
 
     if (!response.ok) {
-      const bodyText = yield* Effect.promise(() => response.text());
+      const bodyText = yield* Effect.tryPromise(() => response.text()).pipe(
+        Effect.orElseSucceed(() => ""),
+      );
       return yield* Effect.fail(
         new NotificationError({
           message: `Discord Webhook がエラーを返しました (${String(response.status)}): ${bodyText}`,

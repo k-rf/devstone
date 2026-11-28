@@ -1,9 +1,11 @@
 import { TimeInstant, TimeInterval } from "@devstone/libs-time-interval";
+import { Toggl2OrganizationId, Toggl2WorkspaceId } from "@devstone/libs-toggl-2-sdk";
 import { DateTime, Effect, Option } from "effect";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
+import { TimeEntryId } from "../../../core/domain/time-entry-id.js";
 import { TimeEntriesPort } from "../../../core/port/outbound/toggl/time-entries.port.js";
 
 import { Toggl2AdapterLive } from "./toggl-2.adapter.js";
@@ -11,7 +13,7 @@ import { Toggl2AdapterLive } from "./toggl-2.adapter.js";
 const server = setupServer();
 
 beforeAll(() => {
-  server.listen();
+  server.listen({ onUnhandledRequest: "error" });
 });
 afterEach(() => {
   server.resetHandlers();
@@ -21,8 +23,8 @@ afterAll(() => {
   server.close();
 });
 
-const organizationId = 1001;
-const workspaceId = 2002;
+const organizationId = Toggl2OrganizationId.make(1001);
+const workspaceId = Toggl2WorkspaceId.make(2002);
 const baseUrl = `https://focus.toggl.com/api/organizations/${String(organizationId)}/workspaces/${String(workspaceId)}`;
 const adapterLayer = Toggl2AdapterLive({
   apiToken: "test-token",
@@ -37,10 +39,13 @@ const interval = (startMs: number, endMs: number): TimeInterval =>
   });
 
 describe("正常系", () => {
-  it("listEntries がストリームを取得してフィルタリング・ソート・クォータ情報を返すこと", async () => {
+  it("listEntries が認証ヘッダとクエリ付きでストリームを取得して正規化・ソート結果を返すこと", async () => {
+    const captureRequest = vi.fn<(url: string, authorization: Option.Option<string>) => void>();
+
     server.use(
-      http.get(`${baseUrl}/time-entries/stream`, () =>
-        HttpResponse.json(
+      http.get(`${baseUrl}/time-entries/stream`, ({ request }) => {
+        captureRequest(request.url, Option.fromNullable(request.headers.get("Authorization")));
+        return HttpResponse.json(
           [
             { id: 2, start: "2026-11-27T10:00:00Z", duration: 1800 },
             { id: 1, start: "2026-11-27T09:00:00Z", duration: 3600 },
@@ -52,8 +57,8 @@ describe("正常系", () => {
               "X-Toggl-Quota-Resets-In": "3600",
             },
           },
-        ),
-      ),
+        );
+      }),
     );
 
     const program = Effect.gen(function* () {
@@ -66,6 +71,12 @@ describe("正常系", () => {
 
     const result = await Effect.runPromise(program);
 
+    const [rawUrl, authorization] = captureRequest.mock.calls[0] ?? ["", Option.none()];
+    const searchParams = new URL(rawUrl).searchParams;
+    expect(authorization).toStrictEqual(Option.some("Bearer test-token"));
+    expect(searchParams.get("date_from")).toBe("2026-11-20T00:00:00.000Z");
+    expect(searchParams.get("date_to")).toBe("2026-11-28T00:00:00.000Z");
+    expect(searchParams.get("include_lock_reason")).toBe("true");
     expect(result.fetchedCount).toBe(3);
     expect(result.excludedCount).toBe(1);
     expect(result.entries.map((entry) => entry.id)).toStrictEqual([1, 2]);
@@ -96,12 +107,12 @@ describe("正常系", () => {
       const port = yield* TimeEntriesPort;
       return yield* port.updateEntries([
         {
-          id: 1,
+          id: TimeEntryId.make(1),
           previousInterval: interval(t0, t1),
           interval: interval(t0, t2),
         },
         {
-          id: 2,
+          id: TimeEntryId.make(2),
           previousInterval: interval(t1, t2),
           interval: interval(t0, t1),
         },
@@ -122,6 +133,37 @@ describe("正常系", () => {
     );
   });
 
+  it("updateEntries で秒粒度の実質差分がない項目は除外し空 PATCH を送信しないこと", async () => {
+    const patchSpy = vi.fn();
+
+    server.use(
+      http.patch(`${baseUrl}/time-entries/bulk`, () => {
+        patchSpy();
+        return new HttpResponse(undefined, { status: 204 });
+      }),
+    );
+
+    const startMs = Date.parse("2026-11-27T09:00:00.200Z");
+    const prevEndMs = Date.parse("2026-11-27T09:01:00.200Z");
+    const nextEndMs = Date.parse("2026-11-27T09:01:00.900Z");
+
+    const quota = await Effect.runPromise(
+      Effect.gen(function* () {
+        const port = yield* TimeEntriesPort;
+        return yield* port.updateEntries([
+          {
+            id: TimeEntryId.make(1),
+            previousInterval: interval(startMs, prevEndMs),
+            interval: interval(startMs, nextEndMs),
+          },
+        ]);
+      }).pipe(Effect.provide(adapterLayer)),
+    );
+
+    expect(patchSpy).not.toHaveBeenCalled();
+    expect(quota).toStrictEqual(Option.none());
+  });
+
   it("deleteEntries が一括削除 DELETE を送信してクォータ情報を返すこと", async () => {
     const captureUrl = vi.fn<(url: string) => void>();
 
@@ -137,7 +179,7 @@ describe("正常系", () => {
 
     const program = Effect.gen(function* () {
       const port = yield* TimeEntriesPort;
-      return yield* port.deleteEntries([10, 20]);
+      return yield* port.deleteEntries([TimeEntryId.make(10), TimeEntryId.make(20)]);
     }).pipe(Effect.provide(adapterLayer));
 
     const quota = await Effect.runPromise(program);
@@ -232,7 +274,11 @@ describe("異常系（SDK エラー変換）", () => {
         Effect.gen(function* () {
           const port = yield* TimeEntriesPort;
           return yield* port.updateEntries([
-            { id: 1, previousInterval: interval(t0, t1), interval: interval(t0, t1 + 1000) },
+            {
+              id: TimeEntryId.make(1),
+              previousInterval: interval(t0, t1),
+              interval: interval(t0, t1 + 1000),
+            },
           ]);
         }).pipe(Effect.provide(adapterLayer)),
       ),
@@ -241,7 +287,7 @@ describe("異常系（SDK エラー変換）", () => {
       Effect.flip(
         Effect.gen(function* () {
           const port = yield* TimeEntriesPort;
-          return yield* port.deleteEntries([1]);
+          return yield* port.deleteEntries([TimeEntryId.make(1)]);
         }).pipe(Effect.provide(adapterLayer)),
       ),
     );

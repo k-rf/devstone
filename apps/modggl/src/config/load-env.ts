@@ -1,3 +1,4 @@
+import { Toggl2OrganizationId, Toggl2WorkspaceId } from "@devstone/libs-toggl-2-sdk";
 import { Config, Data, Effect, Schema, type Option } from "effect";
 
 /**
@@ -13,27 +14,34 @@ export class EnvValidationError extends Data.TaggedError("EnvValidationError")<{
  */
 export interface ModgglEnv {
   readonly togglApiToken: string;
-  readonly togglOrganizationId: number;
-  readonly togglWorkspaceId: number;
+  readonly togglOrganizationId: Toggl2OrganizationId;
+  readonly togglWorkspaceId: Toggl2WorkspaceId;
   readonly discordWebhookUrl: Option.Option<string>;
 }
 
-const NonEmptyTokenSchema = Schema.NonEmptyString.pipe(
-  Schema.filter((value) => (value.trim().length > 0 ? true : "空白のみのトークンは指定できません")),
+const NonEmptyTokenSchema = Schema.String.pipe(
+  Schema.pattern(/^[!-~]+$/u, {
+    message: () =>
+      "トークンには空白・改行・制御文字を含められない空でない印字可能 ASCII のみ指定できます",
+  }),
 );
-
-const PositiveIntFromStringSchema = Schema.NumberFromString.pipe(Schema.int(), Schema.positive());
 
 const DiscordWebhookUrlSchema = Schema.String.pipe(
   Schema.pattern(
-    /^https:\/\/(?:(?:ptb|canary)\.)?(?:discord\.com|discordapp\.com)\/api\/webhooks\/[^/\s]+\/[^/\s]+$/u,
+    /^https:\/\/(?:(?:ptb|canary)\.)?(?:discord\.com|discordapp\.com)\/api\/webhooks\/\d+\/[A-Za-z0-9_-]+$/u,
   ),
 );
 
 const EnvConfig = Config.all({
   togglApiToken: Schema.Config("TOGGL_API_TOKEN", NonEmptyTokenSchema),
-  togglOrganizationId: Schema.Config("TOGGL_ORGANIZATION_ID", PositiveIntFromStringSchema),
-  togglWorkspaceId: Schema.Config("TOGGL_WORKSPACE_ID", PositiveIntFromStringSchema),
+  togglOrganizationId: Schema.Config(
+    "TOGGL_ORGANIZATION_ID",
+    Schema.NumberFromString.pipe(Schema.compose(Toggl2OrganizationId)),
+  ),
+  togglWorkspaceId: Schema.Config(
+    "TOGGL_WORKSPACE_ID",
+    Schema.NumberFromString.pipe(Schema.compose(Toggl2WorkspaceId)),
+  ),
   discordWebhookUrl: Config.option(Schema.Config("DISCORD_WEBHOOK_URL", DiscordWebhookUrlSchema)),
 });
 

@@ -2,6 +2,7 @@ import { mergeIntervalBounds } from "@devstone/libs-time-interval";
 
 import { isSameEntry } from "./is-same-entry.js";
 import { type EntryModification } from "./revision-plan.js";
+import { type TimeEntryId } from "./time-entry-id.js";
 import { type TimeEntry } from "./time-entry.js";
 import { upsertModification } from "./upsert-modification.js";
 
@@ -11,7 +12,7 @@ import { upsertModification } from "./upsert-modification.js";
 export interface MergeSameEntriesResult {
   readonly entries: readonly TimeEntry[];
   readonly modifications: readonly EntryModification[];
-  readonly deletions: readonly number[];
+  readonly deletions: readonly TimeEntryId[];
 }
 
 const mergeAdjacentPair = (

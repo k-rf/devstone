@@ -1,5 +1,7 @@
 import { Schema } from "effect";
 
+import { Toggl2TimeEntryId } from "./time-entry-id.js";
+
 const optionalOption = <S extends Schema.Schema.All>(schema: S) =>
   Schema.optionalWith(schema, { as: "Option", nullable: true });
 
@@ -30,8 +32,8 @@ const TimeEntryTag = Schema.Struct({
 /**
  * Toggl 2.0 API のタイムエントリーストリーム項目スキーマ
  */
-export const TimeEntryStreamItem = Schema.Struct({
-  id: Schema.Number,
+export const Toggl2TimeEntryStreamItem = Schema.Struct({
+  id: Toggl2TimeEntryId,
   start: optionalOption(Schema.String),
   duration: optionalOption(Schema.Number),
   deletedAt: optionalOption(Schema.String).pipe(Schema.fromKey("deleted_at")),
@@ -64,7 +66,7 @@ export const TimeEntryStreamItem = Schema.Struct({
 /**
  * Toggl 2.0 API のタイムエントリーストリーム項目型
  */
-export type TimeEntryStreamItem = typeof TimeEntryStreamItem.Type;
+export type Toggl2TimeEntryStreamItem = typeof Toggl2TimeEntryStreamItem.Type;
 
 /**
  * Toggl 2.0 API のタイムエントリーに紐づくクライアント型

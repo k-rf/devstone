@@ -1,9 +1,12 @@
-import { Console, Effect, Option } from "effect";
+import { Effect, Match, Option } from "effect";
 
-import { ModifyEntriesAbortedError, type InvalidDateRangeError } from "../domain/errors.js";
 import { reviseEntries } from "../domain/revise-entries.js";
 import { type RevisionPlanned } from "../domain/revision-plan.js";
-import { NotificationPort } from "../port/outbound/notification/notification.port.js";
+import { sortTimeEntries } from "../domain/sort-time-entries.js";
+import {
+  NotificationPort,
+  type ModifyEntriesStatus,
+} from "../port/outbound/notification/notification.port.js";
 import {
   TimeEntriesPort,
   type QuotaInfo,
@@ -11,7 +14,11 @@ import {
 } from "../port/outbound/toggl/time-entries.port.js";
 
 import { type ModifyEntriesInput } from "./modify-entries.input.js";
-import { type ModifyEntriesOutput, type ModifyEntriesStatus } from "./modify-entries.output.js";
+import {
+  ModifyEntriesAbortedError,
+  type InvalidDateRangeError,
+  type ModifyEntriesOutput,
+} from "./modify-entries.output.js";
 import { resolveDateRangeActivity } from "./resolve-date-range.activity.js";
 
 /**
@@ -22,28 +29,12 @@ export type ModifyEntriesWorkflowError =
   | ModifyEntriesAbortedError
   | TimeEntriesError;
 
-type NotificationService = Effect.Effect.Success<typeof NotificationPort>;
 type TimeEntriesService = Effect.Effect.Success<typeof TimeEntriesPort>;
-
-const notifyApiFailure =
-  (notificationPort: NotificationService, shouldNotify: boolean) => (error: TimeEntriesError) =>
-    shouldNotify
-      ? notificationPort
-          .notifyError({
-            message: error.message,
-            reason: error.reason,
-            status: error.status,
-            resetsInSeconds: error.resetsInSeconds,
-          })
-          .pipe(Effect.catchAll(() => Effect.void))
-      : Effect.void;
 
 const applyPlannedChanges = (
   timeEntriesPort: TimeEntriesService,
-  notificationPort: NotificationService,
   plan: RevisionPlanned,
   dryRun: boolean,
-  shouldNotify: boolean,
   initialQuota: QuotaInfo,
 ): Effect.Effect<
   { readonly status: ModifyEntriesStatus; readonly quota: QuotaInfo },
@@ -61,15 +52,11 @@ const applyPlannedChanges = (
     }
 
     const patchQuota = hasModifications
-      ? yield* timeEntriesPort
-          .updateEntries(plan.modifications)
-          .pipe(Effect.tapError(notifyApiFailure(notificationPort, shouldNotify)))
+      ? yield* timeEntriesPort.updateEntries(plan.modifications)
       : Option.none<QuotaInfo>();
 
     const deleteQuota = hasDeletions
-      ? yield* timeEntriesPort
-          .deleteEntries(plan.deletions)
-          .pipe(Effect.tapError(notifyApiFailure(notificationPort, shouldNotify)))
+      ? yield* timeEntriesPort.deleteEntries(plan.deletions)
       : Option.none<QuotaInfo>();
 
     const latestQuota = Option.orElse(deleteQuota, () => patchQuota);
@@ -80,9 +67,40 @@ const applyPlannedChanges = (
     };
   });
 
+const notifyFailure = (
+  error: ModifyEntriesWorkflowError,
+): Effect.Effect<void, never, NotificationPort> =>
+  NotificationPort.pipe(
+    Effect.flatMap((notificationPort) =>
+      Match.value(error).pipe(
+        Match.tag("ModifyEntriesAbortedError", (aborted) =>
+          notificationPort
+            .notifyAborted({
+              reason: aborted.reason,
+              first: aborted.first,
+              second: aborted.second,
+            })
+            .pipe(Effect.catchAll(() => Effect.void)),
+        ),
+        Match.tag("TimeEntriesError", (apiError) =>
+          notificationPort
+            .notifyError({
+              message: apiError.message,
+              reason: apiError.reason,
+              status: apiError.status,
+              resetsInSeconds: apiError.resetsInSeconds,
+            })
+            .pipe(Effect.catchAll(() => Effect.void)),
+        ),
+        Match.tag("InvalidDateRangeError", () => Effect.void),
+        Match.exhaustive,
+      ),
+    ),
+  );
+
 /**
  * タイムエントリーを取得し、同一エントリーのマージ・隙間補完・重複解消を All-or-Nothing で実行する Workflow
- * @param input - 取得期間・ドライラン・通知設定の入力データ
+ * @param input - 取得期間・ドライラン設定の入力データ
  * @returns 実行サマリーおよび適用された変更計画、またはエラーを返す Effect
  */
 export const modifyEntriesWorkflow = (
@@ -102,44 +120,31 @@ export const modifyEntriesWorkflow = (
     const timeEntriesPort = yield* TimeEntriesPort;
     const notificationPort = yield* NotificationPort;
 
-    const fetched = yield* timeEntriesPort
-      .listEntries({ since: since, until: until })
-      .pipe(Effect.tapError(notifyApiFailure(notificationPort, input.notify)));
-
-    const plan = reviseEntries(fetched.entries);
+    const fetched = yield* timeEntriesPort.listEntries({ since: since, until: until });
+    const sortedEntries = sortTimeEntries(fetched.entries);
+    const plan = reviseEntries(sortedEntries);
 
     if (plan._tag === "Aborted") {
-      if (input.notify) {
-        yield* notificationPort
-          .notifyAborted({
-            reason: plan.reason,
-            first: plan.first,
-            second: plan.second,
-          })
-          .pipe(Effect.catchAll(() => Effect.void));
-      }
-
       return yield* Effect.fail(
         new ModifyEntriesAbortedError({
           message: `時間重複の解決を機械決定できないため処理を停止しました (${plan.reason})`,
           reason: plan.reason,
           first: plan.first,
           second: plan.second,
-          fetchedCount: fetched.fetchedCount,
-          excludedCount: fetched.excludedCount,
-          processedCount: fetched.entries.length,
-          quotaRemaining: fetched.quota.remaining,
-          quotaResetsInSeconds: fetched.quota.resetsInSeconds,
+          stats: {
+            fetchedCount: fetched.fetchedCount,
+            excludedCount: fetched.excludedCount,
+            processedCount: sortedEntries.length,
+          },
+          quota: fetched.quota,
         }),
       );
     }
 
     const { status, quota } = yield* applyPlannedChanges(
       timeEntriesPort,
-      notificationPort,
       plan,
       input.dryRun,
-      input.notify,
       fetched.quota,
     );
 
@@ -150,7 +155,7 @@ export const modifyEntriesWorkflow = (
       stats: {
         fetchedCount: fetched.fetchedCount,
         excludedCount: fetched.excludedCount,
-        processedCount: fetched.entries.length,
+        processedCount: sortedEntries.length,
         modifiedCount: plan.modifications.length,
         deletedCount: plan.deletions.length,
       },
@@ -159,24 +164,18 @@ export const modifyEntriesWorkflow = (
       quota: quota,
     };
 
-    if (input.notify) {
-      yield* notificationPort
-        .notifyCompleted({
-          status: output.status,
-          since: output.since,
-          until: output.until,
-          fetchedCount: output.stats.fetchedCount,
-          excludedCount: output.stats.excludedCount,
-          modifications: output.modifications,
-          deletedIds: output.deletedIds,
-          quotaRemaining: output.quota.remaining,
-          quotaResetsInSeconds: output.quota.resetsInSeconds,
-        })
-        .pipe(
-          Effect.tapError((error) => Console.error(`通知送信エラー: ${error.message}`)),
-          Effect.catchAll(() => Effect.void),
-        );
-    }
+    yield* notificationPort
+      .notifyCompleted({
+        status: output.status,
+        since: output.since,
+        until: output.until,
+        fetchedCount: output.stats.fetchedCount,
+        excludedCount: output.stats.excludedCount,
+        modifications: output.modifications,
+        deletedIds: output.deletedIds,
+        quota: output.quota,
+      })
+      .pipe(Effect.catchAll(() => Effect.void));
 
     return output;
-  });
+  }).pipe(Effect.tapError(notifyFailure));
