@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "customConditions": ["dev"],
+    "outDir": "dist"
+  },
+  "include": ["src", "*.ts"],
+  "references": [
+    {
+      "path": "../../packages/configs/eslint"
+    },
+    {
+      "path": "../../packages/configs/typescript"
+    },
+    {
+      "path": "../../packages/configs/vitest"
+    },
+    {
+      "path": "../../packages/libs/time-interval"
+    },
+    {
+      "path": "../../packages/libs/toggl-2-sdk"
+    }
+  ]
+}

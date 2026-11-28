@@ -1,0 +1,7 @@
+name: modggl
+runtime:
+  name: nodejs
+  options:
+    packagemanager: pnpm
+    typescript: true
+description: modggl 2.0 GCP infrastructure (Cloud Run Jobs and Cloud Scheduler)

@@ -20,7 +20,8 @@
     "knip": "knip",
     "test:cov": "moon run configs-vitest:coverage-report",
     "check:all": "moon r :format && moon r :typecheck && moon r :lint && pnpm run lint:md && pnpm run lint:spell && moon r :knip && pnpm run test:cov",
-    "build:easel": "docker build -t devstone/easel:latest -f apps/easel/Dockerfile ."
+    "build:easel": "docker build -t devstone/easel:latest -f apps/easel/Dockerfile .",
+    "build:modggl": "docker build -t devstone/modggl:latest -f apps/modggl/Dockerfile ."
   },
   "devDependencies": {
     "@devstone/configs-eslint": "workspace:*",

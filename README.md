@@ -7,6 +7,7 @@
 各アプリケーションの起動方法・環境変数は、各ディレクトリの `README.md` を参照してください。
 
 - [easel](apps/easel/README.md)
+- [modggl](apps/modggl/README.md)
 - [notion-toggl-bridge](apps/notion-toggl-bridge/README.md)
 
 ## 開発の流れ

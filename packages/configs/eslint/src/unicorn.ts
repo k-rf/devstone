@@ -69,5 +69,14 @@ export const unicorn = defineConfig({
 
     /** @remarks 命令的ループを禁止し、高階関数による処理を推奨するため無効化する */
     "unicorn/no-array-for-each": "off",
+
+    /** @remarks oxfmt の小文字整形と競合しないよう 16 進リテラルは小文字に統一する */
+    "unicorn/number-literal-case": ["error", { hexadecimalValue: "lowercase" }],
+
+    /** @remarks 16 進カラーコード等へのアンダースコア区切り強制を無効化し、10 進数の区切り規則は維持する */
+    "unicorn/numeric-separators-style": [
+      "error",
+      { hexadecimal: { onlyIfContainsSeparator: true } },
+    ],
   },
 });

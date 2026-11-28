@@ -29,9 +29,12 @@ trigger: always_on
 root/
 ├── apps/               # アプリケーション本体
 │   ├── agent-analytics/      # エージェントスキル利用統計の集計・可視化アプリ
+│   ├── modggl/               # Toggl 2.0 タイムエントリー自動補正バッチ CLI
 │   └── notion-toggl-bridge/  # Cloudflare Workers アプリ
 ├── automations/        # 外部ツール・端末等の自動化レシピ
 │   └── tasker/         # Android Tasker の自動化レシピ（XML）
+├── infra/              # インフラ構成管理（IaC / Pulumi スタック）
+│   └── modggl/         # modggl 2.0 用 GCP インフラ定義
 ├── packages/           # 共有パッケージ
 │   ├── configs/        # ESLint, TypeScript 等の設定
 │   ├── design-system/  # UI コンポーネント等（予定）
@@ -48,6 +51,7 @@ root/
 - **`automations/`**: `apps/` や `packages/` とは異なり、Android の Tasker レシピ（XML）など、
   外部ツールや端末向けの自動化レシピ・設定資産をコード管理する領域です。
   本リポジトリの開発環境やエージェント基盤を活用し、自動化定義を一元管理します。
+- **`infra/`**: 各アプリケーションを動作させるためのクラウド基盤・IaC（Pulumi 等）の独立パッケージを配置します。
 
 ## 建築指針
 

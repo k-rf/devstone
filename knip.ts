@@ -11,8 +11,17 @@ const config: KnipConfig = {
       entry: ["src/main.ts", "src/**/*.spec-d.ts"],
       project: ["src/**/*.ts"],
     },
+    "apps/modggl": {
+      entry: ["src/main.ts", "src/**/*.spec-d.ts"],
+      project: ["src/**/*.ts"],
+    },
     "apps/notion-toggl-bridge": {
       entry: ["scripts/*.ts"],
+      project: ["src/**/*.ts"],
+    },
+    "infra/modggl": {},
+    "packages/libs/toggl-2-sdk": {
+      entry: ["src/**/*.spec.ts"],
       project: ["src/**/*.ts"],
     },
     "packages/libs/toggl-sdk": {

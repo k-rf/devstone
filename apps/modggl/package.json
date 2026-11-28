@@ -1,0 +1,38 @@
+{
+  "name": "@devstone/modggl",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Toggl 2.0 のタイムエントリーを自動整形・隙間補完・重複解消する CLI アプリケーションです。",
+  "bin": {
+    "modggl": "./dist/main.js"
+  },
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "build:bun": "bun build src/main.ts --outfile dist/bun/modggl.js --target bun",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "lint": "eslint --fix --max-warnings 0",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@devstone/libs-time-interval": "workspace:*",
+    "@devstone/libs-toggl-2-sdk": "workspace:*",
+    "@effect/cli": "0.54.0",
+    "@effect/platform": "0.96.1",
+    "@effect/platform-bun": "0.89.0",
+    "effect": "3.21.2"
+  },
+  "devDependencies": {
+    "@devstone/configs-eslint": "workspace:*",
+    "@devstone/configs-typescript": "workspace:*",
+    "@devstone/configs-vitest": "workspace:*",
+    "@types/bun": "1.3.14",
+    "@types/node": "25.9.1",
+    "@vitest/coverage-istanbul": "4.1.5",
+    "eslint": "10.2.1",
+    "msw": "2.14.2",
+    "typescript": "7.0.2",
+    "vitest": "4.1.5"
+  }
+}

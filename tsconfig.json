@@ -12,10 +12,16 @@
       "path": "./apps/easel"
     },
     {
+      "path": "./apps/modggl"
+    },
+    {
       "path": "./apps/notion-toggl-bridge"
     },
     {
       "path": "./automations/tasker"
+    },
+    {
+      "path": "./infra/modggl"
     },
     {
       "path": "./packages/configs/commitlint"
@@ -31,6 +37,12 @@
     },
     {
       "path": "./packages/libs/json-canvas-spec"
+    },
+    {
+      "path": "./packages/libs/time-interval"
+    },
+    {
+      "path": "./packages/libs/toggl-2-sdk"
     },
     {
       "path": "./packages/libs/toggl-sdk"

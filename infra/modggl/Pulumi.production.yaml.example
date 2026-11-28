@@ -1,0 +1,7 @@
+config:
+  gcp:project: your-gcp-project-id
+  gcp:region: asia-northeast1
+  modggl:imageTag: v1.0.0
+  modggl:togglOrganizationId: "000000"
+  modggl:togglWorkspaceId: "000000"
+  modggl:makeExecutorMember: user:make-oauth-user@example.com

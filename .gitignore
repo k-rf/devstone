@@ -165,3 +165,6 @@ apps/notion-toggl-bridge/scripts/mapper.json
 
 # Antigravity CLI
 .antigravitycli/
+
+# Pulumi stack configs (実プロジェクト値を含む設定は追跡しない)
+infra/*/Pulumi.*.yaml
